@@ -1,1 +1,0 @@
-pyinstaller --onefile "..\Source\Streamlabs Factorio Integration.py"
