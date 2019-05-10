@@ -1,5 +1,6 @@
-import Streamlabs as obs
-import Gui as Gui
+import Streamlabs
+import Gui
 
-app = Gui.Create(obs)
+obs = ()
+app = GuiWindow().app
 app.mainloop()
