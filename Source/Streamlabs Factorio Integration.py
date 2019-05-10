@@ -1,8 +1,5 @@
-from StreamlabsClass import Streamlabs
-#import Streamlabs as obs
-from GUI import *
+import Streamlabs as obs
+import Gui as Gui
 
-obs = Streamlabs()
-root = tk.Tk()
-app = Application(obs, master=root)
+app = Gui.Create(obs)
 app.mainloop()

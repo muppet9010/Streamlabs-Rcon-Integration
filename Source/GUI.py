@@ -1,24 +1,62 @@
 import tkinter as tk
 
 
+def Create(obs):
+    root = tk.Tk()
+    root.minsize(500, 400)
+    app = Application(obs, master=root)
+    return app
+
+
 class Application(tk.Frame):
     def __init__(self, obs, master=None):
         super().__init__(master)
         self.master = master
+        self.obs = obs
         self.pack()
-        self.create_widgets(obs)
+        self.CreateWidgets()
 
-    def create_widgets(self, obs):
-        self.streamlabsConnectButton = tk.Button(self)
-        self.streamlabsConnectButton["text"] = "Connect Streamlabs"
-        self.streamlabsConnectButton["command"] = obs.connect
-        self.streamlabsConnectButton.pack(side="top")
+    def CreateWidgets(self):
+        self.CreateStreamlabs(self.master)
+        self.CreateActivityLog(self.master)
+        self.CreateBottomBar(self.master)
 
-        self.streamlabsDisconnectButton = tk.Button(self)
-        self.streamlabsDisconnectButton["text"] = "Disonnect Streamlabs"
-        self.streamlabsDisconnectButton["command"] = obs.disconnect
-        self.streamlabsDisconnectButton.pack(side="top")
+    def CreateStreamlabs(self, parent):
+        self.streamlabsContainer = tk.Frame(parent)
+        self.streamlabsContainer.pack(fill="x", side="top")
 
-        self.quit = tk.Button(self, text="QUIT", fg="red",
-                              command=self.master.destroy)
-        self.quit.pack(side="bottom")
+        self.UpdateStreamlabsStatus(False)
+        streamlabsStatusLabel = tk.Label(
+            self.streamlabsContainer, textvariable=self.streamlabsStatusText, height=1)
+        streamlabsStatusLabel.pack(side="left")
+
+        streamlabsConnectButton = tk.Button(self.streamlabsContainer)
+        streamlabsConnectButton["text"] = "Connect Streamlabs"
+        streamlabsConnectButton["command"] = self.obs.Connect
+        streamlabsConnectButton.pack(side="left")
+
+        streamlabsDisconnectButton = tk.Button(self.streamlabsContainer)
+        streamlabsDisconnectButton["text"] = "Disonnect Streamlabs"
+        streamlabsDisconnectButton["command"] = self.obs.Disconnect
+        streamlabsDisconnectButton.pack(side="left")
+
+    def CreateActivityLog(self, parent):
+        self.activityLog = tk.Label(parent, height=5)
+        self.activityLog.pack(fill="both", expand=True, side="top")
+
+    def CreateBottomBar(self, parent):
+        self.bottomBarContainer = tk.Frame(parent)
+        self.bottomBarContainer.pack(fill="x", side="top")
+
+        quitButton = tk.Button(self.bottomBarContainer, text="QUIT", fg="red",
+                               command=self.Quit)
+        quitButton.pack(side="left")
+
+    def Quit(self):
+        self.master.destroy()
+
+    def UpdateStreamlabsStatus(self, connected):
+        if connected:
+            self.streamlabsStatusText = "Streamlabs: Connected"
+        else:
+            self.streamlabsStatusText = "Streamlabs: Disconnected"
