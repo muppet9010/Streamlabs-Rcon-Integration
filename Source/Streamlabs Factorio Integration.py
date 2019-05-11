@@ -4,6 +4,7 @@ import datetime as Datetime
 import requests as Requests
 import json as Json
 import os as Os
+from Logging import Logging
 
 
 class Obs():
@@ -12,25 +13,25 @@ class Obs():
 
     def __init__(self):
         self.sio = SocketIo.Client()
-        self.sio.on('event', self.EventHandler)
-        self.sio.on('connect', self.ConnectHandler)
-        self.sio.on('disconnect', self.DisconnectHandler)
+        self.sio.on("event", self.EventHandler)
+        self.sio.on("connect", self.ConnectHandler)
+        self.sio.on("disconnect", self.DisconnectHandler)
 
     def ConnectHandler(self):
-        Logging.DebugLog('Streamlabs Connected')
+        Logging.DebugLog("Streamlabs Connected")
         self.disconnecting = False
         if self.connecting:
             Gui.StartPostObsConnection()
 
     def DisconnectHandler(self):
-        Logging.DebugLog('Streamlabs Disconnected')
+        Logging.DebugLog("Streamlabs Disconnected")
         if not self.disconnecting:
             Gui.AddToActivityLog("Error Streamlabs Stopped Unexpectedly")
         self.disconnecting = False
         Gui.UpdateStatus()
 
     def EventHandler(self, msg):
-        print('Received message: ', msg)
+        print("Received message: ", msg)
         ObsEvent(msg)
 
     def Connect(self):
@@ -39,7 +40,7 @@ class Obs():
         Logging.DebugLog("Streamlabs Connecting")
         self.disconnecting = False
         self.connecting = True
-        self.sio.connect('https://sockets.streamlabs.com?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IkJFMzU5QjZFNTEzRjczOTk1NDlCIiwicmVhZF9vbmx5Ijp0cnVlLCJwcmV2ZW50X21hc3RlciI6dHJ1ZSwidHdpdGNoX2lkIjoiODk1NjMzNDMifQ.K4F-AFIqFkJPFXrcfSO9_aX8g449BNhRGSngHL40dls')
+        self.sio.connect("https://sockets.streamlabs.com?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IkJFMzU5QjZFNTEzRjczOTk1NDlCIiwicmVhZF9vbmx5Ijp0cnVlLCJwcmV2ZW50X21hc3RlciI6dHJ1ZSwidHdpdGNoX2lkIjoiODk1NjMzNDMifQ.K4F-AFIqFkJPFXrcfSO9_aX8g449BNhRGSngHL40dls")
 
     def Disconnect(self):
         if Obs.sio.eio.state != "connected":
@@ -172,7 +173,7 @@ class Gui(TK.Frame):
     def AddToActivityLog(self, text):
         Logging.Log(text)
         self.activityLogText.configure(state="normal")
-        self.activityLogText.insert(1.0, TimestampText(text) + "\n")
+        self.activityLogText.insert(1.0, Logging.TimestampText(text) + "\n")
         self.activityLogText.configure(state="disabled")
 
     def Start(self):
@@ -192,12 +193,6 @@ class Gui(TK.Frame):
         Logging.DebugLog("Stop Button")
         Obs.Disconnect()
         Gui.AddToActivityLog("Stopped")
-
-
-def TimestampText(text):
-    currentDT = Datetime.datetime.now()
-    dtString = currentDT.strftime("%H:%M:%S")
-    return dtString + " : " + text
 
 
 class Currency():
@@ -252,32 +247,6 @@ class Currency():
         return amount / self.rates[currency]
 
 
-class Logging():
-    debugLogging = True
-
-    def __init__(self):
-        currentDT = Datetime.datetime.now()
-        dtString = currentDT.strftime("%Y_%m_%d %H_%M_%S")
-        self.logFileName = "Log " + dtString + ".log"
-        self.debugLogFileName = "Debug " + self.logFileName
-
-    def Log(self, text):
-        self.DebugLog(text)
-        fileName = self.logFileName
-        with open(fileName, "a") as file:
-            file.write(TimestampText(text) + "\n")
-        file.closed
-
-    def DebugLog(self, text):
-        if not self.debugLogging:
-            return
-        fileName = self.debugLogFileName
-        with open(fileName, "a") as file:
-            file.write(TimestampText(text) + "\n")
-        file.closed
-
-
-Logging = Logging()
 Obs = Obs()
 Currency = Currency()
 Gui = GuiWindow().gui
