@@ -1,5 +1,5 @@
 import socketio
-from tkinter import *
+import tkinter as TK
 import datetime
 
 
@@ -22,7 +22,7 @@ class Obs():
 
     def EventHandler(self, msg):
         print('Received message: ', msg)
-        obsEventList.append(ObsEvent(msg))
+        ObsEvent(msg)
 
     def Connect(self):
         if obs.sio.eio.state != "disconnected":
@@ -34,19 +34,19 @@ class Obs():
         self.sio.disconnect()
 
 
-obsEventList = []
-
-
 class ObsEvent():
-    done = False
-
     def __init__(self, data):
         self.id = data["event_id"]
         self.platform = data["for"]
         self.type = data["type"]
-        self.GetNormalisedData(data)
+        if not self.GetNormalisedData(data):
+            return
 
     def GetNormalisedData(self, data):
+        if len(data["message"]) != 1:
+            gui.AddToActivityLog("wrong number of payloads in event: " +
+                                 len(data["message"]) + " data: " + str(data))
+            return False
         message = data["message"][0]
         if (self.platform == "streamlabs" and self.type == "donation") or (self.platform == "youtube_account" and self.type == "superchat"):
             self.valueType = "money"
@@ -70,7 +70,7 @@ class ObsEvent():
             self.valueType = "money"
             self.value = 8
         elif (self.type == "follow"):
-            self.valueType = "viewer"
+            self.valueType = "follow"
             self.value = 1
         elif (self.type == "host"):
             self.valueType = "viewer"
@@ -78,7 +78,9 @@ class ObsEvent():
 
         if self.value == None or self.valueType == None:
             gui.AddToActivityLog("Event not recognised: " + str(data))
-            self.done = True
+            return False
+        else:
+            return True
 
     def GetNormalisedValue(self, message):
         if message["currency"] == "USD":
@@ -88,12 +90,12 @@ class ObsEvent():
 
 class GuiWindow():
     def __init__(self):
-        root = Tk()
-        root.minsize(400, 400)
+        root = TK.Tk()
+        root.minsize(500, 400)
         self.gui = Gui(master=root)
 
 
-class Gui(Frame):
+class Gui(TK.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
@@ -106,41 +108,41 @@ class Gui(Frame):
         self.CreateBottomBar(self.master)
 
     def CreateStreamlabs(self, parent):
-        self.streamlabsContainer = Frame(parent)
-        self.streamlabsContainer.pack(fill="x", side="top")
+        self.streamlabsContainer = TK.Frame(parent)
+        self.streamlabsContainer.pack(fill=TK.X, side=TK.TOP)
 
-        self.streamlabsStatusText = StringVar()
+        self.streamlabsStatusText = TK.StringVar()
         self.UpdateStreamlabsStatus()
-        streamlabsStatusLabel = Label(
+        streamlabsStatusLabel = TK.Label(
             self.streamlabsContainer, textvariable=self.streamlabsStatusText, height=1, width=30)
-        streamlabsStatusLabel.pack(side="left")
+        streamlabsStatusLabel.pack(side=TK.LEFT)
 
-        streamlabsConnectButton = Button(self.streamlabsContainer)
+        streamlabsConnectButton = TK.Button(self.streamlabsContainer)
         streamlabsConnectButton["text"] = "Connect Streamlabs"
         streamlabsConnectButton["command"] = obs.Connect
-        streamlabsConnectButton.pack(side="left")
+        streamlabsConnectButton.pack(side=TK.LEFT)
 
-        streamlabsDisconnectButton = Button(self.streamlabsContainer)
+        streamlabsDisconnectButton = TK.Button(self.streamlabsContainer)
         streamlabsDisconnectButton["text"] = "Disonnect Streamlabs"
         streamlabsDisconnectButton["command"] = obs.Disconnect
-        streamlabsDisconnectButton.pack(side="left")
+        streamlabsDisconnectButton.pack(side=TK.LEFT)
 
     def CreateActivityLog(self, parent):
-        titleFrame = LabelFrame(parent, text="Activity Log")
-        titleFrame.pack(fill="both", expand=True, side="top", padx=3, pady=3)
-        yScroll = Scrollbar(titleFrame, orient="vertical")
-        yScroll.pack(fill="y", expand=True, side="right")
-        self.activityLogText = Text(
-            titleFrame, height=5, wrap="word", yscrollcommand=yScroll.set, state="disabled")
-        self.activityLogText.pack(fill="both", expand=True, side="left")
+        titleFrame = TK.LabelFrame(parent, text="Activity Log")
+        titleFrame.pack(fill=TK.BOTH, expand=True, side=TK.TOP, padx=3, pady=3)
+        yScroll = TK.Scrollbar(titleFrame, orient=TK.VERTICAL)
+        yScroll.pack(fill=TK.Y, expand=True, side=TK.RIGHT)
+        self.activityLogText = TK.Text(
+            titleFrame, height=5, wrap=TK.WORD, yscrollcommand=yScroll.set, state=TK.DISABLED)
+        self.activityLogText.pack(fill=TK.BOTH, expand=True, side=TK.LEFT)
 
     def CreateBottomBar(self, parent):
-        self.bottomBarContainer = Frame(parent)
-        self.bottomBarContainer.pack(fill="x", side="top")
+        self.bottomBarContainer = TK.Frame(parent)
+        self.bottomBarContainer.pack(fill=TK.X, side=TK.TOP)
 
-        quitButton = Button(self.bottomBarContainer, text="QUIT", fg="red",
-                            command=self.Quit)
-        quitButton.pack(side="left")
+        quitButton = TK.Button(self.bottomBarContainer, text="QUIT", fg="red",
+                               command=self.Quit)
+        quitButton.pack(side=TK.LEFT)
 
     def Quit(self):
         obs.Disconnect()
