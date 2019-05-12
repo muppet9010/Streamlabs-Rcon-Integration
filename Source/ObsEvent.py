@@ -1,7 +1,8 @@
 class ObsEvent():
-    def __init__(self, data, gui, currency):
-        self.gui = gui
-        self.currency = currency
+    def __init__(self, data, state):
+        self.State = state
+        self.Gui = state.Gui
+        self.Currency = state.Currency
         self.id = data["event_id"]
         self.platform = data["for"]
         self.type = data["type"]
@@ -10,13 +11,13 @@ class ObsEvent():
 
     def GetNormalisedData(self, data):
         if len(data["message"]) != 1:
-            self.gui.AddToActivityLog("wrong number of payloads in event: " +
+            self.Gui.AddToActivityLog("wrong number of payloads in event: " +
                                       len(data["message"]) + " data: " + str(data))
             return False
         message = data["message"][0]
         if (self.platform == "streamlabs" and self.type == "donation") or (self.platform == "youtube_account" and self.type == "superchat"):
             self.valueType = "money"
-            self.value = self.currency.GetNormalisedValue(
+            self.value = self.Currency.GetNormalisedValue(
                 message.currency, message.amount)
         elif (self.platform == "twitch_account" and self.type == "bits"):
             self.valueType = "money"
@@ -44,7 +45,7 @@ class ObsEvent():
             self.value = message["viewers"]
 
         if self.value == None or self.valueType == None:
-            self.gui.AddToActivityLog("Event not recognised: " + str(data))
+            self.Gui.AddToActivityLog("Event not recognised: " + str(data))
             return False
         else:
             return True

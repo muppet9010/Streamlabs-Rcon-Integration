@@ -1,25 +1,23 @@
 import tkinter as TK
-from Currency import Currency
 
 
 class GuiWindow():
-    def __init__(self, logging, obs):
+    def __init__(self, state):
         root = TK.Tk()
         root.minsize(500, 400)
-        self.gui = Gui(logging, obs, master=root)
+        self.State = state
+        self.Gui = Gui(state, master=root)
 
 
 class Gui(TK.Frame):
-    def __init__(self, logging, obs, master=None):
+    def __init__(self, state, master=None):
         super().__init__(master)
         self.master = master
         self.pack()
-        self.logging = logging
-        self.obs = obs
+        self.State = state
+        self.Logging = state.Logging
+        self.Obs = state.Obs
         self.CreateWidgets()
-
-    def UpdateReferences(self, obs):
-        self.obs = obs
 
     def CreateWidgets(self):
         self.CreateStreamlabs(self.master)
@@ -64,39 +62,39 @@ class Gui(TK.Frame):
         quitButton.pack(side=TK.LEFT)
 
     def Quit(self):
-        self.logging.Log("Quit Button")
-        self.obs.Disconnect()
+        self.Logging.Log("Quit Button")
+        self.Obs.Disconnect()
         self.master.destroy()
 
     def UpdateStatus(self):
-        if self.obs.connecting:
+        if self.Obs.connecting:
             self.statusText.set("OBS Connecting")
-        elif self.obs.sio.eio.state == "connected":
+        elif self.Obs.sio.eio.state == "connected":
             self.statusText.set("Running")
         else:
             self.statusText.set("Stopped")
 
     def AddToActivityLog(self, text):
-        self.logging.Log(text)
+        self.Logging.Log(text)
         self.activityLogText.configure(state="normal")
         self.activityLogText.insert(
-            1.0, self.logging.TimestampText(text) + "\n")
+            1.0, self.Logging.TimestampText(text) + "\n")
         self.activityLogText.configure(state="disabled")
 
     def Start(self):
-        self.logging.DebugLog("Start Button")
-        if not Currency.GetRates(self.logging, self):
-            self.logging.Log("Error: Get Rates for Currency failed")
+        self.Logging.DebugLog("Start Button")
+        if not self.State.Currency.GetRates():
+            self.Logging.Log("Error: Get Rates for Currency failed")
             return
-        self.obs.Connect(Currency)
+        self.Obs.Connect()
         self.UpdateStatus()
 
     def StartPostObsConnection(self):
-        self.obs.connecting = False
+        self.Obs.connecting = False
         self.UpdateStatus()
         self.AddToActivityLog("Started")
 
     def Stop(self):
-        self.logging.DebugLog("Stop Button")
-        self.obs.Disconnect()
+        self.Logging.DebugLog("Stop Button")
+        self.Obs.Disconnect()
         self.AddToActivityLog("Stopped")

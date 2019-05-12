@@ -2,37 +2,29 @@ import datetime as Datetime
 
 
 class Logging():
-    debugLogging = True
-
-    @staticmethod
-    def Setup():
+    def __init__(self, debugLogging=False):
         currentDT = Datetime.datetime.now()
         dtString = currentDT.strftime("%Y_%m_%d %H_%M_%S")
-        Logging.logFileName = "Log " + dtString + ".log"
-        Logging.debugLogFileName = "Debug " + Logging.logFileName
+        self.logFileName = "Log " + dtString + ".log"
+        self.debugLogFileName = "Debug " + self.logFileName
+        self.debugLogging = debugLogging
 
-    @staticmethod
-    def Log(text):
-        Logging.DebugLog(text)
-        fileName = Logging.logFileName
+    def Log(self, text):
+        self.DebugLog(text)
+        fileName = self.logFileName
         with open(fileName, "a") as file:
-            file.write(Logging.TimestampText(text) + "\n")
+            file.write(self.TimestampText(text) + "\n")
         file.closed
 
-    @staticmethod
-    def DebugLog(text):
-        if not Logging.debugLogging:
+    def DebugLog(self, text):
+        if not self.debugLogging:
             return
-        fileName = Logging.debugLogFileName
+        fileName = self.debugLogFileName
         with open(fileName, "a") as file:
-            file.write(Logging.TimestampText(text) + "\n")
+            file.write(self.TimestampText(text) + "\n")
         file.closed
 
-    @staticmethod
-    def TimestampText(text):
+    def TimestampText(self, text):
         currentDT = Datetime.datetime.now()
         dtString = currentDT.strftime("%H:%M:%S")
         return dtString + " : " + text
-
-
-Logging.Setup()
