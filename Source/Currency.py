@@ -5,12 +5,11 @@ import datetime as Datetime
 
 
 class Currency():
-    rates = {}
-    cacheFileName = "CurrencyDataCache.json"
-
     def __init__(self, state):
         self.Logging = state.Logging
         self.State = state
+        self.rates = {}
+        self.cacheFileName = "CurrencyDataCache.json"
 
     def GetRates(self):
         if len(self.rates) > 0:
@@ -49,7 +48,7 @@ class Currency():
         request = Requests.get(url=url, params=params)
         response = request.json()
         if not response["success"]:
-            self.State.Gui.AddToActivityLog(
+            self.State.RecordActivity(
                 "ERROR: Can't get currency conversion data")
             return False
         with open(self.cacheFileName, "w") as file:

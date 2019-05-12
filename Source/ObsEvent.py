@@ -1,27 +1,41 @@
 class ObsEvent():
-    def __init__(self, data, state):
+    def __init__(self, state, data):
         self.State = state
-        self.Gui = state.Gui
-        self.Currency = state.Currency
+        self.Logging = state.Logging
         self.id = data["event_id"]
         self.platform = data["for"]
         self.type = data["type"]
+        self.errored = False
         if not self.GetNormalisedData(data):
+            self.State.RecordActivity("Event not recognised: " + str(data))
+            self.errored = True
             return
+
+    def __str__(self):
+        str_list = []
+        str_list.append("{")
+        str_list.append("id: '" + str(self.id) + "', ")
+        str_list.append("platform: '" + str(self.platform) + "', ")
+        str_list.append("type: '" + str(self.type) + "', ")
+        str_list.append("errored: '" + str(self.errored) + "', ")
+        str_list.append("valueType: '" + str(self.valueType) + "', ")
+        str_list.append("value: '" + str(self.value) + "'")
+        str_list.append("}")
+        return ''.join(str_list)
 
     def GetNormalisedData(self, data):
         if len(data["message"]) != 1:
-            self.Gui.AddToActivityLog("wrong number of payloads in event: " +
+            self.State.RecordActivity("wrong number of payloads in event: " +
                                       len(data["message"]) + " data: " + str(data))
             return False
         message = data["message"][0]
         if (self.platform == "streamlabs" and self.type == "donation") or (self.platform == "youtube_account" and self.type == "superchat"):
             self.valueType = "money"
-            self.value = self.Currency.GetNormalisedValue(
-                message.currency, message.amount)
+            self.value = self.State.Currency.GetNormalisedValue(
+                message["currency"], float(message["amount"]))
         elif (self.platform == "twitch_account" and self.type == "bits"):
             self.valueType = "money"
-            self.value = message["amount"] / 100
+            self.value = float(message["amount"]) / 100
         elif (self.platform == "twitch_account" and self.type == "subscription"):
             self.valueType = "money"
             subPlan = message["sub_plan"]
@@ -45,7 +59,10 @@ class ObsEvent():
             self.value = message["viewers"]
 
         if self.value == None or self.valueType == None:
-            self.Gui.AddToActivityLog("Event not recognised: " + str(data))
             return False
         else:
             return True
+
+    def Process(self):
+        # do stuff
+        print("do event processing")
