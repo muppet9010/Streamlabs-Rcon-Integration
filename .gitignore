@@ -1,6 +1,5 @@
 /build
-*.pyc
 __pycache__
 CurrencyDataCache.json
-*.log
+/Logs
 config.cfg
