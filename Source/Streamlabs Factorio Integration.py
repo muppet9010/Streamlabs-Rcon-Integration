@@ -5,6 +5,7 @@ from Currency import Currency
 from ObsEvent import ObsEvent
 import json as Json
 from Config import Config
+from Profiles import Profiles
 
 
 class State():
@@ -12,6 +13,7 @@ class State():
         self.Config = Config(self)
         self.Logging = Logging(self)
         self.Currency = Currency(self)
+        self.Profiles = Profiles(self)
         self.Obs = Obs(self)
         self.GuiWindow = GuiWindow(self)
         self.Gui = self.GuiWindow.Gui

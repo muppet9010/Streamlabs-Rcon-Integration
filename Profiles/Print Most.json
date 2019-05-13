@@ -5,7 +5,7 @@
         {
             "platform": "streamlabs",
             "type": "donation",
-            "filters": [
+            "filteredActions": [
                 {
                     "condition": "[VALUE] < 5",
                     "manipulator": "",
@@ -20,7 +20,7 @@
         },
         {
             "valueType": "money",
-            "filters": [
+            "filteredActions": [
                 {
                     "condition": "[VALUE] < 5",
                     "manipulator": "",
@@ -35,7 +35,7 @@
         },
         {
             "valueType": "viewer",
-            "filters": [
+            "filteredActions": [
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
@@ -45,7 +45,7 @@
         },
         {
             "valueType": "host",
-            "filters": [
+            "filteredActions": [
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
