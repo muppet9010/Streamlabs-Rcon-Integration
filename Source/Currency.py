@@ -9,12 +9,12 @@ class Currency():
         self.Logging = state.Logging
         self.State = state
         self.rates = {}
-        self.cacheFileName = "CurrencyDataCache.json"
+        self.cacheFileName = "currency data cache.json"
 
     def GetRates(self):
         if len(self.rates) > 0:
             return True
-        if Os.path.isfile("./" + self.cacheFileName):
+        if Os.path.isfile(self.cacheFileName):
             self.Logging.DebugLog(
                 "Trying to get currancy rates from cache file")
             with open(self.cacheFileName, "r") as file:
@@ -44,8 +44,8 @@ class Currency():
     def _SourceRateData(self):
         self.Logging.DebugLog("Sourcing currency rates from website")
         url = "http://www.apilayer.net/api/live"
-        # TODO move to config
-        params = {"access_key": "bf92c65503f807f9abd65b83d39c2c6c"}
+        params = {"access_key": self.State.Config.GetSetting(
+            "Currency ApiLayerAccessKey")}
         request = Requests.get(url=url, params=params)
         response = request.json()
         if not response["success"]:

@@ -4,11 +4,13 @@ from Gui import Gui, GuiWindow
 from Currency import Currency
 from ObsEvent import ObsEvent
 import json as Json
+from Config import Config
 
 
 class State():
     def __init__(self):
-        self.Logging = Logging(True, -1)  # TODO move to config file
+        self.Config = Config(self)
+        self.Logging = Logging(self)
         self.Currency = Currency(self)
         self.Obs = Obs(self)
         self.GuiWindow = GuiWindow(self)

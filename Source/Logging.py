@@ -3,20 +3,20 @@ import os as Os
 
 
 class Logging():
-    def __init__(self, debugLogging, daysLogsToKeep):
+    def __init__(self, state):
         dateFormat = "%Y_%m_%d %H_%M_%S"
         currentDT = Datetime.datetime.now()
         dtString = currentDT.strftime(dateFormat)
         logFolder = "Logs"
         if Os.path.isdir(logFolder):
             self._TidyUpOldLogFiles(
-                logFolder, currentDT, daysLogsToKeep, dateFormat)
+                logFolder, currentDT, state.Config.GetSetting("Logging DaysLogsToKeep"), dateFormat)
         else:
             Os.mkdir(logFolder)
         logFileName = "Log " + dtString + ".log"
         self.logFilePath = logFolder + "/" + logFileName
         self.debugLogFilePath = logFolder + "/Debug" + logFileName
-        self.debugLogging = debugLogging
+        self.debugLogging = state.Config.GetSetting("Logging DebugLogging")
 
     def _TidyUpOldLogFiles(self, logFolder, currentDT, daysLogsToKeep, dateFormat):
         for name in Os.listdir(logFolder):

@@ -19,7 +19,8 @@ class Obs():
         self.Logging.DebugLog("Streamlabs Connecting")
         self.disconnecting = False
         self.connecting = True
-        self.sio.connect("https://sockets.streamlabs.com?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbiI6IjI3OEFBMDk5NEJFNkE0QTkyQzgzIiwicmVhZF9vbmx5Ijp0cnVlLCJwcmV2ZW50X21hc3RlciI6dHJ1ZSwidHdpdGNoX2lkIjoiODk1NjMzNDMifQ.WetcleHOyyhBMv16q04y3mi2XXiBDMzML8JM3kHvbfk")  # TODO move to config file
+        self.sio.connect("https://sockets.streamlabs.com?token=" +
+                         self.State.Config.GetSetting("Obs SocketApiToken"))
 
     def Disconnect(self):
         if self.sio.eio.state != "connected":
