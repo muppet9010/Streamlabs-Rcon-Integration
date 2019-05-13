@@ -1,0 +1,64 @@
+{
+    "name": "Print Most",
+    "description": "Prints all events details to Factorio",
+    "reactions": [
+        {
+            "platform": "streamlabs",
+            "type": "donation",
+            "filters": [
+                {
+                    "condition": "[VALUE] < 5",
+                    "manipulator": "",
+                    "action": "[ACTION_TaValue]"
+                },
+                {
+                    "condition": "[VALUE] >= 5",
+                    "manipulator": "[VALUE] * 2",
+                    "action": "game.print('Thanks for $[VALUE] donation [name], its worth [MODVALUE] to me')"
+                }
+            ]
+        },
+        {
+            "valueType": "money",
+            "filters": [
+                {
+                    "condition": "[VALUE] < 5",
+                    "manipulator": "",
+                    "action": "[ACTION_TaValue]"
+                },
+                {
+                    "condition": "[VALUE] >= 5",
+                    "manipulator": "",
+                    "action": "game.print('Cheers for the $[MODVALUE] support [name], it really helps')"
+                }
+            ]
+        },
+        {
+            "valueType": "viewer",
+            "filters": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        },
+        {
+            "valueType": "host",
+            "filters": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "game.print('[name] brought [VALUE] viewers with them')"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "TaValue",
+            "description": "Say thanks for small value stuff",
+            "effect": "game.print('Ta for $[VALUE] [name]')"
+        }
+    ]
+}

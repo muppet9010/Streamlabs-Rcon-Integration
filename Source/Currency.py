@@ -60,4 +60,4 @@ class Currency():
             self.rates[currency] = rate
 
     def GetNormalisedValue(self, currency, amount):
-        return amount / self.rates[currency]
+        return round(amount / self.rates[currency], 2)

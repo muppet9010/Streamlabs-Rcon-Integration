@@ -22,7 +22,8 @@ class Config():
             "Logging DaysLogsToKeep": 7,
             "Logging DebugLogging": True,
             "Currency ApiLayerAccessKey": "",
-            "Obs SocketApiToken": ""
+            "Obs SocketApiToken": "",
+            "Profile Default": ""
         }
         for name, value in defaults.items():
             if not name in self.settings:

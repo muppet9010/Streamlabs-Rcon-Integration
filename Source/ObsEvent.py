@@ -29,10 +29,14 @@ class ObsEvent():
                                       len(data["message"]) + " data: " + str(data))
             return False
         message = data["message"][0]
-        if (self.platform == "streamlabs" and self.type == "donation") or (self.platform == "youtube_account" and self.type == "superchat"):
+        if (self.platform == "streamlabs" and self.type == "donation"):
             self.valueType = "money"
             self.value = self.State.Currency.GetNormalisedValue(
                 message["currency"], float(message["amount"]))
+        elif (self.platform == "youtube_account" and self.type == "superchat"):
+            self.valueType = "money"
+            self.value = self.State.Currency.GetNormalisedValue(
+                message["currency"], float(message["amount"])/1000000)
         elif (self.platform == "twitch_account" and self.type == "bits"):
             self.valueType = "money"
             self.value = float(message["amount"]) / 100
