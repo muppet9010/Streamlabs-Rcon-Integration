@@ -17,11 +17,11 @@ class Gui(TK.Frame):
         self.State = state
 
     def CreateWidgets(self):
-        self.CreateStreamlabs(self.master)
-        self.CreateActivityLog(self.master)
-        self.CreateBottomBar(self.master)
+        self._CreateStreamlabs(self.master)
+        self._CreateActivityLog(self.master)
+        self._CreateBottomBar(self.master)
 
-    def CreateStreamlabs(self, parent):
+    def _CreateStreamlabs(self, parent):
         self.statusContainer = TK.Frame(parent)
         self.statusContainer.pack(fill=TK.X, side=TK.TOP)
 
@@ -33,15 +33,15 @@ class Gui(TK.Frame):
 
         startButton = TK.Button(self.statusContainer)
         startButton["text"] = "Start"
-        startButton["command"] = self.State.Start
+        startButton["command"] = self.State.OnStartButton
         startButton.pack(side=TK.LEFT)
 
         stopButton = TK.Button(self.statusContainer)
         stopButton["text"] = "Stop"
-        stopButton["command"] = self.State.Stop
+        stopButton["command"] = self.State.OnStopButton
         stopButton.pack(side=TK.LEFT)
 
-    def CreateActivityLog(self, parent):
+    def _CreateActivityLog(self, parent):
         titleFrame = TK.LabelFrame(parent, text="Activity Log")
         titleFrame.pack(fill=TK.BOTH, expand=True, side=TK.TOP, padx=3, pady=3)
         yScroll = TK.Scrollbar(titleFrame, orient=TK.VERTICAL)
@@ -50,12 +50,12 @@ class Gui(TK.Frame):
             titleFrame, height=5, wrap=TK.WORD, yscrollcommand=yScroll.set, state=TK.DISABLED)
         self.activityLogText.pack(fill=TK.BOTH, expand=True, side=TK.LEFT)
 
-    def CreateBottomBar(self, parent):
+    def _CreateBottomBar(self, parent):
         self.bottomBarContainer = TK.Frame(parent)
         self.bottomBarContainer.pack(fill=TK.X, side=TK.TOP)
 
         quitButton = TK.Button(self.bottomBarContainer, text="QUIT", fg="red",
-                               command=self.State.Quit)
+                               command=self.State.OnQuitButton)
         quitButton.pack(side=TK.LEFT)
 
     def UpdateStatusText(self, text):

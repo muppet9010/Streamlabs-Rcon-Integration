@@ -6,7 +6,7 @@ class ObsEvent():
         self.platform = data["for"]
         self.type = data["type"]
         self.errored = False
-        if not self.GetNormalisedData(data):
+        if not self._GetNormalisedData(data):
             self.State.RecordActivity("Event not recognised: " + str(data))
             self.errored = True
             return
@@ -23,7 +23,7 @@ class ObsEvent():
         str_list.append("}")
         return ''.join(str_list)
 
-    def GetNormalisedData(self, data):
+    def _GetNormalisedData(self, data):
         if len(data["message"]) != 1:
             self.State.RecordActivity("wrong number of payloads in event: " +
                                       len(data["message"]) + " data: " + str(data))

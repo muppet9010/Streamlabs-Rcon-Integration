@@ -1,17 +1,35 @@
 import datetime as Datetime
+import os as Os
 
 
 class Logging():
-    def __init__(self, debugLogging=False):
+    def __init__(self, debugLogging, daysLogsToKeep):
+        dateFormat = "%Y_%m_%d %H_%M_%S"
         currentDT = Datetime.datetime.now()
-        dtString = currentDT.strftime("%Y_%m_%d %H_%M_%S")
-        self.logFileName = "Log " + dtString + ".log"
-        self.debugLogFileName = "Debug " + self.logFileName
+        dtString = currentDT.strftime(dateFormat)
+        logFolder = "Logs"
+        if Os.path.isdir(logFolder):
+            self._TidyUpOldLogFiles(
+                logFolder, currentDT, daysLogsToKeep, dateFormat)
+        else:
+            Os.mkdir(logFolder)
+        logFileName = "Log " + dtString + ".log"
+        self.logFilePath = logFolder + "/" + logFileName
+        self.debugLogFilePath = logFolder + "/Debug" + logFileName
         self.debugLogging = debugLogging
+
+    def _TidyUpOldLogFiles(self, logFolder, currentDT, daysLogsToKeep, dateFormat):
+        for name in Os.listdir(logFolder):
+            if name[-3:] != "log":
+                continue
+            oldDateString = name[name.find(" ") + 1:-4]
+            oldDate = Datetime.datetime.strptime(oldDateString, dateFormat)
+            if abs((currentDT - oldDate).days) > daysLogsToKeep:
+                Os.remove(logFolder + "/" + name)
 
     def Log(self, text):
         self.DebugLog(text)
-        fileName = self.logFileName
+        fileName = self.logFilePath
         with open(fileName, "a") as file:
             file.write(self.TimestampText(text) + "\n")
         file.closed
@@ -19,7 +37,7 @@ class Logging():
     def DebugLog(self, text):
         if not self.debugLogging:
             return
-        fileName = self.debugLogFileName
+        fileName = self.debugLogFilePath
         with open(fileName, "a") as file:
             file.write(self.TimestampText(text) + "\n")
         file.closed

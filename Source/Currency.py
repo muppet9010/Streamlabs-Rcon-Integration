@@ -44,6 +44,7 @@ class Currency():
     def _SourceRateData(self):
         self.Logging.DebugLog("Sourcing currency rates from website")
         url = "http://www.apilayer.net/api/live"
+        # TODO move to config
         params = {"access_key": "bf92c65503f807f9abd65b83d39c2c6c"}
         request = Requests.get(url=url, params=params)
         response = request.json()

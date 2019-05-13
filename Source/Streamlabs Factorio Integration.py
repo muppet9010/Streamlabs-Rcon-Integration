@@ -7,7 +7,15 @@ import json as Json
 
 
 class State():
-    def Start(self):
+    def __init__(self):
+        self.Logging = Logging(True, -1)  # TODO move to config file
+        self.Currency = Currency(self)
+        self.Obs = Obs(self)
+        self.GuiWindow = GuiWindow(self)
+        self.Gui = self.GuiWindow.Gui
+        self.Gui.CreateWidgets()
+
+    def OnStartButton(self):
         self.Logging.DebugLog("Start Button")
         if not self.Currency.GetRates():
             self.Logging.Log("Error: Get Rates for Currency failed")
@@ -15,7 +23,30 @@ class State():
         self.Obs.Connect()
         self.UpdateStatus()
 
-    def Quit(self):
+    def OnObsConnect(self):
+        self.Logging.DebugLog("Streamlabs Connected")
+        self.Obs.disconnecting = False
+        if self.Obs.connecting:
+            self._OnStartButtonPostObsConnection()
+
+    def _OnStartButtonPostObsConnection(self):
+        self.Obs.connecting = False
+        self.UpdateStatus()
+        self.RecordActivity("Started")
+
+    def OnStopButton(self):
+        self.Logging.DebugLog("Stop Button")
+        self.Obs.Disconnect()
+        self.RecordActivity("Stopped")
+
+    def OnObsDisconnect(self):
+        self.Logging.DebugLog("Streamlabs Disconnected")
+        if not self.Obs.disconnecting:
+            self.RecordActivity("Error Streamlabs Stopped Unexpectedly")
+        self.Obs.disconnecting = False
+        self.UpdateStatus()
+
+    def OnQuitButton(self):
         self.Logging.Log("Quit Button")
         self.Obs.Disconnect()
         self.Gui.master.destroy()
@@ -24,30 +55,7 @@ class State():
         self.Logging.Log(text)
         self.Gui.AddToActivityLog(text)
 
-    def StartPostObsConnection(self):
-        self.Obs.connecting = False
-        self.UpdateStatus()
-        self.RecordActivity("Started")
-
-    def Stop(self):
-        self.Logging.DebugLog("Stop Button")
-        self.Obs.Disconnect()
-        self.RecordActivity("Stopped")
-
-    def ObsConnectHandler(self):
-        self.Logging.DebugLog("Streamlabs Connected")
-        self.Obs.disconnecting = False
-        if self.Obs.connecting:
-            self.StartPostObsConnection()
-
-    def ObsDisconnectHandler(self):
-        self.Logging.DebugLog("Streamlabs Disconnected")
-        if not self.Obs.disconnecting:
-            self.RecordActivity("Error Streamlabs Stopped Unexpectedly")
-        self.Obs.disconnecting = False
-        self.UpdateStatus()
-
-    def ObsEventHandler(self, data):
+    def OnObsEvent(self, data):
         self.Logging.DebugLog("Streamlabs raw event received: " + str(data))
         event = ObsEvent(self, data)
         self.Logging.DebugLog(
@@ -64,13 +72,10 @@ class State():
         else:
             self.Gui.UpdateStatusText("Stopped")
 
+    def Run(self):
+        self.Logging.DebugLog("App Started")
+        self.Gui.mainloop()
+
 
 State = State()
-State.Logging = Logging(True)
-State.Currency = Currency(State)
-State.Obs = Obs(State)
-State.GuiWindow = GuiWindow(State)
-State.Gui = State.GuiWindow.Gui
-State.Gui.CreateWidgets()
-State.Logging.DebugLog("App Started")
-State.Gui.mainloop()
+State.Run()
