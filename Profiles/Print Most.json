@@ -1,6 +1,6 @@
 {
     "name": "Print Most",
-    "description": "Prints all events details to Factorio",
+    "description": "Prints all financial and host details to Factorio",
     "reactions": [
         {
             "platform": "streamlabs",
@@ -29,7 +29,7 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "",
-                    "action": "game.print('Cheers for the $[MODVALUE] support [name], it really helps')"
+                    "action": "game.print('Cheers for the $[VALUE] support [name], it really helps')"
                 }
             ]
         },

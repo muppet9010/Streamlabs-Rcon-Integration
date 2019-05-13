@@ -4,16 +4,18 @@
 A Python exe for integrating Streamlabs and Factorio.
 
 
-Installation
+Installation & Usage
 ==========
 Get the [latest version zip](https://github.com/muppet9010/Factorio-Streamlabs-Integration).
 Unzip the files in to the desired folder.
 Run the: > Streamlabs Factorio Integration.exe
 Click on Settings button and enter your details.
-...............
+Configure a profile or be happy with the sample one.
+Select the desired profile and click Start.
+The integration is now running between the OBS account and the Factorio game using the selected profile.
 
 
-Usage
+Usage Concepts
 ========
 
 The app takes in Streamlabs OBS events and processes them through configurable reactions to trigger a desired action in a Factorio game. These reactions are grouped togeather as savable profiles.
