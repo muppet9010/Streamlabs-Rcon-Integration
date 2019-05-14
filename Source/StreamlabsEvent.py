@@ -2,14 +2,12 @@ class StreamlabsEvent():
     def __init__(self, state, data):
         self.State = state
         self.Logging = state.Logging
-        self.id = data["event_id"]
-        self.platform = data["for"]
+        self.platform = "streamlabs"
+        if "for" in data:
+            self.platform = data["for"]
         self.type = data["type"]
         self.value = 0
         self.valueType = ""
-        if not (self.platform == "streamlabs" or self.platform == "twitch_account" or self.platform == "youtube_account" or self.platform == "mixer_account"):
-            self.errored = True
-            return
         self.errored = False
         if not self._GetNormalisedData(data):
             self.State.RecordActivity(
@@ -36,6 +34,7 @@ class StreamlabsEvent():
             return False
         message = data["message"][0]
         self.rawData = message
+        self.id = message["_id"]
         if (self.platform == "streamlabs" and self.type == "donation"):
             self.valueType = "money"
             self.value = self.State.Currency.GetNormalisedValue(
@@ -73,6 +72,28 @@ class StreamlabsEvent():
             return False
         else:
             return True
+
+    @staticmethod
+    def ShouldHandleEvent(data):
+        if "for" in data:
+            platform = data["for"]
+            if not (platform == "streamlabs" or platform == "twitch_account" or platform == "youtube_account" or platform == "mixer_account"):
+                return False
+        elif "type" in data:
+            type = data["type"]
+            if not type == "donation":
+                return False
+        else:
+            return False
+        return True
+
+    @staticmethod
+    def ShouldIgnoreEvent(data):
+        if "type" in data:
+            type = data["type"]
+            if (type == "streamlabels" or type == "streamlabels.underlying" or type == "alertPlaying" or type == "subscription-playing"):
+                return True
+        return False
 
     def Process(self):
         # do stuff

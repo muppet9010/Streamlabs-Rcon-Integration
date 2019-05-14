@@ -32,17 +32,18 @@ class Gui(TK.Frame):
             runningContainer, textvariable=self.statusText, height=1, width=30)
         statusLabel.pack(side=TK.LEFT)
 
+        # TODO this doesn't make a list of multiple items...
         self.selectedProfileName = TK.StringVar()
-        sortedProfileNames = sorted(list(
+        self.sortedProfileNames = sorted(list(
             self.State.Profiles.profiles.keys()))
         configProfileDefault = self.State.Config.GetSetting("Profile Default")
-        if configProfileDefault != "" and configProfileDefault in sortedProfileNames:
+        if configProfileDefault != "" and configProfileDefault in self.sortedProfileNames:
             self.selectedProfileName.set(configProfileDefault)
         else:
             self.selectedProfileName.set(
                 self.Translations.currentTexts["Gui SelectProfile"])
         profileList = TK.OptionMenu(
-            runningContainer, self.selectedProfileName, *sortedProfileNames)
+            runningContainer, self.selectedProfileName, self.sortedProfileNames)
         profileList.pack(side=TK.LEFT)
 
         startButton = TK.Button(runningContainer,

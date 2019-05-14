@@ -26,7 +26,7 @@ class State():
     def OnStartButtonHandler(self):
         try:
             self.Logging.DebugLog("Start Button Pressed")
-            if self.Gui.selectedProfileName.get() == self.Translations.currentTexts["Gui SelectProfile"]:
+            if self.Gui.selectedProfileName.get() == "" or self.Gui.selectedProfileName.get() == self.Translations.currentTexts["Gui SelectProfile"]:
                 self.RecordActivity(
                     self.Translations.currentTexts["Message NeedProfileBeforeStart"])
                 return
@@ -87,6 +87,18 @@ class State():
 
     def OnStreamlabsEventHandler(self, data):
         try:
+            if StreamlabsEvent.ShouldIgnoreEvent(data):
+                self.Logging.DebugLog("Streamlabs event being ignored")
+                return
+            if not StreamlabsEvent.ShouldHandleEvent(data):
+                eventDesc = ""
+                if "for" in data:
+                    eventDesc += (" " + data["for"])
+                if "type" in data:
+                    eventDesc += (" " + data["type"])
+                self.RecordActivity(
+                    self.Translations.currentTexts["SteamlabsEvent UndefinedEvent"] + eventDesc)
+                return
             self.Logging.DebugLog(
                 "Streamlabs raw event received: " + str(data))
             event = StreamlabsEvent(self, data)

@@ -20,6 +20,7 @@ class Translations:
                 "Status Running": "Running",
                 "Status Stopped": "Stopped",
                 "Currency WebsiteDownloadFailed": "ERROR: Can't get currency conversion data from website",
-                "SteamlabsEvent UnrecognisedEvent": "ERROR: Event not recognised: ",
-                "SteamlabsEvent BadEventPayloadCount": "ERROR: wrong number of payloads in event: "
+                "SteamlabsEvent UnrecognisedEvent": "ERROR: Event data not recognised: ",
+                "SteamlabsEvent BadEventPayloadCount": "ERROR: wrong number of payloads in event: ",
+                "SteamlabsEvent UndefinedEvent": "WARNING: Streamlabs event being ignored as not recognised: "
             }
