@@ -95,6 +95,17 @@ class StreamlabsEvent():
                 return True
         return False
 
+    @staticmethod
+    def GetEventTitles(data):
+        eventDesc = ""
+        if "for" in data:
+            eventDesc += (" " + data["for"])
+        if "type" in data:
+            eventDesc += (" " + data["type"])
+        if eventDesc == "":
+            eventDesc = "No Title Details"
+        return eventDesc
+
     def Process(self):
         # do stuff
         print("do event processing")

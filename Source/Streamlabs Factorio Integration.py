@@ -88,16 +88,12 @@ class State():
     def OnStreamlabsEventHandler(self, data):
         try:
             if StreamlabsEvent.ShouldIgnoreEvent(data):
-                self.Logging.DebugLog("Streamlabs event being ignored")
+                self.Logging.DebugLog(
+                    "Streamlabs event being ignored: " + StreamlabsEvent.GetEventTitles(data))
                 return
             if not StreamlabsEvent.ShouldHandleEvent(data):
-                eventDesc = ""
-                if "for" in data:
-                    eventDesc += (" " + data["for"])
-                if "type" in data:
-                    eventDesc += (" " + data["type"])
                 self.RecordActivity(
-                    self.Translations.currentTexts["SteamlabsEvent UndefinedEvent"] + eventDesc)
+                    self.Translations.currentTexts["SteamlabsEvent UndefinedEvent"] + StreamlabsEvent.GetEventTitles(data))
                 return
             self.Logging.DebugLog(
                 "Streamlabs raw event received: " + str(data))
