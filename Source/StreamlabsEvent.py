@@ -5,6 +5,11 @@ class StreamlabsEvent():
         self.id = data["event_id"]
         self.platform = data["for"]
         self.type = data["type"]
+        self.value = 0
+        self.valueType = ""
+        if not (self.platform == "streamlabs" or self.platform == "twitch_account" or self.platform == "youtube_account" or self.platform == "mixer_account"):
+            self.errored = True
+            return
         self.errored = False
         if not self._GetNormalisedData(data):
             self.State.RecordActivity(
@@ -26,10 +31,11 @@ class StreamlabsEvent():
 
     def _GetNormalisedData(self, data):
         if len(data["message"]) != 1:
-            self.State.RecordActivity(self.State.Translations.currentTexts["SteamlabsEvent BadEventPayloadCount"] +
-                                      len(data["message"]) + " data: " + str(data))
+            self.State.RecordActivity(
+                self.State.Translations.currentTexts["SteamlabsEvent BadEventPayloadCount"] + len(data["message"]) + " data: " + str(data))
             return False
         message = data["message"][0]
+        self.rawData = message
         if (self.platform == "streamlabs" and self.type == "donation"):
             self.valueType = "money"
             self.value = self.State.Currency.GetNormalisedValue(
