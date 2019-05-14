@@ -9,9 +9,9 @@ class Obs():
         self.disconnecting = False
         self.connecting = False
         self.sio = SocketIo.Client()
-        self.sio.on("event", self.State.OnObsEvent)
-        self.sio.on("connect", self.State.OnObsConnect)
-        self.sio.on("disconnect", self.State.OnObsDisconnect)
+        self.sio.on("event", self.State.OnObsEventHandler)
+        self.sio.on("connect", self.State.OnObsConnectHandler)
+        self.sio.on("disconnect", self.State.OnObsDisconnectHandler)
 
     def Connect(self):
         if self.sio.eio.state != "disconnected":

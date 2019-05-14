@@ -23,7 +23,8 @@ class Config():
             "Logging DebugLogging": True,
             "Currency ApiLayerAccessKey": "",
             "Obs SocketApiToken": "",
-            "Profile Default": ""
+            "Profile Default": "",
+            "Factorio PlayerName": ""
         }
         for name, value in defaults.items():
             if not name in self.settings:

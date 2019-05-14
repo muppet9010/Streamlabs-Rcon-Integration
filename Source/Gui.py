@@ -31,14 +31,12 @@ class Gui(TK.Frame):
             self.statusContainer, textvariable=self.statusText, height=1, width=30)
         statusLabel.pack(side=TK.LEFT)
 
-        startButton = TK.Button(self.statusContainer)
-        startButton["text"] = "Start"
-        startButton["command"] = self.State.OnStartButton
+        startButton = TK.Button(self.statusContainer,
+                                text="Start", command=self.State.OnStartButtonHandler)
         startButton.pack(side=TK.LEFT)
 
-        stopButton = TK.Button(self.statusContainer)
-        stopButton["text"] = "Stop"
-        stopButton["command"] = self.State.OnStopButton
+        stopButton = TK.Button(
+            self.statusContainer, text="Stop", command=self.State.OnStopButtonHandler)
         stopButton.pack(side=TK.LEFT)
 
     def _CreateActivityLog(self, parent):
@@ -55,7 +53,7 @@ class Gui(TK.Frame):
         self.bottomBarContainer.pack(fill=TK.X, side=TK.TOP)
 
         quitButton = TK.Button(self.bottomBarContainer, text="QUIT", fg="red",
-                               command=self.State.OnQuitButton)
+                               command=self.State.OnQuitButtonHandler)
         quitButton.pack(side=TK.LEFT)
 
     def UpdateStatusText(self, text):

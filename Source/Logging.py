@@ -1,9 +1,11 @@
 import datetime as Datetime
 import os as Os
+import traceback as Traceback
 
 
 class Logging():
     def __init__(self, state):
+        self.State = state
         dateFormat = "%Y_%m_%d %H_%M_%S"
         currentDT = Datetime.datetime.now()
         dtString = currentDT.strftime(dateFormat)
@@ -46,3 +48,16 @@ class Logging():
         currentDT = Datetime.datetime.now()
         dtString = currentDT.strftime("%H:%M:%S")
         return dtString + " : " + text
+
+    def RecordException(self, ex, description):
+        text = description + " - See logs for details"
+        stackTrace = Traceback.format_exc()
+        try:
+            self.State.RecordActivity(text)
+        except:
+            pass
+        try:
+            self.Log(stackTrace)
+        except:
+            pass
+        raise ex
