@@ -22,7 +22,7 @@ class Config():
             "Logging DaysLogsToKeep": 7,
             "Logging DebugLogging": True,
             "Currency ApiLayerAccessKey": "",
-            "Obs SocketApiToken": "",
+            "Streamlabs SocketApiToken": "",
             "Profile Default": "",
             "Factorio PlayerName": ""
         }

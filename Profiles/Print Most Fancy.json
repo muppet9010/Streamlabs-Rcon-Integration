@@ -1,6 +1,6 @@
 {
-    "name": "Print Most",
-    "description": "Prints all financial and host details to Factorio",
+    "name": "Print Most Fancy",
+    "description": "Prints all financial and host details to Factorio with flavour text",
     "reactions": [
         {
             "platform": "streamlabs",

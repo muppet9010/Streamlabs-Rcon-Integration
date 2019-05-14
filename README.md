@@ -12,25 +12,25 @@ Run the: > Streamlabs Factorio Integration.exe
 Click on Settings button and enter your details.
 Configure a profile or be happy with the sample one.
 Select the desired profile and click Start.
-The integration is now running between the OBS account and the Factorio game using the selected profile.
+The integration is now running between the Streamlabs account and the Factorio game using the selected profile.
 
 
 Usage Concepts
 ========
 
-The app takes in Streamlabs OBS events and processes them through configurable reactions to trigger a desired action in a Factorio game. These reactions are grouped togeather as savable profiles.
+The app takes in Streamlabs events and processes them through configurable reactions to trigger a desired action in a Factorio game. These reactions are grouped togeather as savable profiles.
 
-The Streamlabs OBS events and their contained data can found on the second part of this page.
+The Streamlabs events and their contained data can found on the second part of this page.
 https://streamlabs.readme.io/docs/socket-api
 
 The app runs a single grouping of reactions at a time, being loaded and saved as a profile. During the process if no suitable option is found it will be shown within the app and that events processing stops. Its assumed you want to handle any event you get. Special options at each level exist for more simple uses cases.
 
-When an OBS event is received it is processed to have additional data items calculated for them:
+When an Streamlabs event is received it is processed to have additional data items calculated for them:
     `[VALUETYPE]` = a simplified grouping of events in to either `money`, `viewer` or `host`.
     `[VALUE]` = the standardised value of the event. Donations and money amounts are converted to USD. Subscriptions have the USD cost of them. Follows and Hosts ahve the viewer count. This may be a decimal number.
 The reactions are reviewed to find the most approperiate one. First the reactions are checked for the first matching platform and type to the event. If no match is found the ValueType of the event is checked for in the reactions for a match.
 
-Assuming a reaction for the event is found the reaction's filters are checked for the first that is met. Filters allow simple math script conditions to be used to select the approperiate action to do for the event. All of the events data items from OBS and this app (generated up to this point) can be used witihn the filter in the format `[DATA_ITEM_NAME]`. i.e. `[VALUE] >= 5 and [VALUE] < 10`. There is a special `ALL` filter option that it configured will be triggered after all other filters have been checked. The filters within a reaction are not order specific and so should not overlap each others conditions.
+Assuming a reaction for the event is found the reaction's filters are checked for the first that is met. Filters allow simple math script conditions to be used to select the approperiate action to do for the event. All of the events data items from Streamlabs and this app (generated up to this point) can be used witihn the filter in the format `[DATA_ITEM_NAME]`. i.e. `[VALUE] >= 5 and [VALUE] < 10`. There is a special `ALL` filter option that it configured will be triggered after all other filters have been checked. The filters within a reaction are not order specific and so should not overlap each others conditions.
 
 The first complying reaction filter will then run an optional manipulator script if configured. This creates a new data item for the event `[MODVALUE]` with the scripts simple math script output value. This is used when you want to pass a modified value in to the Factorio game.
 

@@ -25,7 +25,7 @@ class Profile:
         self.name = profileData["name"]
         self.description = profileData["description"]
         self.actions = {}
-        if profileData["actions"] != None:
+        if "actions" in profileData:
             for actionData in profileData["actions"]:
                 self.actions[actionData["name"]] = Action(actionData)
         self.reactionPriorities = {1: [], 2: []}

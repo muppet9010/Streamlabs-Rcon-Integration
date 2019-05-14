@@ -1,0 +1,36 @@
+{
+    "name": "Print All",
+    "description": "Prints all events very simply",
+    "reactions": [
+        {
+            "valueType": "money",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "game.print('[name] supported with $[VALUE]')"
+                }
+            ]
+        },
+        {
+            "valueType": "viewer",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "game.print('[name] followed')"
+                }
+            ]
+        },
+        {
+            "valueType": "host",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "game.print('[name] hosted with [VALUE] viewers')"
+                }
+            ]
+        }
+    ]
+}

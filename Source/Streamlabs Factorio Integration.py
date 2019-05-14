@@ -1,11 +1,12 @@
 from Logging import Logging
-from Obs import Obs
+from Streamlabs import Streamlabs
 from Gui import Gui, GuiWindow
 from Currency import Currency
-from ObsEvent import ObsEvent
+from StreamlabsEvent import StreamlabsEvent
 import json as Json
 from Config import Config
 from Profiles import Profiles
+from Translations import Translations
 
 
 class State():
@@ -14,52 +15,60 @@ class State():
         self.Logging = Logging(self)
 
     def Setup(self):
+        self.Translations = Translations(self)
         self.Currency = Currency(self)
         self.Profiles = Profiles(self)
-        self.Obs = Obs(self)
+        self.Streamlabs = Streamlabs(self)
         self.GuiWindow = GuiWindow(self)
         self.Gui = self.GuiWindow.Gui
         self.Gui.CreateWidgets()
 
     def OnStartButtonHandler(self):
         try:
-            self.Logging.DebugLog("Start Button")
+            self.Logging.DebugLog("Start Button Pressed")
+            if self.Gui.selectedProfileName.get() == self.Translations.currentTexts["Gui SelectProfile"]:
+                self.RecordActivity(
+                    self.Translations.currentTexts["Message NeedProfileBeforeStart"])
+                return
             if not self.Currency.GetRates():
                 self.Logging.Log("Error: Get Rates for Currency failed")
                 return
-            self.Obs.Connect()
+            self.Streamlabs.Connect()
             self.UpdateStatus()
         except Exception as ex:
             self.Logging.RecordException(ex, "Start Button Critical Error")
 
-    def OnObsConnectHandler(self):
+    def OnStreamlabsConnectHandler(self):
         try:
             self.Logging.DebugLog("Streamlabs Connected")
-            self.Obs.disconnecting = False
-            if self.Obs.connecting:
-                self._OnStartButtonPostObsConnection()
+            self.Streamlabs.disconnecting = False
+            if self.Streamlabs.connecting:
+                self._OnStartButtonPostStreamlabsConnection()
         except Exception as ex:
             self.Logging.RecordException(ex, "OBS Connected Critical Error")
 
-    def _OnStartButtonPostObsConnection(self):
-        self.Obs.connecting = False
+    def _OnStartButtonPostStreamlabsConnection(self):
+        self.Streamlabs.connecting = False
         self.UpdateStatus()
-        self.RecordActivity("Started")
+        self.RecordActivity(self.Translations.currentTexts["Message Started"])
 
     def OnStopButtonHandler(self):
         try:
-            self.Logging.DebugLog("Stop Button")
-            self.Obs.Disconnect()
-            self.RecordActivity("Stopped")
+            self.Logging.DebugLog("Stop Button Pressed")
+            self.Streamlabs.Disconnect()
         except Exception as ex:
             self.Logging.RecordException(ex, "Stop Button Critical Error")
 
-    def OnObsDisconnectHandler(self):
+    def OnStreamlabsDisconnectHandler(self):
         try:
-            self.Logging.DebugLog("Streamlabs Disconnected")
-            if not self.Obs.disconnecting:
-                self.RecordActivity("Error Streamlabs Stopped Unexpectedly")
-            self.Obs.disconnecting = False
+            self.Logging.DebugLog("Streamlabs Disconnected Pressed")
+            if not self.Streamlabs.disconnecting:
+                self.RecordActivity(
+                    self.Translations.currentTexts["Message StreamlabsUnexpectedStop"])
+            else:
+                self.RecordActivity(
+                    self.Translations.currentTexts["Message Stopped"])
+            self.Streamlabs.disconnecting = False
             self.UpdateStatus()
         except Exception as ex:
             self.Logging.RecordException(ex, "OBS Disconnected Critical Error")
@@ -67,7 +76,7 @@ class State():
     def OnQuitButtonHandler(self):
         try:
             self.Logging.Log("Quit Button")
-            self.Obs.Disconnect()
+            self.Streamlabs.Disconnect()
             self.Gui.master.destroy()
         except Exception as ex:
             self.Logging.RecordException(ex, "Quit Button Critical Error")
@@ -76,11 +85,11 @@ class State():
         self.Logging.Log(text)
         self.Gui.AddToActivityLog(text)
 
-    def OnObsEventHandler(self, data):
+    def OnStreamlabsEventHandler(self, data):
         try:
             self.Logging.DebugLog(
                 "Streamlabs raw event received: " + str(data))
-            event = ObsEvent(self, data)
+            event = StreamlabsEvent(self, data)
             self.Logging.DebugLog(
                 "Streamlabs processed event: " + str(event))
             if event.errored:
@@ -91,12 +100,15 @@ class State():
                 ex, "OBS Event Handler Critical Error - This event won't be processed")
 
     def UpdateStatus(self):
-        if self.Obs.connecting:
-            self.Gui.UpdateStatusText("OBS Connecting")
-        elif self.Obs.sio.eio.state == "connected":
-            self.Gui.UpdateStatusText("Running")
+        if self.Streamlabs.connecting:
+            self.Gui.UpdateStatusText(
+                self.Translations.currentTexts["Status OBSConnecting"])
+        elif self.Streamlabs.sio.eio.state == "connected":
+            self.Gui.UpdateStatusText(
+                self.Translations.currentTexts["Status Running"])
         else:
-            self.Gui.UpdateStatusText("Stopped")
+            self.Gui.UpdateStatusText(
+                self.Translations.currentTexts["Status Stopped"])
 
     def Run(self):
         self.Logging.DebugLog("App Started")
@@ -109,7 +121,7 @@ try:
     state.Run()
 except Exception as ex:
     try:
-        self.Obs.Disconnect()
+        self.Streamlabs.Disconnect()
     except:
         pass
     try:

@@ -50,7 +50,7 @@ class Currency():
         response = request.json()
         if not response["success"]:
             self.State.RecordActivity(
-                "ERROR: Can't get currency conversion data")
+                self.State.Translations.currentTexts["Currency WebsiteDownloadFailed"])
             return False
         with open(self.cacheFileName, "w") as file:
             file.write(Json.dumps(response))

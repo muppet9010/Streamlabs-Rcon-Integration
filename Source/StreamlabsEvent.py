@@ -1,4 +1,4 @@
-class ObsEvent():
+class StreamlabsEvent():
     def __init__(self, state, data):
         self.State = state
         self.Logging = state.Logging
@@ -7,7 +7,8 @@ class ObsEvent():
         self.type = data["type"]
         self.errored = False
         if not self._GetNormalisedData(data):
-            self.State.RecordActivity("Event not recognised: " + str(data))
+            self.State.RecordActivity(
+                self.State.Translations.currentTexts["SteamlabsEvent UnrecognisedEvent"] + str(data))
             self.errored = True
             return
 
@@ -25,7 +26,7 @@ class ObsEvent():
 
     def _GetNormalisedData(self, data):
         if len(data["message"]) != 1:
-            self.State.RecordActivity("wrong number of payloads in event: " +
+            self.State.RecordActivity(self.State.Translations.currentTexts["SteamlabsEvent BadEventPayloadCount"] +
                                       len(data["message"]) + " data: " + str(data))
             return False
         message = data["message"][0]
