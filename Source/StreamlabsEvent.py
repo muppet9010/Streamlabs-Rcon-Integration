@@ -15,6 +15,14 @@ class StreamlabsEvent():
             self.errored = True
             return
 
+    @property
+    def value(self):
+        return "{:.2f}".format(self._value)
+
+    @value.setter
+    def value(self, value):
+        self._value = value
+
     def __str__(self):
         str_list = []
         str_list.append("{")
@@ -45,7 +53,7 @@ class StreamlabsEvent():
                 message["currency"], float(message["amount"])/1000000)
         elif (self.platform == "twitch_account" and self.type == "bits"):
             self.valueType = "money"
-            self.value = float(message["amount"]) / 100
+            self.value = round(float(message["amount"]) / 100, 2)
         elif (self.platform == "twitch_account" and self.type == "subscription"):
             self.valueType = "money"
             subPlan = message["sub_plan"]
@@ -68,7 +76,7 @@ class StreamlabsEvent():
             self.valueType = "viewer"
             self.value = message["viewers"]
 
-        if self.value == None or self.valueType == None:
+        if self.value == 0 or self.valueType == "":
             return False
         else:
             return True
@@ -91,7 +99,7 @@ class StreamlabsEvent():
     def ShouldIgnoreEvent(data):
         if "type" in data:
             type = data["type"]
-            if (type == "streamlabels" or type == "streamlabels.underlying" or type == "alertPlaying" or type == "subscription-playing"):
+            if (type == "streamlabels" or type == "streamlabels.underlying" or type == "alertPlaying" or type == "subscription-playing" or type == "rollEndCredits" or type == "subMysteryGift"):
                 return True
         return False
 
@@ -99,9 +107,9 @@ class StreamlabsEvent():
     def GetEventTitles(data):
         eventDesc = ""
         if "for" in data:
-            eventDesc += (" " + data["for"])
+            eventDesc += ("for: '" + data["for"] + "'")
         if "type" in data:
-            eventDesc += (" " + data["type"])
+            eventDesc += ("type: '" + data["type"] + "'")
         if eventDesc == "":
             eventDesc = "No Title Details"
         return eventDesc

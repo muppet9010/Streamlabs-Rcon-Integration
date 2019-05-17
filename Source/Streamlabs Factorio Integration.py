@@ -96,7 +96,7 @@ class State():
                     self.Translations.currentTexts["SteamlabsEvent UndefinedEvent"] + StreamlabsEvent.GetEventTitles(data))
                 return
             self.Logging.DebugLog(
-                "Streamlabs raw event received: " + str(data))
+                "Streamlabs supported raw event received: " + str(data))
             event = StreamlabsEvent(self, data)
             self.Logging.DebugLog(
                 "Streamlabs processed event: " + str(event))
