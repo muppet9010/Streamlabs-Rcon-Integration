@@ -1,19 +1,34 @@
 class StreamlabsEvent():
+    handledEventTypes = ["youtube_account-superchat", "youtube_account-subscription", "youtube_account-follow", "twitch_account-bits", "twitch_account-subscription",
+                         "twitch_account-follow", "twitch_account-host", "twitch_account-raid", "mixer_account-subscription", "mixer_account-follow", "mixer_account-host", "streamlabs-donation"]
+
     def __init__(self, state, data):
         self.State = state
         self.Logging = state.Logging
-        self.platform = "streamlabs"
+
         if "for" in data:
-            self.platform = data["for"]
-        self.type = data["type"]
+            self.rawPlatform = data["for"]
+        else:
+            self.rawplatform = ""
+        if "for" in data:
+            self.rawType = data["type"]
+        else:
+            self.rawType = ""
+        self.rawData = data
+        self.id = ""
+        self.type = ""
         self.value = 0
         self.valueType = ""
         self.errored = False
-        if not self._GetNormalisedData(data):
+
+        if len(data["message"]) != 1:
             self.State.RecordActivity(
-                self.State.Translations.currentTexts["SteamlabsEvent UnrecognisedEvent"] + str(data))
+                self.State.Translations.currentTexts["StreamlabsEvent BadEventPayloadCount"] + len(data["message"]))
             self.errored = True
             return
+        message = data["message"][0]
+        self.rawMessage = message
+        self.id = message["_id"]
 
     @property
     def value(self):
@@ -27,89 +42,85 @@ class StreamlabsEvent():
         str_list = []
         str_list.append("{")
         str_list.append("id: '" + str(self.id) + "', ")
-        str_list.append("platform: '" + str(self.platform) + "', ")
-        str_list.append("type: '" + str(self.type) + "', ")
+        str_list.append("rawPlatform: '" + str(self.rawPlatform) + "', ")
+        str_list.append("rawType: '" + str(self.rawType) + "', ")
         str_list.append("errored: '" + str(self.errored) + "', ")
+        str_list.append("type: '" + str(self.type) + "', ")
         str_list.append("valueType: '" + str(self.valueType) + "', ")
         str_list.append("value: '" + str(self.value) + "'")
         str_list.append("}")
         return ''.join(str_list)
 
-    def _GetNormalisedData(self, data):
-        if len(data["message"]) != 1:
-            self.State.RecordActivity(
-                self.State.Translations.currentTexts["SteamlabsEvent BadEventPayloadCount"] + len(data["message"]) + " data: " + str(data))
+    def IsHandledEvent(self):
+        if self.rawType == "donation":
+            self.rawPlatform = "streamlabs"
+        rawHandlerString = self.rawPlatform + "-" + self.rawType
+        if rawHandlerString in self.handledEventTypes:
+            self.type = rawHandlerString
+            return True
+        else:
             return False
-        message = data["message"][0]
-        self.rawData = message
-        self.id = message["_id"]
-        if (self.platform == "streamlabs" and self.type == "donation"):
+
+    def ShouldIgnoreEvent(self):
+        if (self.rawPlatform == "streamlabs") and (self.rawType == "streamlabels" or self.rawType == "streamlabels.underlying" or self.rawType == "alertPlaying" or self.rawType == "subscription-playing" or self.rawType == "rollEndCredits" or self.rawType == "subMysteryGift"):
+            return True
+        if self.id in self.State.donationsIdsProcessed:
+            self.Logging.DebugLog(
+                "Streamlabs donation event being ignored as in processed list: " + self.id)
+            return True
+        return False
+
+    def PopulateNormalisedData(self):
+        if (self.type == "streamlabs-donation"):
             self.valueType = "money"
             self.value = self.State.Currency.GetNormalisedValue(
-                message["currency"], float(message["amount"]))
-        elif (self.platform == "youtube_account" and self.type == "superchat"):
+                self.rawMessage["currency"], float(self.rawMessage["amount"]))
+            self.State.donationsIdsProcessed[self.id] = True
+        elif (self.type == "youtube_account-superchat"):
             self.valueType = "money"
             self.value = self.State.Currency.GetNormalisedValue(
-                message["currency"], float(message["amount"])/1000000)
-        elif (self.platform == "twitch_account" and self.type == "bits"):
+                self.rawMessage["currency"], float(self.rawMessage["amount"])/1000000)
+        elif (self.type == "twitch_account-bits"):
             self.valueType = "money"
-            self.value = round(float(message["amount"]) / 100, 2)
-        elif (self.platform == "twitch_account" and self.type == "subscription"):
+            self.value = round(float(self.rawMessage["amount"]) / 100, 2)
+        elif (self.type == "twitch_account-subscription"):
             self.valueType = "money"
-            subPlan = message["sub_plan"]
+            subPlan = self.rawMessage["sub_plan"]
             if subPlan == "Prime" or subPlan == "1000":
                 self.value = 5
             elif subPlan == "2000":
                 self.value = 10
             elif subPlan == "3000":
                 self.value = 25
-        elif (self.platform == "youtube_account" and self.type == "subscription"):
+            else:
+                self.State.RecordActivity(
+                    self.State.Translations.currentTexts["StreamlabsEvent UnrecognisedTwitchSubscriptionType"] + subPlan)
+                return False
+        elif (self.type == "youtube_account-subscription"):
             self.valueType = "money"
             self.value = 5
-        elif (self.platform == "mixer_account" and self.type == "subscription"):
+        elif (self.type == "mixer_account-subscription"):
             self.valueType = "money"
             self.value = 8
-        elif (self.type == "follow"):
+        elif (self.type == "youtube_account-follow" or self.type == "twitch_account-follow" or self.type == "mixer_account-follow"):
             self.valueType = "follow"
             self.value = 1
-        elif (self.type == "host"):
+        elif (self.type == "twitch_account-host" or self.type == "mixer_account-host"):
             self.valueType = "viewer"
-            self.value = message["viewers"]
-
-        if self.value == 0 or self.valueType == "":
-            return False
-        else:
-            return True
-
-    @staticmethod
-    def ShouldHandleEvent(data):
-        if "for" in data:
-            platform = data["for"]
-            if not (platform == "streamlabs" or platform == "twitch_account" or platform == "youtube_account" or platform == "mixer_account"):
-                return False
-        elif "type" in data:
-            type = data["type"]
-            if not type == "donation":
-                return False
+            self.value = self.rawMessage["viewers"]
+        elif (self.type == "twitch_account-raid"):
+            self.valueType = "viewer"
+            self.value = self.rawMessage["raiders"]
         else:
             return False
         return True
 
-    @staticmethod
-    def ShouldIgnoreEvent(data):
-        if "type" in data:
-            type = data["type"]
-            if (type == "streamlabels" or type == "streamlabels.underlying" or type == "alertPlaying" or type == "subscription-playing" or type == "rollEndCredits" or type == "subMysteryGift"):
-                return True
-        return False
-
-    @staticmethod
-    def GetEventTitles(data):
+    def GetEventTitlesAsPrettyString(self):
         eventDesc = ""
-        if "for" in data:
-            eventDesc += ("for: '" + data["for"] + "'")
-        if "type" in data:
-            eventDesc += ("type: '" + data["type"] + "'")
+        if self.rawPlatform != "":
+            eventDesc += ("for: '" + self.rawPlatform + "' ")
+        if self.rawType != "":
+            eventDesc += ("type: '" + self.rawType + "' ")
         if eventDesc == "":
             eventDesc = "No Title Details"
         return eventDesc

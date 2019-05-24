@@ -13,6 +13,7 @@ class State():
     def __init__(self):
         self.Config = Config(self)
         self.Logging = Logging(self)
+        self.donationsIdsProcessed = {}
 
     def Setup(self):
         self.Translations = Translations(self)
@@ -87,21 +88,27 @@ class State():
 
     def OnStreamlabsEventHandler(self, data):
         try:
-            if StreamlabsEvent.ShouldIgnoreEvent(data):
+            event = StreamlabsEvent(self, data)
+            if event.errored:
                 self.Logging.DebugLog(
-                    "Streamlabs event being ignored: " + StreamlabsEvent.GetEventTitles(data))
+                    "Streamlabs event erroed during initial handling: " + str(event))
                 return
-            if not StreamlabsEvent.ShouldHandleEvent(data):
-                self.RecordActivity(
-                    self.Translations.currentTexts["SteamlabsEvent UndefinedEvent"] + StreamlabsEvent.GetEventTitles(data))
+            if event.ShouldIgnoreEvent():
+                self.Logging.DebugLog(
+                    "Streamlabs event being ignored: " + event.GetEventTitlesAsPrettyString())
                 return
             self.Logging.DebugLog(
-                "Streamlabs supported raw event received: " + str(data))
-            event = StreamlabsEvent(self, data)
+                "Streamlabs raw event data: " + str(data))
+            if not event.IsHandledEvent():
+                self.RecordActivity(
+                    self.Translations.currentTexts["StreamlabsEvent UnrecognisedEvent"] + event.GetEventTitlesAsPrettyString())
+                return
+            if not event.PopulateNormalisedData():
+                self.RecordActivity(
+                    self.Translations.currentTexts["StreamlabsEvent ErrorProcessingEvent"] + event.GetEventTitlesAsPrettyString())
+                return
             self.Logging.DebugLog(
                 "Streamlabs processed event: " + str(event))
-            if event.errored:
-                return
             event.Process()
         except Exception as ex:
             self.Logging.RecordException(

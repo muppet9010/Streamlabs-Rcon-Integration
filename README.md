@@ -20,7 +20,7 @@ Usage Concepts
 
 The app takes in Streamlabs events and processes them through configurable reactions to trigger a desired action in a Factorio game. These reactions are grouped togeather as savable profiles.
 
-The Streamlabs events and their contained data can found on the second part of this page.
+The Streamlabs events and their contained data can found on the second part of this page. However, this list doesn't exactly match or cover all events Streamlabs sends presently.
 https://streamlabs.readme.io/docs/socket-api
 
 The app runs a single grouping of reactions at a time, being loaded and saved as a profile. During the process if no suitable option is found it will be shown within the app and that events processing stops. Its assumed you want to handle any event you get. Special options at each level exist for more simple uses cases.

@@ -43,7 +43,7 @@ class Gui(TK.Frame):
             self.selectedProfileName.set(
                 self.Translations.currentTexts["Gui SelectProfile"])
         profileList = TK.OptionMenu(
-            runningContainer, self.selectedProfileName, self.sortedProfileNames)
+            runningContainer, self.selectedProfileName, *self.sortedProfileNames)
         profileList.pack(side=TK.LEFT)
 
         startButton = TK.Button(runningContainer,
