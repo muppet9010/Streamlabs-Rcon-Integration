@@ -1,3 +1,6 @@
+import re as Regex
+
+
 class StreamlabsEvent():
     handledEventTypes = ["youtube_account-superchat", "youtube_account-subscription", "youtube_account-follow", "twitch_account-bits", "twitch_account-subscription",
                          "twitch_account-follow", "twitch_account-host", "twitch_account-raid", "mixer_account-subscription", "mixer_account-follow", "mixer_account-host", "streamlabs-donation"]
@@ -41,13 +44,14 @@ class StreamlabsEvent():
     def __str__(self):
         str_list = []
         str_list.append("{")
-        str_list.append("id: '" + str(self.id) + "', ")
-        str_list.append("platform: '" + str(self.platform) + "', ")
-        str_list.append("type: '" + str(self.type) + "', ")
+        str_list.append("id: '" + self.id + "', ")
+        str_list.append("platform: '" + self.platform + "', ")
+        str_list.append("type: '" + self.type + "', ")
         str_list.append("errored: '" + str(self.errored) + "', ")
-        str_list.append("handlerName: '" + str(self.handlerName) + "', ")
-        str_list.append("valueType: '" + str(self.valueType) + "', ")
-        str_list.append("value: '" + str(self.value) + "'")
+        str_list.append("handlerName: '" + self.handlerName + "', ")
+        str_list.append("valueType: '" + self.valueType + "', ")
+        str_list.append("value: '" + self.value + "'")
+        str_list.append("rawData: " + str(self.rawData))
         str_list.append("}")
         return ''.join(str_list)
 
@@ -130,12 +134,24 @@ class StreamlabsEvent():
             eventDesc = "No Title Details"
         return eventDesc
 
-    def Process(self):
-        print("doing event processing")
-        actionText = self.State.Profiles.currentProfile.GetActionTextForEvent(
-            self)
-        # TODO needs to handle custom errors being thrown from within this search code
-        if actionText == None:
-            print("No action text found")
-        else:
-            print("actionText: " + actionText.text)
+    def SubstituteEventDataIntoString(self, string, modValue="''"):
+        instances = Regex.findall(r"\[[a-zA-Z]+\]", string)
+        for instance in instances:
+            dataKeyName = instance[1:-1]
+            dataKeyValue = "''"
+            if dataKeyName == "MODVALUE":
+                dataKeyValue = modValue
+            elif dataKeyName == "VALUE":
+                dataKeyValue = self.value
+            elif dataKeyName == "PLATFORM":
+                dataKeyValue = self.platform
+            elif dataKeyName == "TYPE":
+                dataKeyValue = self.type
+            elif dataKeyName == "VALUETYPE":
+                dataKeyValue = self.valueType
+            elif dataKeyName == "ID":
+                dataKeyValue = self.id
+            elif dataKeyName in self.rawMessage:
+                dataKeyValue = self.rawMessage[dataKeyName]
+            string = string.replace(instance, str(dataKeyValue))
+        return string

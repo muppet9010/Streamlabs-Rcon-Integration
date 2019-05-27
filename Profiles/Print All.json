@@ -13,7 +13,7 @@
             ]
         },
         {
-            "valueType": "viewer",
+            "valueType": "follow",
             "filteredActions": [
                 {
                     "condition": "[ALL]",
@@ -23,7 +23,7 @@
             ]
         },
         {
-            "valueType": "host",
+            "valueType": "viewer",
             "filteredActions": [
                 {
                     "condition": "[ALL]",

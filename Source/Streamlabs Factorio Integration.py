@@ -110,7 +110,22 @@ class State():
                 return
             self.Logging.DebugLog(
                 "Streamlabs processed event: " + str(event))
-            event.Process()
+
+            actionText = self.Profiles.currentProfile.GetActionTextForEvent(
+                event)
+            if actionText == None:
+                self.RecordActivity(
+                    self.Translations.currentTexts["StreamlabsEvent NoProfileAction"] + event.GetEventTitlesAsPrettyString())
+                self.Logging.DebugLog(
+                    "No profile action for: " + event.GetEventTitlesAsPrettyString())
+                return
+            if actionText == "":
+                self.Logging.DebugLog(
+                    "NOTHING action specified for: " + event.GetEventTitlesAsPrettyString())
+                return
+
+            # TODO do RCON now
+            print("actionText: " + actionText)
         except Exception as ex:
             self.Logging.RecordException(
                 ex, "OBS Event Handler Critical Error - This event won't be processed")

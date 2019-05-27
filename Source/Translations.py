@@ -23,5 +23,6 @@ class Translations:
                 "StreamlabsEvent ErrorProcessingEvent": "ERROR: event data not as expected: ",
                 "StreamlabsEvent BadEventPayloadCount": "ERROR: wrong number of payloads in event: ",
                 "StreamlabsEvent UnrecognisedEvent": "WARNING: Streamlabs event being ignored as not recognised: ",
-                "StreamlabsEvent UnrecognisedTwitchSubscriptionType": "ERROR: unrecognised twitch subscription type: "
+                "StreamlabsEvent UnrecognisedTwitchSubscriptionType": "ERROR: unrecognised twitch subscription type: ",
+                "StreamlabsEvent NoProfileAction": "WARNING: no reaction found for event: "
             }

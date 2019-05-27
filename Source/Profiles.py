@@ -60,6 +60,10 @@ class Profile:
 
 class Reaction:
     def __init__(self, reactionData, profile):
+        self.platform = ""
+        self.type = ""
+        self.handlerName = ""
+        self.valueType = ""
         # TODO validate these values are accepted and throw error if not
         if "platform" in reactionData:
             self.platform = reactionData["platform"]
@@ -68,21 +72,25 @@ class Reaction:
                 self.platform, self.type)
         else:
             self.valueType = reactionData["valueType"]
-        self.filterPriorities = {1: [], 2: []}
+        self.filterActionPriorities = {1: [], 2: []}
         for filteredActionData in reactionData["filteredActions"]:
             self._AddfilteredActionData(filteredActionData, profile)
 
     def _AddfilteredActionData(self, filteredActionData, profile):
         filteredAction = FilteredAction(filteredActionData, profile)
         if filteredAction.condition == "[ALL]":
-            self.filterPriorities[2].append(filteredAction)
+            self.filterActionPriorities[2].append(filteredAction)
         else:
-            self.filterPriorities[1].append(filteredAction)
+            self.filterActionPriorities[1].append(filteredAction)
 
     def GetActionTextForEvent(self, event):
-        # TODO HERE - Parse over the filterPriorities and filteredActions to find the approperiate one. If nothing found return None
-        print(self.handlerName)
-        return "found " + self.handlerName
+        for filterAction in self.filterActionPriorities[1]:
+            if filterAction.DoesEventTriggerAction(event):
+                return filterAction.GetActionText(event)
+        for filterAction in self.filterActionPriorities[2]:
+            if filterAction.DoesEventTriggerAction(event):
+                return filterAction.GetActionText(event)
+        return None
 
 
 class FilteredAction:
@@ -90,11 +98,38 @@ class FilteredAction:
         # TODO Validate the condition and manipulator text strings
         self.condition = filteredActionData["condition"]
         self.manipulator = filteredActionData["manipulator"]
+        self.actionText = ""
+        self.action = None
         action = filteredActionData["action"]
         if action[0:8] == "[ACTION_" and action[-1:] == "]":
             self.action = profile.actions[action[8:-1]]
         else:
-            self.action = action
+            self.actionText = action
+
+    def DoesEventTriggerAction(self, event):
+        if self.condition == "[ALL]":
+            return True
+        conditionStringPopulated = event.SubstituteEventDataIntoString(
+            self.condition)
+        if eval(conditionStringPopulated) == True:
+            return True
+        else:
+            return False
+
+    def GetActionText(self, event):
+        if self.actionText == "[NOTHING]":
+            return ""
+        actionText = self.actionText
+        if self.action != None:
+            actionText = self.action.effect
+        if self.manipulator != None and self.manipulator != "":
+            manipulatorValueString = event.SubstituteEventDataIntoString(
+                self.manipulator)
+            manipulatorValue = eval(manipulatorValueString)
+            return event.SubstituteEventDataIntoString(
+                actionText, manipulatorValue)
+        return event.SubstituteEventDataIntoString(
+            actionText)
 
 
 class Action:
