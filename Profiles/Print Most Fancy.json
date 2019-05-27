@@ -14,7 +14,39 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "[VALUE] * 2",
-                    "action": "game.print('Thanks for the $[VALUE] donation [name], its worth $[MODVALUE] to me')"
+                    "action": "game.print('Thanks for the $[VALUE] donation [display_name], its worth $[MODVALUE] to me')"
+                }
+            ]
+        },
+        {
+            "platform": "twitch_account",
+            "type": "subscription",
+            "filteredActions": [
+                {
+                    "condition": "[VALUE] < 5",
+                    "manipulator": "",
+                    "action": "[ACTION_TaValue]"
+                },
+                {
+                    "condition": "[VALUE] >= 5",
+                    "manipulator": "",
+                    "action": "game.print('Thanks for subscribing [display_name] for [months] months')"
+                }
+            ]
+        },
+        {
+            "platform": "twitch_account",
+            "type": "subscription_gift",
+            "filteredActions": [
+                {
+                    "condition": "[VALUE] < 5",
+                    "manipulator": "",
+                    "action": "[ACTION_TaValue]"
+                },
+                {
+                    "condition": "[VALUE] >= 5",
+                    "manipulator": "",
+                    "action": "game.print('Thanks [gifter_display_name] for subscribing [display_name]')"
                 }
             ]
         },
@@ -29,7 +61,7 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "",
-                    "action": "game.print('Cheers for the $[VALUE] support [name], it really helps')"
+                    "action": "game.print('Cheers for the $[VALUE] support [display_name], it really helps')"
                 }
             ]
         },
@@ -49,7 +81,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "game.print('[name] brought [VALUE] viewers with them')"
+                    "action": "game.print('[display_name] brought [VALUE] viewers with them')"
                 }
             ]
         }
@@ -58,7 +90,7 @@
         {
             "name": "TaValue",
             "description": "Say thanks for small value stuff",
-            "effect": "game.print('Ta for $[VALUE] [name]')"
+            "effect": "game.print('Ta for $[VALUE] [display_name]')"
         }
     ]
 }

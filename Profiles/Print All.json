@@ -8,7 +8,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "game.print('[name] supported with $[VALUE]')"
+                    "action": "game.print('[display_name] supported with $[VALUE]')"
                 }
             ]
         },
@@ -18,7 +18,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "game.print('[name] followed')"
+                    "action": "game.print('[display_name] followed')"
                 }
             ]
         },
@@ -28,7 +28,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "game.print('[name] hosted with [VALUE] viewers')"
+                    "action": "game.print('[display_name] hosted with [VALUE] viewers')"
                 }
             ]
         }

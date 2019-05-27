@@ -2,7 +2,7 @@ import re as Regex
 
 
 class StreamlabsEvent():
-    handledEventTypes = ["youtube_account-superchat", "youtube_account-subscription", "youtube_account-follow", "twitch_account-bits", "twitch_account-subscription",
+    handledEventTypes = ["youtube_account-superchat", "youtube_account-subscription", "youtube_account-follow", "twitch_account-bits", "twitch_account-subscription", "twitch_account-subscription_gift",
                          "twitch_account-follow", "twitch_account-host", "twitch_account-raid", "mixer_account-subscription", "mixer_account-follow", "mixer_account-host", "streamlabs-donation"]
 
     def __init__(self, state, data):
@@ -17,6 +17,7 @@ class StreamlabsEvent():
             self.type = data["type"]
         else:
             self.type = ""
+
         self.rawData = data
         self.id = ""
         self.handlerName = ""
@@ -32,6 +33,13 @@ class StreamlabsEvent():
         message = data["message"][0]
         self.rawMessage = message
         self.id = message["_id"]
+
+        if self.type == "donation":
+            self.platform = "streamlabs"
+        elif self.platform == "twitch_account" and self.type == "subscription" and "gifter" in self.rawMessage and self.rawMessage["gifter"] != None:
+            self.type = "subscription_gift"
+        self.handlerName = self.MakeHandlerString(
+            self.platform, self.type)
 
     @property
     def value(self):
@@ -56,12 +64,7 @@ class StreamlabsEvent():
         return ''.join(str_list)
 
     def IsHandledEvent(self):
-        if self.type == "donation":
-            self.platform = "streamlabs"
-        rawHandlerString = self.MakeHandlerString(
-            self.platform, self.type)
-        if rawHandlerString in self.handledEventTypes:
-            self.handlerName = rawHandlerString
+        if self.handlerName in self.handledEventTypes:
             return True
         else:
             return False
