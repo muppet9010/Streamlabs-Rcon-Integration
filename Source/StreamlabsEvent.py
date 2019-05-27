@@ -7,16 +7,16 @@ class StreamlabsEvent():
         self.Logging = state.Logging
 
         if "for" in data:
-            self.rawPlatform = data["for"]
+            self.platform = data["for"]
         else:
-            self.rawplatform = ""
+            self.platform = ""
         if "for" in data:
-            self.rawType = data["type"]
+            self.type = data["type"]
         else:
-            self.rawType = ""
+            self.type = ""
         self.rawData = data
         self.id = ""
-        self.type = ""
+        self.handlerName = ""
         self.value = 0
         self.valueType = ""
         self.errored = False
@@ -42,27 +42,32 @@ class StreamlabsEvent():
         str_list = []
         str_list.append("{")
         str_list.append("id: '" + str(self.id) + "', ")
-        str_list.append("rawPlatform: '" + str(self.rawPlatform) + "', ")
-        str_list.append("rawType: '" + str(self.rawType) + "', ")
-        str_list.append("errored: '" + str(self.errored) + "', ")
+        str_list.append("platform: '" + str(self.platform) + "', ")
         str_list.append("type: '" + str(self.type) + "', ")
+        str_list.append("errored: '" + str(self.errored) + "', ")
+        str_list.append("handlerName: '" + str(self.handlerName) + "', ")
         str_list.append("valueType: '" + str(self.valueType) + "', ")
         str_list.append("value: '" + str(self.value) + "'")
         str_list.append("}")
         return ''.join(str_list)
 
     def IsHandledEvent(self):
-        if self.rawType == "donation":
-            self.rawPlatform = "streamlabs"
-        rawHandlerString = self.rawPlatform + "-" + self.rawType
+        if self.type == "donation":
+            self.platform = "streamlabs"
+        rawHandlerString = self.MakeHandlerString(
+            self.platform, self.type)
         if rawHandlerString in self.handledEventTypes:
-            self.type = rawHandlerString
+            self.handlerName = rawHandlerString
             return True
         else:
             return False
 
+    @staticmethod
+    def MakeHandlerString(platform, type):
+        return platform + "-" + type
+
     def ShouldIgnoreEvent(self):
-        if (self.rawPlatform == "streamlabs") and (self.rawType == "streamlabels" or self.rawType == "streamlabels.underlying" or self.rawType == "alertPlaying" or self.rawType == "subscription-playing" or self.rawType == "rollEndCredits" or self.rawType == "subMysteryGift"):
+        if (self.platform == "streamlabs") and (self.type == "streamlabels" or self.type == "streamlabels.underlying" or self.type == "alertPlaying" or self.type == "subscription-playing" or self.type == "rollEndCredits" or self.type == "subMysteryGift"):
             return True
         if self.id in self.State.donationsIdsProcessed:
             self.Logging.DebugLog(
@@ -71,19 +76,19 @@ class StreamlabsEvent():
         return False
 
     def PopulateNormalisedData(self):
-        if (self.type == "streamlabs-donation"):
+        if (self.handlerName == "streamlabs-donation"):
             self.valueType = "money"
             self.value = self.State.Currency.GetNormalisedValue(
                 self.rawMessage["currency"], float(self.rawMessage["amount"]))
             self.State.donationsIdsProcessed[self.id] = True
-        elif (self.type == "youtube_account-superchat"):
+        elif (self.handlerName == "youtube_account-superchat"):
             self.valueType = "money"
             self.value = self.State.Currency.GetNormalisedValue(
                 self.rawMessage["currency"], float(self.rawMessage["amount"])/1000000)
-        elif (self.type == "twitch_account-bits"):
+        elif (self.handlerName == "twitch_account-bits"):
             self.valueType = "money"
             self.value = round(float(self.rawMessage["amount"]) / 100, 2)
-        elif (self.type == "twitch_account-subscription"):
+        elif (self.handlerName == "twitch_account-subscription"):
             self.valueType = "money"
             subPlan = self.rawMessage["sub_plan"]
             if subPlan == "Prime" or subPlan == "1000":
@@ -96,19 +101,19 @@ class StreamlabsEvent():
                 self.State.RecordActivity(
                     self.State.Translations.currentTexts["StreamlabsEvent UnrecognisedTwitchSubscriptionType"] + subPlan)
                 return False
-        elif (self.type == "youtube_account-subscription"):
+        elif (self.handlerName == "youtube_account-subscription"):
             self.valueType = "money"
             self.value = 5
-        elif (self.type == "mixer_account-subscription"):
+        elif (self.handlerName == "mixer_account-subscription"):
             self.valueType = "money"
             self.value = 8
-        elif (self.type == "youtube_account-follow" or self.type == "twitch_account-follow" or self.type == "mixer_account-follow"):
+        elif (self.handlerName == "youtube_account-follow" or self.handlerName == "twitch_account-follow" or self.handlerName == "mixer_account-follow"):
             self.valueType = "follow"
             self.value = 1
-        elif (self.type == "twitch_account-host" or self.type == "mixer_account-host"):
+        elif (self.handlerName == "twitch_account-host" or self.handlerName == "mixer_account-host"):
             self.valueType = "viewer"
             self.value = self.rawMessage["viewers"]
-        elif (self.type == "twitch_account-raid"):
+        elif (self.handlerName == "twitch_account-raid"):
             self.valueType = "viewer"
             self.value = self.rawMessage["raiders"]
         else:
@@ -117,14 +122,20 @@ class StreamlabsEvent():
 
     def GetEventTitlesAsPrettyString(self):
         eventDesc = ""
-        if self.rawPlatform != "":
-            eventDesc += ("for: '" + self.rawPlatform + "' ")
-        if self.rawType != "":
-            eventDesc += ("type: '" + self.rawType + "' ")
+        if self.platform != "":
+            eventDesc += ("for: '" + self.platform + "' ")
+        if self.type != "":
+            eventDesc += ("type: '" + self.type + "' ")
         if eventDesc == "":
             eventDesc = "No Title Details"
         return eventDesc
 
     def Process(self):
-        # do stuff
-        print("do event processing")
+        print("doing event processing")
+        actionText = self.State.Profiles.currentProfile.GetActionTextForEvent(
+            self)
+        # TODO needs to handle custom errors being thrown from within this search code
+        if actionText == None:
+            print("No action text found")
+        else:
+            print("actionText: " + actionText.text)

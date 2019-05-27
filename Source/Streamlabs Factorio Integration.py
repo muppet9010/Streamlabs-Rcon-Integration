@@ -31,6 +31,7 @@ class State():
                 self.RecordActivity(
                     self.Translations.currentTexts["Message NeedProfileBeforeStart"])
                 return
+            self.Profiles.SetCurrentProfile(self.Gui.selectedProfileName.get())
             if not self.Currency.GetRates():
                 self.Logging.Log("Error: Get Rates for Currency failed")
                 return
