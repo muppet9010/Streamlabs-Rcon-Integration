@@ -18,6 +18,7 @@ class State():
     def Setup(self):
         self.Translations = Translations(self)
         self.Currency = Currency(self)
+        StreamlabsEvent.LoadEventDefinitions()
         self.Profiles = Profiles(self)
         self.Streamlabs = Streamlabs(self)
         self.GuiWindow = GuiWindow(self)
@@ -94,7 +95,7 @@ class State():
                 self.Logging.DebugLog(
                     "Streamlabs event erroed during initial handling: " + str(event))
                 return
-            if event.ShouldIgnoreEvent():
+            if event.ignored:
                 self.Logging.DebugLog(
                     "Streamlabs event being ignored: " + event.GetEventTitlesAsPrettyString())
                 return
@@ -126,6 +127,7 @@ class State():
 
             # TODO do RCON now
             print("actionText: " + actionText)
+            self.RecordActivity("actionText: " + actionText)
         except Exception as ex:
             self.Logging.RecordException(
                 ex, "OBS Event Handler Critical Error - This event won't be processed")

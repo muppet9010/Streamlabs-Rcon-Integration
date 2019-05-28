@@ -12,14 +12,11 @@ class Profiles:
         if not Os.path.isdir(self.profileFolder):
             Os.mkdir(self.profileFolder)
         else:
-            self._LoadProfilesFromFolder()
-
-    def _LoadProfilesFromFolder(self):
-        for fileName in Os.listdir(self.profileFolder):
-            with open(self.profileFolder + "/" + fileName, "r") as file:
-                data = Json.load(file)
-            file.closed
-            self.profiles[data["name"]] = Profile(data)
+            for fileName in Os.listdir(self.profileFolder):
+                with open(self.profileFolder + "/" + fileName, "r") as file:
+                    data = Json.load(file)
+                file.closed
+                self.profiles[data["name"]] = Profile(data)
 
     def SetCurrentProfile(self, profileName):
         self.currentProfile = self.profiles[profileName]
@@ -35,14 +32,11 @@ class Profile:
                 self.actions[actionData["name"]] = Action(actionData)
         self.reactionPriorities = {1: [], 2: []}
         for reactionData in profileData["reactions"]:
-            self._AddReaction(reactionData)
-
-    def _AddReaction(self, reactionData):
-        reaction = Reaction(reactionData, self)
-        if "platform" in reactionData:
-            self.reactionPriorities[1].append(reaction)
-        elif "valueType" in reactionData:
-            self.reactionPriorities[2].append(reaction)
+            reaction = Reaction(reactionData, self)
+            if "platform" in reactionData:
+                self.reactionPriorities[1].append(reaction)
+            elif "valueType" in reactionData:
+                self.reactionPriorities[2].append(reaction)
 
     def GetActionTextForEvent(self, event):
         for reaction in self.reactionPriorities[1]:
@@ -60,28 +54,30 @@ class Profile:
 
 class Reaction:
     def __init__(self, reactionData, profile):
+        self.profile = profile
         self.platform = ""
         self.type = ""
         self.handlerName = ""
         self.valueType = ""
-        # TODO validate these values are accepted and throw error if not
         if "platform" in reactionData:
             self.platform = reactionData["platform"]
             self.type = reactionData["type"]
             self.handlerName = StreamlabsEvent.MakeHandlerString(
                 self.platform, self.type)
+            if self.handlerName not in StreamlabsEvent.handledEventTypes.keys():
+                raise ValueError(
+                    "invalid event handler type: " + self.handlerName)
         else:
             self.valueType = reactionData["valueType"]
+            if self.valueType not in ["money", "follow", "viewer"]:
+                raise ValueError("invalid valueType: " + self.valueType)
         self.filterActionPriorities = {1: [], 2: []}
         for filteredActionData in reactionData["filteredActions"]:
-            self._AddfilteredActionData(filteredActionData, profile)
-
-    def _AddfilteredActionData(self, filteredActionData, profile):
-        filteredAction = FilteredAction(filteredActionData, profile)
-        if filteredAction.condition == "[ALL]":
-            self.filterActionPriorities[2].append(filteredAction)
-        else:
-            self.filterActionPriorities[1].append(filteredAction)
+            filteredAction = FilteredAction(filteredActionData, self)
+            if filteredAction.condition == "[ALL]":
+                self.filterActionPriorities[2].append(filteredAction)
+            else:
+                self.filterActionPriorities[1].append(filteredAction)
 
     def GetActionTextForEvent(self, event):
         for filterAction in self.filterActionPriorities[1]:
@@ -94,17 +90,44 @@ class Reaction:
 
 
 class FilteredAction:
-    def __init__(self, filteredActionData, profile):
-        # TODO Validate the condition and manipulator text strings
+    def __init__(self, filteredActionData, reaction):
+        self.reaction = reaction
+
         self.condition = filteredActionData["condition"]
+        eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
+            self.reaction.handlerName, self.condition, False)
+        if eventAttributeCheckResult != "":
+            raise ValueError(self.reaction.handlerName +
+                             " condition error: " + eventAttributeCheckResult)
+
         self.manipulator = filteredActionData["manipulator"]
+        eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
+            self.reaction.handlerName, self.manipulator, False)
+        if eventAttributeCheckResult != "":
+            raise ValueError(self.reaction.handlerName +
+                             " manipulator error: " + eventAttributeCheckResult)
         self.actionText = ""
         self.action = None
         action = filteredActionData["action"]
         if action[0:8] == "[ACTION_" and action[-1:] == "]":
-            self.action = profile.actions[action[8:-1]]
+            actionName = action[8:-1]
+            if actionName in self.reaction.profile.actions.keys():
+                self.action = self.reaction.profile.actions[actionName]
+                eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
+                    self.reaction.handlerName, self.action.effect, True)
+                if eventAttributeCheckResult != "":
+                    raise ValueError(self.reaction.handlerName + " referenced action " +
+                                     actionName + " which has action text error: " + eventAttributeCheckResult)
+            else:
+                raise ValueError(self.reaction.handlerName +
+                                 " referenced non-existent action : " + actionName)
         else:
             self.actionText = action
+            eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
+                self.reaction.handlerName, self.actionText, True)
+            if eventAttributeCheckResult != "":
+                raise ValueError(self.reaction.handlerName +
+                                 " action text error: " + eventAttributeCheckResult)
 
     def DoesEventTriggerAction(self, event):
         if self.condition == "[ALL]":

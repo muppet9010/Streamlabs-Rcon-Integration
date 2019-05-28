@@ -8,14 +8,11 @@ class Config():
         self.fileName = "config.json"
         self.settings = {}
         if Os.path.isfile(self.fileName):
-            self._LoadConfigFile()
+            with open(self.fileName, "r") as file:
+                data = Json.load(file)
+            file.closed
+            self.settings = data
         self._PopulateMissingConfigDefaults()
-
-    def _LoadConfigFile(self):
-        with open(self.fileName, "r") as file:
-            data = Json.load(file)
-        file.closed
-        self.settings = data
 
     def _PopulateMissingConfigDefaults(self):
         defaults = {

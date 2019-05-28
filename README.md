@@ -21,14 +21,11 @@ Usage Concepts
 
 The app takes in Streamlabs events and processes them through configurable reactions to trigger a desired action in a Factorio game. These reactions are grouped togeather as savable profiles.
 
-The Streamlabs events and their contained data are a bit variable. The complete list of data items can be found in the [eventDefinitions.json file](https://github.com/muppet9010/Factorio-Streamlabs-Integration/eventDefinitions.json). The top section of platform and type `[ALL]` are generated and normalised by the program to provide some standard entries. The platform and event specific attributes are what streamlabs seems to be currently including. These often vary from their documentation and they seem to change periodically.
+The complete list of Streamlabs events and their contained data attributes can be found in the [eventDefinitions.json file](https://github.com/muppet9010/Factorio-Streamlabs-Integration/eventDefinitions.json). The top section under `[ALL]` are generated and normalised by the program to provide some standard entries across all event types. The list of platform and event specific attributes are what streamlabs is currently sending. These often vary from their documentation and change periodically.
 
 The app runs a single grouping of reactions at a time, being loaded and saved as a profile. During the process if no suitable option is found it will be shown within the app and that events processing stops. Its assumed you want to handle any event you get. Special options at each level exist for more simple uses cases.
 
-When an Streamlabs event is received it is processed to have additional data items calculated for them:
-    `[VALUETYPE]` = a simplified grouping of events in to either `money`, `viewer` or `host`.
-    `[VALUE]` = the standardised value of the event. Donations and money amounts are converted to USD. Subscriptions have the USD cost of them. Follows and Hosts have the viewer count. This may be a decimal number.
-The reactions are reviewed to find the most approperiate one. First the reactions are checked for the first matching platform and type to the event. If no match is found the ValueType of the event is checked for in the reactions for a match.
+When an Streamlabs event is received it is processed to have the standard `[ALL]` additional data attributes calculated for them. The reactions are reviewed to find the most approperiate one. First the reactions are checked for the first matching platform and type to the event. If no match is found the ValueType of the event is checked for in the reactions for a match.
 
 Assuming a reaction for the event is found the reaction's filters are checked for the first that is met. Filters allow simple math script conditions to be used to select the approperiate action to do for the event. All of the events data items from Streamlabs and this app (generated up to this point) can be used witihn the filter in the format `[DATA_ITEM_NAME]`. i.e. `[VALUE] >= 5 and [VALUE] < 10`. There is a special `ALL` filter option that it configured will be triggered after all other filters have been checked. The filters within a reaction are not order specific and so should not overlap each others conditions.
 
@@ -41,6 +38,10 @@ All data items used in scripts are replaced with their event data values at exec
 Filter and manipulator scripts can include the logical statements `and`, `or` as well as brackets `()`. These scripts are run as Python code.
 
 Actions can be a locally defined Lua string or use a shared named Lua string within the profile. This is to allow re-use when its convienent.
+
+When the application starts up all profiles in the profile folder are checked for their compliance with the event handler types and their attributes. Any issues causes the program to stop loading and the issue is recorded to the log file. This is to avoid failure from mis-configuration at run time.
+
+After configuring the application it is advised to run it and use the Streamlabs Test Widget option to send test events and confirm it behaves as you expect.
 
 
 

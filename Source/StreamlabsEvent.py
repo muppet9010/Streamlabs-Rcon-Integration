@@ -1,9 +1,9 @@
 import re as Regex
+import json as Json
 
 
 class StreamlabsEvent():
-    handledEventTypes = ["youtube_account-superchat", "youtube_account-subscription", "youtube_account-follow", "twitch_account-bits", "twitch_account-subscription", "twitch_account-subscription_gift",
-                         "twitch_account-follow", "twitch_account-host", "twitch_account-raid", "mixer_account-subscription", "mixer_account-follow", "mixer_account-host", "streamlabs-donation"]
+    handledEventTypes = {}
 
     def __init__(self, state, data):
         self.State = state
@@ -23,16 +23,28 @@ class StreamlabsEvent():
         self.handlerName = ""
         self.value = 0
         self.valueType = ""
+        self.bestName = ""
+        self.rawMessage = {}
         self.errored = False
+        self.ignored = False
+
+        if self.ShouldIgnoreEvent():
+            self.ignored = True
+            return
 
         if len(data["message"]) != 1:
             self.State.RecordActivity(
-                self.State.Translations.currentTexts["StreamlabsEvent BadEventPayloadCount"] + len(data["message"]))
+                self.State.Translations.currentTexts["StreamlabsEvent BadEventPayloadCount"] + str(
+                    len(data["message"])))
             self.errored = True
             return
         message = data["message"][0]
         self.rawMessage = message
         self.id = message["_id"]
+        if "display_name" in self.rawMessage.keys():
+            self.bestName = self.rawMessage["display_name"]
+        else:
+            self.bestName = self.rawMessage["name"]
 
         if self.type == "donation":
             self.platform = "streamlabs"
@@ -56,15 +68,17 @@ class StreamlabsEvent():
         str_list.append("platform: '" + self.platform + "', ")
         str_list.append("type: '" + self.type + "', ")
         str_list.append("errored: '" + str(self.errored) + "', ")
+        str_list.append("ignored: '" + str(self.ignored) + "', ")
         str_list.append("handlerName: '" + self.handlerName + "', ")
         str_list.append("valueType: '" + self.valueType + "', ")
-        str_list.append("value: '" + self.value + "'")
+        str_list.append("value: '" + str(self.value) + "', ")
+        str_list.append("bestName: '" + self.bestName + "', ")
         str_list.append("rawData: " + str(self.rawData))
         str_list.append("}")
         return ''.join(str_list)
 
     def IsHandledEvent(self):
-        if self.handlerName in self.handledEventTypes:
+        if self.handlerName in self.handledEventTypes.keys():
             return True
         else:
             return False
@@ -95,7 +109,7 @@ class StreamlabsEvent():
         elif (self.handlerName == "twitch_account-bits"):
             self.valueType = "money"
             self.value = round(float(self.rawMessage["amount"]) / 100, 2)
-        elif (self.handlerName == "twitch_account-subscription"):
+        elif (self.handlerName == "twitch_account-subscription") or (self.handlerName == "twitch_account-subscription-gift"):
             self.valueType = "money"
             subPlan = self.rawMessage["sub_plan"]
             if subPlan == "Prime" or subPlan == "1000":
@@ -138,7 +152,7 @@ class StreamlabsEvent():
         return eventDesc
 
     def SubstituteEventDataIntoString(self, string, modValue="''"):
-        instances = Regex.findall(r"\[[a-zA-Z]+\]", string)
+        instances = StreamlabsEvent.FindAttributeTagsInString(string)
         for instance in instances:
             dataKeyName = instance[1:-1]
             dataKeyValue = "''"
@@ -154,7 +168,35 @@ class StreamlabsEvent():
                 dataKeyValue = self.valueType
             elif dataKeyName == "ID":
                 dataKeyValue = self.id
+            elif dataKeyName == "BESTNAME":
+                dataKeyValue = self.bestName
             elif dataKeyName in self.rawMessage:
                 dataKeyValue = self.rawMessage[dataKeyName]
             string = string.replace(instance, str(dataKeyValue))
         return string
+
+    @staticmethod
+    def FindAttributeTagsInString(string):
+        return Regex.findall(r"\[[a-z_A-Z]+\]", string)
+
+    @staticmethod
+    def LoadEventDefinitions():
+        with open("eventDefinitions.json", "r") as file:
+            data = Json.load(file)
+        file.closed
+        StreamlabsEvent.handledEventTypes = data
+
+    @staticmethod
+    def IsBadEventAttritubeUsed(eventType, string, modValueAllowed):
+        instances = StreamlabsEvent.FindAttributeTagsInString(string)
+        for instance in instances:
+            dataKeyName = instance[1:-1]
+            if dataKeyName in ["ALL", "NOTHING"]:
+                continue
+            if dataKeyName == "MODVALUE" and not modValueAllowed:
+                return "MODVALUE used when not allowed"
+            if dataKeyName in StreamlabsEvent.handledEventTypes['[ALL]'].keys():
+                continue
+            if dataKeyName not in StreamlabsEvent.handledEventTypes[eventType].keys():
+                return instance + " invalid in " + eventType
+        return ""

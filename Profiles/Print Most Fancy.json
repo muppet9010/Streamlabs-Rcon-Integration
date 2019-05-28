@@ -14,7 +14,7 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "[VALUE] * 2",
-                    "action": "game.print('Thanks for the $[VALUE] donation [display_name], its worth $[MODVALUE] to me')"
+                    "action": "game.print('Thanks for the $[VALUE] donation [name], its worth $[MODVALUE] to me')"
                 }
             ]
         },
@@ -61,7 +61,7 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "",
-                    "action": "game.print('Cheers for the $[VALUE] support [display_name], it really helps')"
+                    "action": "game.print('Cheers for the $[VALUE] support [BESTNAME], it really helps')"
                 }
             ]
         },
@@ -81,7 +81,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "game.print('[display_name] brought [VALUE] viewers with them')"
+                    "action": "game.print('[BESTNAME] brought [VALUE] viewers with them')"
                 }
             ]
         }
@@ -90,7 +90,7 @@
         {
             "name": "TaValue",
             "description": "Say thanks for small value stuff",
-            "effect": "game.print('Ta for $[VALUE] [display_name]')"
+            "effect": "game.print('Ta for $[VALUE] [BESTNAME]')"
         }
     ]
 }
