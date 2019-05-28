@@ -2,6 +2,7 @@
 
 
 A Python exe for integrating Streamlabs and Factorio.
+At present only really tested with Twitch, but should work with mixer and youtube based on API spec.
 
 
 Installation & Usage
@@ -20,14 +21,13 @@ Usage Concepts
 
 The app takes in Streamlabs events and processes them through configurable reactions to trigger a desired action in a Factorio game. These reactions are grouped togeather as savable profiles.
 
-The Streamlabs events and their contained data can found on the second part of this page. However, this list doesn't exactly match or cover all events Streamlabs sends presently.
-https://streamlabs.readme.io/docs/socket-api
+The Streamlabs events and their contained data are a bit variable. The complete list of data items can be found in the [eventDefinitions.json file](https://github.com/muppet9010/Factorio-Streamlabs-Integration/eventDefinitions.json). The top section of platform and type `[ALL]` are generated and normalised by the program to provide some standard entries. The platform and event specific attributes are what streamlabs seems to be currently including. These often vary from their documentation and they seem to change periodically.
 
 The app runs a single grouping of reactions at a time, being loaded and saved as a profile. During the process if no suitable option is found it will be shown within the app and that events processing stops. Its assumed you want to handle any event you get. Special options at each level exist for more simple uses cases.
 
 When an Streamlabs event is received it is processed to have additional data items calculated for them:
     `[VALUETYPE]` = a simplified grouping of events in to either `money`, `viewer` or `host`.
-    `[VALUE]` = the standardised value of the event. Donations and money amounts are converted to USD. Subscriptions have the USD cost of them. Follows and Hosts ahve the viewer count. This may be a decimal number.
+    `[VALUE]` = the standardised value of the event. Donations and money amounts are converted to USD. Subscriptions have the USD cost of them. Follows and Hosts have the viewer count. This may be a decimal number.
 The reactions are reviewed to find the most approperiate one. First the reactions are checked for the first matching platform and type to the event. If no match is found the ValueType of the event is checked for in the reactions for a match.
 
 Assuming a reaction for the event is found the reaction's filters are checked for the first that is met. Filters allow simple math script conditions to be used to select the approperiate action to do for the event. All of the events data items from Streamlabs and this app (generated up to this point) can be used witihn the filter in the format `[DATA_ITEM_NAME]`. i.e. `[VALUE] >= 5 and [VALUE] < 10`. There is a special `ALL` filter option that it configured will be triggered after all other filters have been checked. The filters within a reaction are not order specific and so should not overlap each others conditions.
