@@ -13,7 +13,7 @@ class StreamlabsEvent():
             self.platform = data["for"]
         else:
             self.platform = ""
-        if "for" in data:
+        if "type" in data:
             self.type = data["type"]
         else:
             self.type = ""
@@ -32,6 +32,11 @@ class StreamlabsEvent():
             self.ignored = True
             return
 
+        if "message" not in data:
+            self.State.RecordActivity(
+                self.State.Translations.currentTexts["StreamlabsEvent MissingEventPayloadCount"])
+            self.errored = True
+            return
         if len(data["message"]) != 1:
             self.State.RecordActivity(
                 self.State.Translations.currentTexts["StreamlabsEvent BadEventPayloadCount"] + str(
@@ -46,7 +51,7 @@ class StreamlabsEvent():
         else:
             self.bestName = self.rawMessage["name"]
 
-        if self.type == "donation":
+        if self.type == "donation" and self.platform == "":
             self.platform = "streamlabs"
         elif self.platform == "twitch_account" and self.type == "subscription" and "gifter" in self.rawMessage and self.rawMessage["gifter"] != None:
             self.type = "subscription_gift"
@@ -88,7 +93,7 @@ class StreamlabsEvent():
         return platform + "-" + type
 
     def ShouldIgnoreEvent(self):
-        if (self.platform == "streamlabs") and (self.type == "streamlabels" or self.type == "streamlabels.underlying" or self.type == "alertPlaying" or self.type == "subscription-playing" or self.type == "rollEndCredits" or self.type == "subMysteryGift"):
+        if (self.type == "streamlabels") or (self.type == "streamlabels.underlying") or (self.type == "alertPlaying") or (self.type == "subscription-playing") or (self.type == "rollEndCredits") or (self.type == "subMysteryGift"):
             return True
         if self.id in self.State.donationsIdsProcessed:
             self.Logging.DebugLog(

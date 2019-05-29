@@ -93,7 +93,7 @@ class State():
             event = StreamlabsEvent(self, data)
             if event.errored:
                 self.Logging.DebugLog(
-                    "Streamlabs event erroed during initial handling: " + str(event))
+                    "Streamlabs event errored during initial handling: " + str(event))
                 return
             if event.ignored:
                 self.Logging.DebugLog(
