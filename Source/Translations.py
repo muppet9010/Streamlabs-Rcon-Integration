@@ -14,7 +14,7 @@ class Translations:
                 "Gui ActivityLogTitle": "Actvity Log",
                 "Message NeedProfileBeforeStart": "Must select a profile before starting",
                 "Message Started": "Started",
-                "Message StreamlabsUnexepctedStop": "Error Streamlabs Stopped Unexpectedly",
+                "Message StreamlabsUnexpectedStop": "Error Streamlabs Stopped Unexpectedly",
                 "Message Stopped": "Stopped",
                 "Status OBSConnecting": "OBS Connecting",
                 "Status Running": "Running",
