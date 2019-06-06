@@ -107,17 +107,17 @@ class State():
                 return
             if event.ignored:
                 self.Logging.DebugLog(
-                    "Streamlabs event being ignored: " + event.GetEventTitlesAsPrettyString())
+                    "Streamlabs event being ignored: " + event.GetEventRawTitlesAsPrettyString())
                 return
             self.Logging.DebugLog(
                 "Streamlabs raw event data: " + str(data))
             if not event.IsHandledEvent():
                 self.RecordActivity(
-                    self.Translations.currentTexts["StreamlabsEvent UnrecognisedEvent"] + event.GetEventTitlesAsPrettyString())
+                    self.Translations.currentTexts["StreamlabsEvent UnrecognisedEvent"] + event.GetEventRawTitlesAsPrettyString())
                 return
             if not event.PopulateNormalisedData():
                 self.RecordActivity(
-                    self.Translations.currentTexts["StreamlabsEvent ErrorProcessingEvent"] + event.GetEventTitlesAsPrettyString())
+                    self.Translations.currentTexts["StreamlabsEvent ErrorProcessingEvent"] + event.GetEventRawTitlesAsPrettyString())
                 return
             self.Logging.DebugLog(
                 "Streamlabs processed event: " + str(event))
@@ -126,13 +126,13 @@ class State():
                 event)
             if actionText == None:
                 self.RecordActivity(
-                    self.Translations.currentTexts["StreamlabsEvent NoProfileAction"] + event.GetEventTitlesAsPrettyString())
+                    self.Translations.currentTexts["StreamlabsEvent NoProfileAction"] + event.GetEventRawTitlesAsPrettyString())
                 self.Logging.DebugLog(
-                    "No profile action for: " + event.GetEventTitlesAsPrettyString())
+                    "No profile action for: " + event.GetEventRawTitlesAsPrettyString())
                 return
             if actionText == "":
                 self.Logging.DebugLog(
-                    "NOTHING action specified for: " + event.GetEventTitlesAsPrettyString())
+                    "NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
                 return
 
             # TODO do RCON now

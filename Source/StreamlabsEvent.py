@@ -1,5 +1,6 @@
 import re as Regex
 import json as Json
+import traceback as Traceback
 
 
 class StreamlabsEvent():
@@ -160,7 +161,7 @@ class StreamlabsEvent():
             return False
         return True
 
-    def GetEventTitlesAsPrettyString(self):
+    def GetEventRawTitlesAsPrettyString(self):
         eventDesc = ""
         if self.platform != "":
             eventDesc += ("for: '" + self.platform + "' ")
@@ -198,7 +199,7 @@ class StreamlabsEvent():
 
     @staticmethod
     def FindAttributeTagsInString(string):
-        return Regex.findall(r"\[[a-z_A-Z]+\]", string)
+        return Regex.findall(r"\[[a-z_A-Z0-9]+\]", string)
 
     @staticmethod
     def LoadEventDefinitions():
@@ -209,15 +210,29 @@ class StreamlabsEvent():
 
     @staticmethod
     def IsBadEventAttritubeUsed(eventType, string, modValueAllowed):
+        if string in ["", "[ALL]", "[NOTHING]"]:
+            return ""
         instances = StreamlabsEvent.FindAttributeTagsInString(string)
         for instance in instances:
             dataKeyName = instance[1:-1]
-            if dataKeyName in ["ALL", "NOTHING"]:
-                continue
             if dataKeyName == "MODVALUE" and not modValueAllowed:
-                return "MODVALUE used when not allowed"
+                return "[MODVALUE] used when not allowed"
             if dataKeyName in StreamlabsEvent.handledEventTypes['[ALL]'].keys():
                 continue
-            if dataKeyName not in StreamlabsEvent.handledEventTypes[eventType].keys():
-                return instance + " invalid in " + eventType
+            if eventType == "" or dataKeyName not in StreamlabsEvent.handledEventTypes[eventType].keys():
+                return instance + " not a valid attribute for this event"
+        return ""
+
+    @staticmethod
+    def IsScriptValid(scriptString):
+        if scriptString in ["", "[ALL]", "[NOTHING]"]:
+            return ""
+        instances = StreamlabsEvent.FindAttributeTagsInString(scriptString)
+        testScriptString = scriptString
+        for instance in instances:
+            testScriptString = testScriptString.replace(instance, str(1))
+        try:
+            eval(testScriptString)
+        except Exception:
+            return "config value: " + scriptString + "\n" + Traceback.format_exc(limit=0, chain=False)
         return ""

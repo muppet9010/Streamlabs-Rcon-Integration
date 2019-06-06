@@ -36,6 +36,10 @@ class Logging():
             file.write(self.TimestampText(text) + "\n")
         file.closed
 
+    def LogQuit(self, text):
+        self.Log(text)
+        exit()
+
     def DebugLog(self, text):
         if not self.debugLogging:
             return

@@ -16,14 +16,15 @@ class Profiles:
                 with open(self.profileFolder + "/" + fileName, "r") as file:
                     data = Json.load(file)
                 file.closed
-                self.profiles[data["name"]] = Profile(data)
+                self.profiles[data["name"]] = Profile(data, self)
 
     def SetCurrentProfile(self, profileName):
         self.currentProfile = self.profiles[profileName]
 
 
 class Profile:
-    def __init__(self, profileData):
+    def __init__(self, profileData, profiles):
+        self.profiles = profiles
         self.name = profileData["name"]
         self.description = profileData["description"]
         self.actions = {}
@@ -54,6 +55,7 @@ class Profile:
 
 class Reaction:
     def __init__(self, reactionData, profile):
+        self.Logging = profile.profiles.State.Logging
         self.profile = profile
         self.platform = ""
         self.type = ""
@@ -65,12 +67,12 @@ class Reaction:
             self.handlerName = StreamlabsEvent.MakeHandlerString(
                 self.platform, self.type)
             if self.handlerName not in StreamlabsEvent.handledEventTypes.keys():
-                raise ValueError(
+                self.Logging.LogQuit(
                     "invalid event handler type: " + self.handlerName)
         else:
             self.valueType = reactionData["valueType"]
             if self.valueType not in ["money", "follow", "viewer"]:
-                raise ValueError("invalid valueType: " + self.valueType)
+                self.Logging.LogQuit("invalid valueType: " + self.valueType)
         self.filterActionPriorities = {1: [], 2: []}
         for filteredActionData in reactionData["filteredActions"]:
             filteredAction = FilteredAction(filteredActionData, self)
@@ -88,24 +90,40 @@ class Reaction:
                 return filterAction.GetActionText(event)
         return None
 
+    def GetPrintHandlerType(self):
+        if self.handlerName != "":
+            return self.handlerName
+        else:
+            return self.valueType
+
 
 class FilteredAction:
     def __init__(self, filteredActionData, reaction):
         self.reaction = reaction
+        self.Logging = self.reaction.profile.profiles.State.Logging
 
         self.condition = filteredActionData["condition"]
         eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
             self.reaction.handlerName, self.condition, False)
         if eventAttributeCheckResult != "":
-            raise ValueError(self.reaction.handlerName +
-                             " condition error: " + eventAttributeCheckResult)
+            self.Logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
+                                 "' condition error: " + eventAttributeCheckResult)
+        scriptParseCheck = StreamlabsEvent.IsScriptValid(self.condition)
+        if scriptParseCheck != "":
+            self.Logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
+                                 "' has an invalid condition script:\n" + scriptParseCheck)
 
         self.manipulator = filteredActionData["manipulator"]
         eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
             self.reaction.handlerName, self.manipulator, False)
         if eventAttributeCheckResult != "":
-            raise ValueError(self.reaction.handlerName +
-                             " manipulator error: " + eventAttributeCheckResult)
+            self.Logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
+                                 "' manipulator error: " + eventAttributeCheckResult)
+        scriptParseCheck = StreamlabsEvent.IsScriptValid(self.manipulator)
+        if scriptParseCheck != "":
+            self.Logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
+                                 "' has an invalid manipulator script:\n" + scriptParseCheck)
+
         self.actionText = ""
         self.action = None
         action = filteredActionData["action"]
@@ -116,18 +134,18 @@ class FilteredAction:
                 eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
                     self.reaction.handlerName, self.action.effect, True)
                 if eventAttributeCheckResult != "":
-                    raise ValueError(self.reaction.handlerName + " referenced action " +
-                                     actionName + " which has action text error: " + eventAttributeCheckResult)
+                    self.Logging.LogQuit("'" + self.reaction.GetPrintHandlerType() + "' referenced action " +
+                                         actionName + " which has action text error: " + eventAttributeCheckResult)
             else:
-                raise ValueError(self.reaction.handlerName +
-                                 " referenced non-existent action : " + actionName)
+                self.Logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
+                                     "' referenced non-existent action : " + actionName)
         else:
             self.actionText = action
             eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
                 self.reaction.handlerName, self.actionText, True)
             if eventAttributeCheckResult != "":
-                raise ValueError(self.reaction.handlerName +
-                                 " action text error: " + eventAttributeCheckResult)
+                self.Logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
+                                     "' action text error: " + eventAttributeCheckResult)
 
     def DoesEventTriggerAction(self, event):
         if self.condition == "[ALL]":
