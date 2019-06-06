@@ -31,7 +31,7 @@ Assuming a reaction for the event is found the reaction's filters are checked fo
 
 The first complying reaction filter will then run an optional manipulator script if configured. This creates a new data item for the event `[MODVALUE]` with the scripts simple math script output value. This is used when you want to pass a modified value in to the game.
 
-The action tied to the filter is an Rcon command that's run in the game. It can be multiple Rcon commands and utilise any of the events data items in the standard format `[DATA_ITEM_NAME]`. i.e. `/c game.print("[name] supported with $[VALUE] worth $[MODVALUE]")`. There is a special `NOTHING` action that is intended for intentionally ignoring the event.
+The action tied to the filter are the Rcon commands that are run in the game. It can utilise any of the events data items in the standard format `[DATA_ITEM_NAME]`. i.e. `/c game.print("[name] supported with $[VALUE] worth $[MODVALUE]")`. There is a special `NOTHING` action that is intended for intentionally ignoring the event. This avoids any warnings about unhandled events.
 
 All data items used in scripts are replaced with their event data values at execution time. The replaced text may require wrapping in quotes if it needs to be treated as a string.
 
