@@ -8,7 +8,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "game.print('[BESTNAME] supported with $[VALUE]')"
+                    "action": "game.print('[BESTNAME] supported with $[VALUE]. They said, [BESTCOMMENT]')"
                 }
             ]
         },

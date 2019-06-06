@@ -27,6 +27,10 @@
         "BESTNAME": {
             "valueType": "text string",
             "description": "the best name for the user the event was done by. This will be the display name if one is available, otherwise the username."
+        },
+        "BESTCOMMENT": {
+            "valueType": "text string",
+            "description": "the best comment/message attached to the event. Will be a blank string if no comment/message exists on the event"
         }
     },
     "streamlabs-donation": {

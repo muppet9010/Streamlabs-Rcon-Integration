@@ -24,6 +24,7 @@ class StreamlabsEvent():
         self.value = 0
         self.valueType = ""
         self.bestName = ""
+        self.bestComment = ""
         self.rawMessage = {}
         self.errored = False
         self.ignored = False
@@ -45,11 +46,16 @@ class StreamlabsEvent():
             return
         message = data["message"][0]
         self.rawMessage = message
-        self.id = message["_id"]
+
+        self.id = self.rawMessage["_id"]
         if "display_name" in self.rawMessage.keys():
             self.bestName = self.rawMessage["display_name"]
-        else:
+        elif "name" in self.rawMessage.keys():
             self.bestName = self.rawMessage["name"]
+        if "message" in self.rawMessage.keys():
+            self.bestComment = self.rawMessage["message"]
+        elif "comment" in self.rawMessage.keys():
+            self.bestComment = self.rawMessage["comment"]
 
         if self.type == "donation" and self.platform == "":
             self.platform = "streamlabs"
@@ -60,11 +66,17 @@ class StreamlabsEvent():
 
     @property
     def value(self):
-        return "{:.2f}".format(self._value)
+        return self._value
 
     @value.setter
     def value(self, value):
-        self._value = value
+        self._value = float(value)
+
+    def GetValueForDisplay(self):
+        if self._value.is_integer():
+            return str(int(self._value))
+        else:
+            return self._value
 
     def __str__(self):
         str_list = []
@@ -94,6 +106,8 @@ class StreamlabsEvent():
 
     def ShouldIgnoreEvent(self):
         if (self.type == "streamlabels") or (self.type == "streamlabels.underlying") or (self.type == "alertPlaying") or (self.type == "subscription-playing") or (self.type == "rollEndCredits") or (self.type == "subMysteryGift"):
+            return True
+        if (self.platform == "widget"):
             return True
         if self.id in self.State.donationsIdsProcessed:
             self.Logging.DebugLog(
@@ -164,7 +178,7 @@ class StreamlabsEvent():
             if dataKeyName == "MODVALUE":
                 dataKeyValue = modValue
             elif dataKeyName == "VALUE":
-                dataKeyValue = self.value
+                dataKeyValue = self.GetValueForDisplay()
             elif dataKeyName == "PLATFORM":
                 dataKeyValue = self.platform
             elif dataKeyName == "TYPE":
@@ -175,6 +189,8 @@ class StreamlabsEvent():
                 dataKeyValue = self.id
             elif dataKeyName == "BESTNAME":
                 dataKeyValue = self.bestName
+            elif dataKeyName == "BESTCOMMENT":
+                dataKeyValue = self.bestComment
             elif dataKeyName in self.rawMessage:
                 dataKeyValue = self.rawMessage[dataKeyName]
             string = string.replace(instance, str(dataKeyValue))

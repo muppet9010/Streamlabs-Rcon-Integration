@@ -13,7 +13,7 @@
                 },
                 {
                     "condition": "[VALUE] >= 5",
-                    "manipulator": "[VALUE] * 2",
+                    "manipulator": "[VALUE] * 1.5",
                     "action": "game.print('Thanks for the $[VALUE] donation [name], its worth $[MODVALUE] to me')"
                 }
             ]
@@ -61,7 +61,7 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "",
-                    "action": "game.print('Cheers for the $[VALUE] support [BESTNAME], it really helps')"
+                    "action": "game.print('Cheers for the $[VALUE] support, it really helps. [BESTNAME]: [BESTCOMMENT]')"
                 }
             ]
         },

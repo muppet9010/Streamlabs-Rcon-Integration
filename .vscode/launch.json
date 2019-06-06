@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Streamlabs Factorio Integration",
+            "name": "Streamlabs Rcon Integration",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/Source/Streamlabs Factorio Integration.py"
+            "program": "${workspaceFolder}/Source/Streamlabs Rcon Integration.py"
         },
         {
             "name": "Python: Current File",
