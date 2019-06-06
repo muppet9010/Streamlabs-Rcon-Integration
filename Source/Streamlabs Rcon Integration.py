@@ -54,6 +54,7 @@ class State():
         self.Streamlabs.connecting = False
         self.UpdateStatus()
         self.RecordActivity(self.Translations.currentTexts["Message Started"])
+        self.Gui.StartedUpdateDisabledElements()
 
     def OnStopButtonHandler(self):
         try:
@@ -73,6 +74,7 @@ class State():
                     self.Translations.currentTexts["Message Stopped"])
             self.Streamlabs.disconnecting = False
             self.UpdateStatus()
+            self.Gui.StoppedUpdateDisabledElements()
         except Exception as ex:
             self.Logging.RecordException(ex, "OBS Disconnected Critical Error")
 

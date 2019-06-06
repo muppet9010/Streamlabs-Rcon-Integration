@@ -32,7 +32,6 @@ class Gui(TK.Frame):
             runningContainer, textvariable=self.statusText, height=1, width=30)
         statusLabel.pack(side=TK.LEFT)
 
-        # TODO this doesn't make a list of multiple items...
         self.selectedProfileName = TK.StringVar()
         self.sortedProfileNames = sorted(list(
             self.State.Profiles.profiles.keys()))
@@ -42,17 +41,19 @@ class Gui(TK.Frame):
         else:
             self.selectedProfileName.set(
                 self.Translations.currentTexts["Gui SelectProfile"])
-        profileList = TK.OptionMenu(
+        self.profileList = TK.OptionMenu(
             runningContainer, self.selectedProfileName, *self.sortedProfileNames)
-        profileList.pack(side=TK.LEFT)
+        self.profileList.pack(side=TK.LEFT)
 
-        startButton = TK.Button(runningContainer,
-                                text=self.Translations.currentTexts["Gui StartButton"], command=self.State.OnStartButtonHandler)
-        startButton.pack(side=TK.LEFT)
+        self.startButton = TK.Button(runningContainer,
+                                     text=self.Translations.currentTexts["Gui StartButton"], command=self.State.OnStartButtonHandler)
+        self.startButton.pack(side=TK.LEFT)
 
-        stopButton = TK.Button(
+        self.stopButton = TK.Button(
             runningContainer, text=self.Translations.currentTexts["Gui StopButton"], command=self.State.OnStopButtonHandler)
-        stopButton.pack(side=TK.LEFT)
+        self.stopButton.pack(side=TK.LEFT)
+
+        self.StoppedUpdateDisabledElements()
 
     def _CreateActivityLog(self, parent):
         titleFrame = TK.LabelFrame(
@@ -76,7 +77,17 @@ class Gui(TK.Frame):
         self.statusText.set(text)
 
     def AddToActivityLog(self, text):
-        self.activityLogText.configure(state="normal")
+        self.activityLogText.configure(state=TK.NORMAL)
         self.activityLogText.insert(
             1.0, self.State.Logging.TimestampText(text) + "\n")
-        self.activityLogText.configure(state="disabled")
+        self.activityLogText.configure(state=TK.DISABLED)
+
+    def StartedUpdateDisabledElements(self):
+        self.startButton.config(state=TK.DISABLED)
+        self.profileList.config(state=TK.DISABLED)
+        self.stopButton.config(state=TK.NORMAL)
+
+    def StoppedUpdateDisabledElements(self):
+        self.startButton.config(state=TK.NORMAL)
+        self.profileList.config(state=TK.NORMAL)
+        self.stopButton.config(state=TK.DISABLED)
