@@ -53,7 +53,7 @@ class Gui(TK.Frame):
             runningContainer, text=self.Translations.currentTexts["Gui StopButton"], command=self.State.OnStopButtonHandler)
         self.stopButton.pack(side=TK.LEFT)
 
-        self.StoppedUpdateDisabledElements()
+        self.OnStopped()
 
     def _CreateActivityLog(self, parent):
         titleFrame = TK.LabelFrame(
@@ -82,12 +82,12 @@ class Gui(TK.Frame):
             1.0, self.State.Logging.TimestampText(text) + "\n")
         self.activityLogText.configure(state=TK.DISABLED)
 
-    def StartedUpdateDisabledElements(self):
+    def OnStarted(self):
         self.startButton.config(state=TK.DISABLED)
         self.profileList.config(state=TK.DISABLED)
         self.stopButton.config(state=TK.NORMAL)
 
-    def StoppedUpdateDisabledElements(self):
+    def OnStopped(self):
         self.startButton.config(state=TK.NORMAL)
         self.profileList.config(state=TK.NORMAL)
         self.stopButton.config(state=TK.DISABLED)

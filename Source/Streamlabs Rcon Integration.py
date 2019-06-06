@@ -33,13 +33,16 @@ class State():
                     self.Translations.currentTexts["Message NeedProfileBeforeStart"])
                 return
             self.Profiles.SetCurrentProfile(self.Gui.selectedProfileName.get())
+            self.Gui.OnStarted()
             if not self.Currency.GetRates():
                 self.Logging.Log("Error: Get Rates for Currency failed")
+                self.Gui.OnStopped()
                 return
             self.Streamlabs.Connect()
             self.UpdateStatus()
         except Exception as ex:
             self.Logging.RecordException(ex, "Start Button Critical Error")
+            self.Gui.OnStopped()
 
     def OnStreamlabsConnectHandler(self):
         try:
@@ -51,10 +54,15 @@ class State():
             self.Logging.RecordException(ex, "OBS Connected Critical Error")
 
     def _OnStartButtonPostStreamlabsConnection(self):
-        self.Streamlabs.connecting = False
-        self.UpdateStatus()
-        self.RecordActivity(self.Translations.currentTexts["Message Started"])
-        self.Gui.StartedUpdateDisabledElements()
+        try:
+            self.Streamlabs.connecting = False
+            self.UpdateStatus()
+            self.RecordActivity(
+                self.Translations.currentTexts["Message Started"])
+        except Exception as ex:
+            self.Logging.RecordException(
+                ex, "Start Button Post Connection Critical Error")
+            self.Gui.OnStopped()
 
     def OnStopButtonHandler(self):
         try:
@@ -66,6 +74,7 @@ class State():
     def OnStreamlabsDisconnectHandler(self):
         try:
             self.Logging.DebugLog("Streamlabs Disconnected Pressed")
+            self.Gui.OnStopped()
             if not self.Streamlabs.disconnecting:
                 self.RecordActivity(
                     self.Translations.currentTexts["Message StreamlabsUnexpectedStop"])
@@ -74,7 +83,6 @@ class State():
                     self.Translations.currentTexts["Message Stopped"])
             self.Streamlabs.disconnecting = False
             self.UpdateStatus()
-            self.Gui.StoppedUpdateDisabledElements()
         except Exception as ex:
             self.Logging.RecordException(ex, "OBS Disconnected Critical Error")
 
