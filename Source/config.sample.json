@@ -1,0 +1,8 @@
+{
+    "Logging DaysLogsToKeep": 7,
+    "Logging DebugLogging": true,
+    "Currency ApiLayerAccessKey": "",
+    "Streamlabs SocketApiToken": "",
+    "Profile Default": "",
+    "Factorio PlayerName": ""
+}

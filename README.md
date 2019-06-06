@@ -8,6 +8,7 @@ At present only really tested with Twitch, but should work with mixer and youtub
 Installation & Usage
 ==========
 Get the [latest version zip](https://github.com/muppet9010/Streamlabs-Rcon-Integration).
+Create a free account at [Currency Layer website](https://currencylayer.com) and make a note of the API access key as needs to be entered in to the programs config later on.
 Unzip the files in to the desired folder.
 Open config.json in a text editor and add in your details.
 Run the: > Streamlabs Rcon Integration.exe
