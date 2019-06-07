@@ -6,6 +6,7 @@ from StreamlabsEvent import StreamlabsEvent
 import json as Json
 from Config import Config
 from Profiles import Profiles
+from Rcon import Rcon
 from Translations import Translations
 
 
@@ -13,6 +14,7 @@ class State():
     def __init__(self):
         self.Config = Config(self)
         self.Logging = Logging(self)
+        self.Config.LogMissingSettings()
         self.donationsIdsProcessed = {}
 
     def Setup(self):
@@ -21,6 +23,7 @@ class State():
         StreamlabsEvent.LoadEventDefinitions()
         self.Profiles = Profiles(self)
         self.Streamlabs = Streamlabs(self)
+        self.Rcon = Rcon(self)
         self.GuiWindow = GuiWindow(self)
         self.Gui = self.GuiWindow.Gui
         self.Gui.CreateWidgets()
@@ -37,6 +40,10 @@ class State():
             if not self.Currency.GetRates():
                 self.Logging.Log("Error: Get Rates for Currency failed")
                 self.Gui.OnStopped()
+                return
+            if not self.Rcon.TestConnection():
+                # self.RecordActivity(
+                    # self.Translations.currentTexts["Message RconTestFailed"])
                 return
             self.Streamlabs.Connect()
             self.UpdateStatus()

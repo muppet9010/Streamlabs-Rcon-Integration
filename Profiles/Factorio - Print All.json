@@ -8,7 +8,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "game.print('[BESTNAME] supported with $[VALUE]. They said, [BESTCOMMENT]')"
+                    "action": "/sc game.print('[BESTNAME] supported with $[VALUE]. They said, [BESTCOMMENT]')"
                 }
             ]
         },
@@ -18,7 +18,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "game.print('[BESTNAME] followed')"
+                    "action": "/sc game.print('[BESTNAME] followed')"
                 }
             ]
         },
@@ -28,7 +28,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "game.print('[BESTNAME] hosted with [VALUE] viewers')"
+                    "action": "/sc game.print('[BESTNAME] hosted with [VALUE] viewers')"
                 }
             ]
         }

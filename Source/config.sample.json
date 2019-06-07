@@ -4,5 +4,8 @@
     "Currency ApiLayerAccessKey": "",
     "Streamlabs SocketApiToken": "",
     "Profile Default": "",
-    "Factorio PlayerName": ""
+    "Factorio PlayerName": "",
+    "Rcon Server Address": "",
+    "Rcon Server Port": "",
+    "Rcon Server Password": ""
 }

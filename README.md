@@ -53,5 +53,6 @@ Uses the python modules and their dependcies:
 - Python 3.7 and default install modules
 - python-socketio[client]  =  https://python-socketio.readthedocs.io/en/latest/
 - PyInstaller  =  https://www.pyinstaller.org/
+- MCRcon  =  https://github.com/uncaught-exceptions/mcrcon
 
 Build the scripts into an exe using PyInstaller via Build.bat. It will place the exe in the "build\dist" folder.
