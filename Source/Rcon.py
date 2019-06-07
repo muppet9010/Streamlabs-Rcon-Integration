@@ -3,11 +3,11 @@ from mcrcon import MCRcon
 
 class Rcon:
     def __init__(self, state):
-        self.State = state
-        self.serverAddress = self.State.Config.GetSetting(
+        self.state = state
+        self.serverAddress = self.state.config.GetSetting(
             "Rcon Server Address")
-        self.serverPort = self.State.Config.GetSetting("Rcon Server Port")
-        self.serverPassword = self.State.Config.GetSetting(
+        self.serverPort = self.state.config.GetSetting("Rcon Server Port")
+        self.serverPassword = self.state.config.GetSetting(
             "Rcon Server Password")
 
     def TestConnection(self):
@@ -15,8 +15,8 @@ class Rcon:
             self.SendCommand('/version')
             return True
         except Exception as ex:
-            self.State.Logging.RecordException(ex, "Rcon server test failed")
-            self.State.RecordActivity(str(ex))
+            self.state.logging.RecordException(ex, "Rcon server test failed")
+            self.state.RecordActivity(str(ex))
             return False
 
     def SendCommand(self, commandString):

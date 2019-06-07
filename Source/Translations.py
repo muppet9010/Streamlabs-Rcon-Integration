@@ -1,6 +1,6 @@
 class Translations:
     def __init__(self, state):
-        self.State = state
+        self.state = state
         language = "en"
         self.currentTexts = self.GetLocalisedTexts(language)
 

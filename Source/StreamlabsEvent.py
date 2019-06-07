@@ -7,8 +7,8 @@ class StreamlabsEvent():
     handledEventTypes = {}
 
     def __init__(self, state, data):
-        self.State = state
-        self.Logging = state.Logging
+        self.state = state
+        self.logging = state.logging
 
         if "for" in data:
             self.platform = data["for"]
@@ -35,13 +35,13 @@ class StreamlabsEvent():
             return
 
         if "message" not in data:
-            self.State.RecordActivity(
-                self.State.Translations.currentTexts["StreamlabsEvent MissingEventPayloadCount"])
+            self.state.RecordActivity(
+                self.state.translations.currentTexts["StreamlabsEvent MissingEventPayloadCount"])
             self.errored = True
             return
         if len(data["message"]) != 1:
-            self.State.RecordActivity(
-                self.State.Translations.currentTexts["StreamlabsEvent BadEventPayloadCount"] + str(
+            self.state.RecordActivity(
+                self.state.translations.currentTexts["StreamlabsEvent BadEventPayloadCount"] + str(
                     len(data["message"])))
             self.errored = True
             return
@@ -110,8 +110,8 @@ class StreamlabsEvent():
             return True
         if (self.platform == "widget"):
             return True
-        if self.id in self.State.donationsIdsProcessed:
-            self.Logging.DebugLog(
+        if self.id in self.state.donationsIdsProcessed:
+            self.logging.DebugLog(
                 "Streamlabs donation event being ignored as in processed list: " + self.id)
             return True
         return False
@@ -119,12 +119,12 @@ class StreamlabsEvent():
     def PopulateNormalisedData(self):
         if (self.handlerName == "streamlabs-donation"):
             self.valueType = "money"
-            self.value = self.State.Currency.GetNormalisedValue(
+            self.value = self.state.currency.GetNormalisedValue(
                 self.rawMessage["currency"], float(self.rawMessage["amount"]))
-            self.State.donationsIdsProcessed[self.id] = True
+            self.state.donationsIdsProcessed[self.id] = True
         elif (self.handlerName == "youtube_account-superchat"):
             self.valueType = "money"
-            self.value = self.State.Currency.GetNormalisedValue(
+            self.value = self.state.currency.GetNormalisedValue(
                 self.rawMessage["currency"], float(self.rawMessage["amount"])/1000000)
         elif (self.handlerName == "twitch_account-bits"):
             self.valueType = "money"
@@ -139,8 +139,8 @@ class StreamlabsEvent():
             elif subPlan == "3000":
                 self.value = 25
             else:
-                self.State.RecordActivity(
-                    self.State.Translations.currentTexts["StreamlabsEvent UnrecognisedTwitchSubscriptionType"] + subPlan)
+                self.state.RecordActivity(
+                    self.state.translations.currentTexts["StreamlabsEvent UnrecognisedTwitchSubscriptionType"] + subPlan)
                 return False
         elif (self.handlerName == "youtube_account-subscription"):
             self.valueType = "money"

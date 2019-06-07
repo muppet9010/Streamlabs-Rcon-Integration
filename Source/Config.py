@@ -4,7 +4,7 @@ import os as Os
 
 class Config():
     def __init__(self, state):
-        self.State = state
+        self.state = state
         self.fileName = "config.json"
         self.settings = {}
         if Os.path.isfile(self.fileName):
@@ -34,7 +34,7 @@ class Config():
 
     def LogMissingSettings(self):
         for name in self.settingsMissing:
-            self.State.Logging.Log(
+            self.state.logging.Log(
                 "Config key missing, using default: " + name)
 
     def GetSetting(self, name):

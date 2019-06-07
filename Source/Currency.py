@@ -6,8 +6,8 @@ import datetime as Datetime
 
 class Currency():
     def __init__(self, state):
-        self.Logging = state.Logging
-        self.State = state
+        self.logging = state.logging
+        self.state = state
         self.rates = {}
         self.cacheFileName = "currency data cache.json"
 
@@ -15,7 +15,7 @@ class Currency():
         if len(self.rates) > 0:
             return True
         if Os.path.isfile(self.cacheFileName):
-            self.Logging.DebugLog(
+            self.logging.DebugLog(
                 "Trying to get currancy rates from cache file")
             with open(self.cacheFileName, "r") as file:
                 data = Json.load(file)
@@ -28,29 +28,29 @@ class Currency():
                     currency = name[3:]
                     self.rates[currency] = rate
                 if len(self.rates) > 0:
-                    self.Logging.DebugLog(
+                    self.logging.DebugLog(
                         "Got currency rates from cache file")
                     return True
 
         self._SourceRateData()
         if len(self.rates) > 0:
-            self.Logging.DebugLog("Got currency rates from website")
+            self.logging.DebugLog("Got currency rates from website")
             return True
         else:
-            self.Logging.DebugLog(
+            self.logging.DebugLog(
                 "Failed to get any currency rates from website")
             return False
 
     def _SourceRateData(self):
-        self.Logging.DebugLog("Sourcing currency rates from website")
+        self.logging.DebugLog("Sourcing currency rates from website")
         url = "http://www.apilayer.net/api/live"
-        params = {"access_key": self.State.Config.GetSetting(
+        params = {"access_key": self.state.config.GetSetting(
             "Currency ApiLayerAccessKey")}
         request = Requests.get(url=url, params=params)
         response = request.json()
         if not response["success"]:
-            self.State.RecordActivity(
-                self.State.Translations.currentTexts["Currency WebsiteDownloadFailed"])
+            self.state.RecordActivity(
+                self.state.translations.currentTexts["Currency WebsiteDownloadFailed"])
             return False
         with open(self.cacheFileName, "w") as file:
             file.write(Json.dumps(response))
