@@ -1,3 +1,6 @@
 Make a settings manager GUI
 Make a profile manager GUI
 Make so that profile startup errors are shown in a GUI and disable running until fixed.
+Have seperate Activity and System (status, warning, errors) logs
+Have a way to pause logs from updating and then resume
+Add a way to fire test events data at this to allow better testing of responses than the Streamlabs Test Widgets button.

@@ -25,7 +25,8 @@ class Config():
             "Factorio PlayerName": "",
             "Rcon Server Address": "",
             "Rcon Server Port": 25575,
-            "Rcon Server Password": ""
+            "Rcon Server Password": "",
+            "Rcon Test Command": "/version"
         }
         for name, value in defaults.items():
             if not name in self.settings:

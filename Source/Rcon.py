@@ -9,10 +9,11 @@ class Rcon:
         self.serverPort = self.state.config.GetSetting("Rcon Server Port")
         self.serverPassword = self.state.config.GetSetting(
             "Rcon Server Password")
+        self.testCommand = self.state.config.GetSetting("Rcon Test Command")
 
     def TestConnection(self):
         try:
-            self.SendCommand('/version')
+            self.SendCommand(self.testCommand)
             return True
         except Exception as ex:
             self.state.logging.RecordException(ex, "Rcon server test failed")
@@ -21,4 +22,4 @@ class Rcon:
 
     def SendCommand(self, commandString):
         with MCRcon(self.serverAddress, self.serverPassword, self.serverPort) as mcr:
-            mcr.command(commandString)
+            return mcr.command(commandString)

@@ -27,5 +27,6 @@ class Translations:
                 "StreamlabsEvent UnrecognisedTwitchSubscriptionType": "ERROR: unrecognised twitch subscription type: ",
                 "StreamlabsEvent NoProfileAction": "WARNING: no reaction found for event: ",
                 "StreamlabsEvent EventHandled": "Event Handled: ",
-                "Rcon CommandError": "ERROR: Rcon command failed, run manually: "
+                "Rcon CommandError": "ERROR: Rcon command failed, run manually: ",
+                "Rcon CommandResponseWarning": "WARNING: Rcon got response from server: "
             }

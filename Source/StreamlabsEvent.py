@@ -45,8 +45,8 @@ class StreamlabsEvent():
                     len(data["message"])))
             self.errored = True
             return
-        message = data["message"][0]
-        self.rawMessage = message
+        rawMessage = data["message"][0]
+        self.rawMessage = rawMessage
 
         self.id = self.rawMessage["_id"]
         if "display_name" in self.rawMessage.keys():
@@ -196,7 +196,8 @@ class StreamlabsEvent():
                 dataKeyValue = self.bestComment
             elif dataKeyName in self.rawMessage:
                 dataKeyValue = self.rawMessage[dataKeyName]
-            string = string.replace(instance, str(dataKeyValue))
+            string = string.replace(
+                instance, StreamlabsEvent.EspaceStringForRcon(str(dataKeyValue)))
         return string
 
     @staticmethod
@@ -238,3 +239,10 @@ class StreamlabsEvent():
         except Exception:
             return "config value: " + scriptString + "\n" + Traceback.format_exc(limit=0, chain=False)
         return ""
+
+    @staticmethod
+    def EspaceStringForRcon(text):
+        text = text.replace("\\", "\\\\")
+        text = text.replace("'", "\\'")
+        text = text.replace('"', '\\"')
+        return text

@@ -1,6 +1,6 @@
 {
-    "name": "Factorio - Dev Test",
-    "description": "Development test profile",
+    "name": "Factorio - Advanced Usage Example",
+    "description": "Example of some more complicated uses",
     "reactions": [
         {
             "valueType": "money",
@@ -8,12 +8,12 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "int([VALUE]/5)",
-                    "action": "/escape_pod_add_level [MODVALUE]"
+                    "action": "/a_custom_command [MODVALUE] '[BESTNAME]'"
                 },
                 {
                     "condition": "[ALL]",
-                    "manipulator": "",
-                    "action": "[NOTHING]"
+                    "manipulator": "'bob'",
+                    "action": "static manipulator value: \"[MODVALUE]\""
                 }
             ]
         },
@@ -23,7 +23,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "[NOTHING]"
+                    "action": "/sc game.print('[BESTNAME]')"
                 }
             ]
         },
@@ -31,9 +31,9 @@
             "valueType": "viewer",
             "filteredActions": [
                 {
-                    "condition": "[ALL]",
-                    "manipulator": "",
-                    "action": "[NOTHING]"
+                    "condition": "[VALUE] >= 0",
+                    "manipulator": "'bo\\'b'",
+                    "action": "/sc game.print('[MODVALUE]\\'s great' .. ' and ' .. \"[BESTNAME]'s awesome\")"
                 }
             ]
         }

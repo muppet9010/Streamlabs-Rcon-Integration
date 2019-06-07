@@ -17,6 +17,7 @@ The integration is now running between the Streamlabs account and the game using
 
 Should a critical error occur the progra may fail to load or close. Details can be found in the current log within the Logs folder.
 
+
 Usage Concepts
 ========
 
@@ -28,20 +29,20 @@ The app runs a single grouping of reactions at a time, being loaded and saved as
 
 When an Streamlabs event is received it is processed to have the standard `[ALL]` additional data attributes calculated for them. The reactions are reviewed to find the most approperiate one. First the reactions are checked for the first matching platform and type to the event. If no match is found the ValueType of the event is checked for in the reactions for a match.
 
-Assuming a reaction for the event is found the reaction's filter script is checked for the first that is met (resolves to True). Filters allow a scripts conditions to be used to select the approperiate action to do for the event. All of the events data items from Streamlabs and this app can be used witihn the filter in the format `[DATA_ITEM_NAME]`. i.e. `[VALUE] >= 5 and [VALUE] < 10`. There is a special `ALL` filter option that it configured will be triggered after all other filters have been checked. The filters within a reaction are not order specific and so should not overlap each others conditions.
+Assuming a reaction for the event is found the reaction's filter script is checked for the first that is met (resolves to True). Filters allow a scripts conditions to be used to select the approperiate action to do for the event. All of the events data attributes from Streamlabs and this app can be used witihn the filter in the format `[DATA_ITEM_NAME]`. i.e. `[VALUE] >= 5 and [VALUE] < 10`. There is a special `ALL` filter option that it configured will be triggered after all other filters have been checked. The filters within a reaction are not order specific and so should not overlap each others conditions.
 
 The first complying reaction filter will then run an optional manipulator script if configured. This creates a new data item for the event `[MODVALUE]` with the scripts output value. This is used when you want to pass a modified value in to the game.
 
-The action tied to the filter are the Rcon commands that are run in the game. It can utilise any of the events data items in the standard format `[DATA_ITEM_NAME]`. i.e. `[name] supported with $[VALUE] worth $[MODVALUE]` or `/promote [name]`. There is a special `NOTHING` action that is intended for intentionally ignoring the event. This avoids any warnings about unhandled events. Actions can be either a specific Lua command string or the name of a shared Lua command string within the profile. This is to allow re-use of Lua command strings when its convienent.
+The action tied to the filter are the Rcon commands that are run in the game. It can utilise any of the events data attributes in the standard format `[DATA_ITEM_NAME]`. i.e. `[name] supported with $[VALUE] worth $[MODVALUE]` or `/promote [name]`. There is a special `NOTHING` action that is intended for intentionally ignoring the event. This avoids any warnings about unhandled events. Actions can be either a specific Lua command string or the name of a shared Lua command string within the profile. This is to allow re-use of Lua command strings when its convienent. Should an Rcon command get a response from the server it will be shown in the Activity Log as is liekly an error from the game.
 
-All data items used in scripts are replaced with their event data values at execution time. The replaced text may require wrapping in quotes if it needs to be treated as a string. A script is a single python expression that can be processed via the Python eval() function.
+All data attributes used in scripts are replaced with their event data values at execution time. The replaced text may require wrapping in quotes if it needs to be treated as a string. A script is a single python expression that can be processed via the Python eval() function.
 
 When the application starts up all profiles in the profile folder are checked for their compliance with the event handler types and their attributes. All conditions and manipulators will be tested with a value of "1" for all attributes to confirm they are valid python scripts. Any issues causes the program to stop loading and the issue is recorded to the log file. This is to avoid failure from mis-configuration at run time.
 Additional profiles can be created within the Profiles folder following the sample profile syntax and the eventDefinitions.json events and attributes.
 
 After configuring the application it is advised to run it and use the Streamlabs Test Widget option to send test events and confirm it behaves as you expect.
 
-
+Profile configuration files must be created with knowledge of quote escaping. The profile file is in the JSON syntax and so all text strings must be wrapped in double quotes `"` within it. If you want to use a duoble quote within a text string it must be escaped with a back slash `\`. Single quotes can be used fine within a JSON string and are advised for this reason. Data attributes will be made safe by the program; with any single or doube quotes either being removed by Python automatically or escaped with a backslash before being used as part of an rcon command. If you require a single or double quote to be recieved by Rcon escaped then you must escape it with 2 back slashes `\\'`. See the `Factorio - Advanced Usage Example.json` for examples of the some of these combinations.
 
 
 Development Building
