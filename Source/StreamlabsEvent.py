@@ -36,12 +36,12 @@ class StreamlabsEvent():
 
         if "message" not in data:
             self.state.RecordActivity(
-                self.state.translations.currentTexts["StreamlabsEvent MissingEventPayloadCount"])
+                self.state.translations.GetTranslation("StreamlabsEvent MissingEventPayloadCount"))
             self.errored = True
             return
         if len(data["message"]) != 1:
             self.state.RecordActivity(
-                self.state.translations.currentTexts["StreamlabsEvent BadEventPayloadCount"] + str(
+                self.state.translations.GetTranslation("StreamlabsEvent BadEventPayloadCount") + str(
                     len(data["message"])))
             self.errored = True
             return
@@ -140,7 +140,7 @@ class StreamlabsEvent():
                 self.value = 25
             else:
                 self.state.RecordActivity(
-                    self.state.translations.currentTexts["StreamlabsEvent UnrecognisedTwitchSubscriptionType"] + subPlan)
+                    self.state.translations.GetTranslation("StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
                 return False
         elif (self.handlerName == "youtube_account-subscription"):
             self.valueType = "money"

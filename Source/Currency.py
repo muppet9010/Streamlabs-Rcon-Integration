@@ -50,7 +50,7 @@ class Currency():
         response = request.json()
         if not response["success"]:
             self.state.RecordActivity(
-                self.state.translations.currentTexts["Currency WebsiteDownloadFailed"])
+                self.state.translations.GetTranslation("Currency WebsiteDownloadFailed"))
             return False
         with open(self.cacheFileName, "w") as file:
             file.write(Json.dumps(response))

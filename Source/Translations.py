@@ -1,10 +1,10 @@
 class Translations:
     def __init__(self, state):
         self.state = state
-        language = "en"
-        self.currentTexts = self.GetLocalisedTexts(language)
+        self.language = "en"
+        self.currentTexts = self.LoadLocalisedTexts(self.language)
 
-    def GetLocalisedTexts(self, language):
+    def LoadLocalisedTexts(self, language):
         if language == "en":
             return {
                 "Gui SelectProfile": "Select a profile",
@@ -31,3 +31,11 @@ class Translations:
                 "Rcon CommandResponseWarning": "WARNING: Rcon got response from server: ",
                 "Rcon TestErrorMessage": "Rcon connection test message: "
             }
+
+    def GetTranslation(self, key):
+        if key in self.currentTexts.keys():
+            return self.currentTexts[key]
+        else:
+            self.state.logging.Log(
+                "missing translation in '" + self.language + "': " + key)
+            return "MISSING KEY"

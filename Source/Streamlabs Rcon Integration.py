@@ -32,9 +32,9 @@ class State():
     def OnStartButtonHandler(self):
         try:
             self.logging.DebugLog("Start Button Pressed")
-            if self.gui.selectedProfileName.get() == "" or self.gui.selectedProfileName.get() == self.translations.currentTexts["Gui SelectProfile"]:
+            if self.gui.selectedProfileName.get() == "" or self.gui.selectedProfileName.get() == self.translations.GetTranslation("Gui SelectProfile"):
                 self.RecordActivity(
-                    self.translations.currentTexts["Message NeedProfileBeforeStart"])
+                    self.translations.GetTranslation("Message NeedProfileBeforeStart"))
                 return
             self.profiles.SetCurrentProfile(self.gui.selectedProfileName.get())
             self.gui.OnStarted()
@@ -65,7 +65,7 @@ class State():
             self.streamlabs.connecting = False
             self.UpdateStatus()
             self.RecordActivity(
-                self.translations.currentTexts["Message Started"])
+                self.translations.GetTranslation("Message Started"))
         except Exception as ex:
             self.logging.RecordException(
                 ex, "Start Button Post Connection Critical Error")
@@ -84,10 +84,10 @@ class State():
             self.gui.OnStopped()
             if not self.streamlabs.disconnecting:
                 self.RecordActivity(
-                    self.translations.currentTexts["Message StreamlabsUnexpectedStop"])
+                    self.translations.GetTranslation("Message StreamlabsUnexpectedStop"))
             else:
                 self.RecordActivity(
-                    self.translations.currentTexts["Message Stopped"])
+                    self.translations.GetTranslation("Message Stopped"))
             self.streamlabs.disconnecting = False
             self.UpdateStatus()
         except Exception as ex:
@@ -120,11 +120,11 @@ class State():
                 "Streamlabs raw event data: " + str(data))
             if not event.IsHandledEvent():
                 self.RecordActivity(
-                    self.translations.currentTexts["StreamlabsEvent UnrecognisedEvent"] + event.GetEventRawTitlesAsPrettyString())
+                    self.translations.GetTranslation("StreamlabsEvent UnrecognisedEvent") + event.GetEventRawTitlesAsPrettyString())
                 return
             if not event.PopulateNormalisedData():
                 self.RecordActivity(
-                    self.translations.currentTexts["StreamlabsEvent ErrorProcessingEvent"] + event.GetEventRawTitlesAsPrettyString())
+                    self.translations.GetTranslation("StreamlabsEvent ErrorProcessingEvent") + event.GetEventRawTitlesAsPrettyString())
                 return
             self.logging.DebugLog(
                 "Streamlabs processed event: " + str(event))
@@ -133,7 +133,7 @@ class State():
                 event)
             if actionText == None:
                 self.RecordActivity(
-                    self.translations.currentTexts["StreamlabsEvent NoProfileAction"] + event.GetEventRawTitlesAsPrettyString())
+                    self.translations.GetTranslation("StreamlabsEvent NoProfileAction") + event.GetEventRawTitlesAsPrettyString())
                 self.logging.DebugLog(
                     "No profile action for: " + event.GetEventRawTitlesAsPrettyString())
                 return
@@ -150,13 +150,13 @@ class State():
                 except Exception as ex:
                     self.logging.RecordException(ex, "Rcon event failed")
                     self.RecordActivity(
-                        self.translations.currentTexts["Rcon CommandError"] + actionText)
+                        self.translations.GetTranslation("Rcon CommandError") + actionText)
                     return
             self.RecordActivity(
-                self.translations.currentTexts["StreamlabsEvent EventHandled"] + event.GetEventRawTitlesAsPrettyString() + " : " + event.bestName + " : value " + str(event.value) + " : " + actionType)
+                self.translations.GetTranslation("StreamlabsEvent EventHandled") + event.GetEventRawTitlesAsPrettyString() + " : " + event.bestName + " : value " + str(event.value) + " : " + actionType)
             if response != "":
                 self.RecordActivity(
-                    self.translations.currentTexts["Rcon CommandResponseWarning"] + response)
+                    self.translations.GetTranslation("Rcon CommandResponseWarning") + response)
             self.logging.DebugLog("Action done: " + actionText)
         except Exception as ex:
             self.logging.RecordException(
@@ -165,13 +165,13 @@ class State():
     def UpdateStatus(self):
         if self.streamlabs.connecting:
             self.gui.UpdateStatusText(
-                self.translations.currentTexts["Status OBSConnecting"])
+                self.translations.GetTranslation("Status OBSConnecting"))
         elif self.streamlabs.sio.eio.state == "connected":
             self.gui.UpdateStatusText(
-                self.translations.currentTexts["Status Running"])
+                self.translations.GetTranslation("Status Running"))
         else:
             self.gui.UpdateStatusText(
-                self.translations.currentTexts["Status Stopped"])
+                self.translations.GetTranslation("Status Stopped"))
 
     def Run(self):
         self.logging.Log("App Started")

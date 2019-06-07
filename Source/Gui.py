@@ -43,24 +43,24 @@ class Gui(TK.Frame):
             self.selectedProfileName.set(configProfileDefault)
         else:
             self.selectedProfileName.set(
-                self.translations.currentTexts["Gui SelectProfile"])
+                self.translations.GetTranslation("Gui SelectProfile"))
         self.profileList = TK.OptionMenu(
             runningContainer, self.selectedProfileName, *self.sortedProfileNames)
         self.profileList.pack(side=TK.LEFT)
 
         self.startButton = TK.Button(runningContainer,
-                                     text=self.translations.currentTexts["Gui StartButton"], command=self.state.OnStartButtonHandler)
+                                     text=self.translations.GetTranslation("Gui StartButton"), command=self.state.OnStartButtonHandler)
         self.startButton.pack(side=TK.LEFT)
 
         self.stopButton = TK.Button(
-            runningContainer, text=self.translations.currentTexts["Gui StopButton"], command=self.state.OnStopButtonHandler)
+            runningContainer, text=self.translations.GetTranslation("Gui StopButton"), command=self.state.OnStopButtonHandler)
         self.stopButton.pack(side=TK.LEFT)
 
         self.OnStopped()
 
     def _CreateActivityLog(self, parent):
         titleFrame = TK.LabelFrame(
-            parent, text=self.translations.currentTexts["Gui ActivityLogTitle"])
+            parent, text=self.translations.GetTranslation("Gui ActivityLogTitle"))
         titleFrame.pack(fill=TK.BOTH, expand=True, side=TK.TOP, padx=3, pady=3)
         yScroll = TK.Scrollbar(titleFrame, orient=TK.VERTICAL)
         yScroll.pack(fill=TK.Y, expand=False, side=TK.RIGHT)
@@ -72,7 +72,7 @@ class Gui(TK.Frame):
         self.bottomBarContainer = TK.Frame(parent)
         self.bottomBarContainer.pack(fill=TK.X, side=TK.TOP)
 
-        quitButton = TK.Button(self.bottomBarContainer, text=self.translations.currentTexts["Gui QuitButton"], fg="red",
+        quitButton = TK.Button(self.bottomBarContainer, text=self.translations.GetTranslation("Gui QuitButton"), fg="red",
                                command=self.state.OnQuitButtonHandler)
         quitButton.pack(side=TK.LEFT)
 
