@@ -4,6 +4,7 @@ import tkinter as TK
 class GuiWindow():
     def __init__(self, state):
         root = TK.Tk()
+        root.title("Streamlabs Rcon Integration - " + state.version)
         root.minsize(500, 200)
         root.geometry("1000x400")
         root.protocol("WM_DELETE_WINDOW", state.OnQuitButtonHandler)
@@ -14,10 +15,10 @@ class GuiWindow():
 class Gui(TK.Frame):
     def __init__(self, state, master=None):
         super().__init__(master)
-        self.master=master
+        self.master = master
         self.pack()
-        self.state=state
-        self.translations=state.translations
+        self.state = state
+        self.translations = state.translations
 
     def CreateWidgets(self):
         self._CreateRunningBar(self.master)
@@ -25,53 +26,53 @@ class Gui(TK.Frame):
         # self._CreateBottomBar(self.master) # Don't bother with for just a quit button
 
     def _CreateRunningBar(self, parent):
-        runningContainer=TK.Frame(parent)
+        runningContainer = TK.Frame(parent)
         runningContainer.pack(fill=TK.X, side=TK.TOP)
 
-        self.statusText=TK.StringVar()
+        self.statusText = TK.StringVar()
         self.state.UpdateStatus()
-        statusLabel=TK.Label(
+        statusLabel = TK.Label(
             runningContainer, textvariable=self.statusText, height=1, width=30)
         statusLabel.pack(side=TK.LEFT)
 
-        self.selectedProfileName=TK.StringVar()
-        self.sortedProfileNames=sorted(list(
+        self.selectedProfileName = TK.StringVar()
+        self.sortedProfileNames = sorted(list(
             self.state.profiles.profiles.keys()))
-        configProfileDefault=self.state.config.GetSetting("Profile Default")
+        configProfileDefault = self.state.config.GetSetting("Profile Default")
         if configProfileDefault != "" and configProfileDefault in self.sortedProfileNames:
             self.selectedProfileName.set(configProfileDefault)
         else:
             self.selectedProfileName.set(
                 self.translations.currentTexts["Gui SelectProfile"])
-        self.profileList=TK.OptionMenu(
+        self.profileList = TK.OptionMenu(
             runningContainer, self.selectedProfileName, *self.sortedProfileNames)
         self.profileList.pack(side=TK.LEFT)
 
-        self.startButton=TK.Button(runningContainer,
+        self.startButton = TK.Button(runningContainer,
                                      text=self.translations.currentTexts["Gui StartButton"], command=self.state.OnStartButtonHandler)
         self.startButton.pack(side=TK.LEFT)
 
-        self.stopButton=TK.Button(
+        self.stopButton = TK.Button(
             runningContainer, text=self.translations.currentTexts["Gui StopButton"], command=self.state.OnStopButtonHandler)
         self.stopButton.pack(side=TK.LEFT)
 
         self.OnStopped()
 
     def _CreateActivityLog(self, parent):
-        titleFrame=TK.LabelFrame(
+        titleFrame = TK.LabelFrame(
             parent, text=self.translations.currentTexts["Gui ActivityLogTitle"])
         titleFrame.pack(fill=TK.BOTH, expand=True, side=TK.TOP, padx=3, pady=3)
-        yScroll=TK.Scrollbar(titleFrame, orient=TK.VERTICAL)
+        yScroll = TK.Scrollbar(titleFrame, orient=TK.VERTICAL)
         yScroll.pack(fill=TK.Y, expand=False, side=TK.RIGHT)
-        self.activityLogText=TK.Text(
+        self.activityLogText = TK.Text(
             titleFrame, height=5, wrap=TK.WORD, yscrollcommand=yScroll.set, state=TK.DISABLED)
         self.activityLogText.pack(fill=TK.BOTH, expand=True, side=TK.LEFT)
 
     def _CreateBottomBar(self, parent):
-        self.bottomBarContainer=TK.Frame(parent)
+        self.bottomBarContainer = TK.Frame(parent)
         self.bottomBarContainer.pack(fill=TK.X, side=TK.TOP)
 
-        quitButton=TK.Button(self.bottomBarContainer, text=self.translations.currentTexts["Gui QuitButton"], fg="red",
+        quitButton = TK.Button(self.bottomBarContainer, text=self.translations.currentTexts["Gui QuitButton"], fg="red",
                                command=self.state.OnQuitButtonHandler)
         quitButton.pack(side=TK.LEFT)
 

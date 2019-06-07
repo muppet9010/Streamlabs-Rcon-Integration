@@ -11,11 +11,11 @@ Get the [latest version zip](https://github.com/muppet9010/Streamlabs-Rcon-Integ
 Create a free account at [Currency Layer website](https://currencylayer.com) and make a note of the API access key as needs to be entered in to the programs config later on.
 Unzip the files in to the desired folder.
 Open config.json in a text editor and add in your details.
-Run the: > Streamlabs Rcon Integration.exe
+Run the program: Streamlabs Rcon Integration.exe
 Select the desired profile from the dropdown and click Start.
 The integration is now running between the Streamlabs account and the game using the selected profile.
 
-Should a critical error occur the progra may fail to load or close. Details can be found in the current log within the Logs folder.
+Should a critical error occur the program may fail to load or close. Details can be found in the most recent log file within the Logs folder.
 
 
 Usage Concepts
@@ -54,4 +54,4 @@ Uses the python modules and their dependcies:
 - PyInstaller  =  https://www.pyinstaller.org/
 - MCRcon  =  https://github.com/uncaught-exceptions/mcrcon
 
-Build the scripts into an exe using PyInstaller via Build.bat. It will place the exe in the "build\dist" folder.
+Build the scripts into an exe using PyInstaller via Build.bat. It will place the exe and other files in the `build\dist` folder. This `dist` folder is the program and can be shared via zip.

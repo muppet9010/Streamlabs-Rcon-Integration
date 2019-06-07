@@ -28,5 +28,6 @@ class Translations:
                 "StreamlabsEvent NoProfileAction": "WARNING: no reaction found for event: ",
                 "StreamlabsEvent EventHandled": "Event Handled: ",
                 "Rcon CommandError": "ERROR: Rcon command failed, run manually: ",
-                "Rcon CommandResponseWarning": "WARNING: Rcon got response from server: "
+                "Rcon CommandResponseWarning": "WARNING: Rcon got response from server: ",
+                "Rcon TestErrorMessage": "Rcon connection test message: "
             }

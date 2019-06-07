@@ -19,6 +19,7 @@ class Logging():
         self.logFilePath = logFolder + "/" + logFileName
         self.debugLogFilePath = logFolder + "/Debug" + logFileName
         self.debugLogging = state.config.GetSetting("Logging DebugLogging")
+        self.Log("Logging Started - " + self.state.version)
 
     def _TidyUpOldLogFiles(self, logFolder, currentDT, daysLogsToKeep, dateFormat):
         for name in Os.listdir(logFolder):

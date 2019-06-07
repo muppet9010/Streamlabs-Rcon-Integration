@@ -17,7 +17,8 @@ class Rcon:
             return True
         except Exception as ex:
             self.state.logging.RecordException(ex, "Rcon server test failed")
-            self.state.RecordActivity(str(ex))
+            self.state.RecordActivity(
+                self.state.translations.currentTexts["Rcon TestErrorMessage"] + str(ex))
             return False
 
     def SendCommand(self, commandString):

@@ -12,12 +12,13 @@ from Translations import Translations
 
 class State():
     def __init__(self):
+        self.version = "0.1.0"
         self.config = Config(self)
         self.logging = Logging(self)
         self.config.LogMissingSettings()
-        self.donationsIdsProcessed = {}
 
     def Setup(self):
+        self.donationsIdsProcessed = {}
         self.translations = Translations(self)
         self.currency = Currency(self)
         StreamlabsEvent.LoadEventDefinitions()
@@ -173,7 +174,7 @@ class State():
                 self.translations.currentTexts["Status Stopped"])
 
     def Run(self):
-        self.logging.DebugLog("App Started")
+        self.logging.Log("App Started")
         self.gui.mainloop()
 
 
