@@ -1,24 +1,25 @@
 # Streamlabs-Rcon-Integration
 
 
-A Python exe for integrating Streamlabs and any game supporting Rcon. Its currently being used with Factorio, but should be compatible with any other Rcon interfaced game.
+A Python exe for integrating Streamlabs and any game supporting Rcon. Its currently being used with Factorio, but should be compatible with any other Rcon interfaced game. 
+
 At present only really tested with Twitch, but should work with mixer and youtube based on API spec.
 
 
 Installation & Usage
 ==========
-Get the [latest version zip](https://github.com/muppet9010/Streamlabs-Rcon-Integration).
-Create a free account at [Currency Layer website](https://currencylayer.com) and make a note of the API access key as needs to be entered in to the programs config later on.
-Unzip the files in to the desired folder.
-Open config.json in a text editor and add in your details.
-Run the program: Streamlabs Rcon Integration.exe
-Select the desired profile from the dropdown and click Start.
-The integration is now running between the Streamlabs account and the game using the selected profile.
+1. Get the [latest version zip](https://github.com/muppet9010/Streamlabs-Rcon-Integration).
+2. Create a free account at [Currency Layer website](https://currencylayer.com) and make a note of the API access key as needs to be entered in to the programs config later on.
+3. Unzip the files in to the desired folder.
+4. Open config.json in a text editor and add in your details.
+5. Run the program: Streamlabs Rcon Integration.exe
+6. Select the desired profile from the dropdown and click Start.
+7. The integration is now running between the Streamlabs account and the game using the selected profile.
 
 Should a critical error occur the program may fail to load or close. Details can be found in the most recent log file within the Logs folder.
 
 
-Usage Concepts
+Program Execution Concepts
 ========
 
 The app takes in Streamlabs events and processes them through configurable reactions to trigger a desired action via Rcon in  game. These reactions are grouped togeather as savable profiles.
