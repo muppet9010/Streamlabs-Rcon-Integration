@@ -1,0 +1,3 @@
+Make a settings manager GUI
+Make a profile manager GUI
+Make so that profile startup errors are shown in a GUI and disable running until fixed.

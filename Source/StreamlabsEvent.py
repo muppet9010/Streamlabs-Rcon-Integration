@@ -164,9 +164,11 @@ class StreamlabsEvent():
     def GetEventRawTitlesAsPrettyString(self):
         eventDesc = ""
         if self.platform != "":
-            eventDesc += ("for: '" + self.platform + "' ")
+            eventDesc += self.platform
         if self.type != "":
-            eventDesc += ("type: '" + self.type + "' ")
+            if eventDesc != "":
+                eventDesc += " - "
+            eventDesc += (self.type)
         if eventDesc == "":
             eventDesc = "No Title Details"
         return eventDesc

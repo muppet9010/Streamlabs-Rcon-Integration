@@ -103,6 +103,9 @@ class FilteredAction:
         self.Logging = self.reaction.profile.profiles.State.Logging
 
         self.condition = filteredActionData["condition"]
+        if self.condition == "":
+            self.Logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
+                                 "' condition can not be blank")
         eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
             self.reaction.handlerName, self.condition, False)
         if eventAttributeCheckResult != "":
@@ -141,6 +144,9 @@ class FilteredAction:
                                      "' referenced non-existent action : " + actionName)
         else:
             self.actionText = action
+            if self.actionText == "":
+                self.Logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
+                                     "' action can not be blank")
             eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
                 self.reaction.handlerName, self.actionText, True)
             if eventAttributeCheckResult != "":

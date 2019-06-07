@@ -25,5 +25,7 @@ class Translations:
                 "StreamlabsEvent MissingEventPayloadCount": "ERROR: no payload in event",
                 "StreamlabsEvent UnrecognisedEvent": "WARNING: Streamlabs event being ignored as not recognised: ",
                 "StreamlabsEvent UnrecognisedTwitchSubscriptionType": "ERROR: unrecognised twitch subscription type: ",
-                "StreamlabsEvent NoProfileAction": "WARNING: no reaction found for event: "
+                "StreamlabsEvent NoProfileAction": "WARNING: no reaction found for event: ",
+                "StreamlabsEvent EventHandled": "Event Handled: ",
+                "Rcon CommandError": "ERROR: Rcon command failed, run manually: "
             }

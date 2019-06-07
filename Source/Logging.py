@@ -54,7 +54,7 @@ class Logging():
         return dtString + " : " + text
 
     def RecordException(self, ex, description):
-        text = description + " - See logs for details"
+        text = description + " - See logs for full details"
         stackTrace = Traceback.format_exc()
         try:
             self.State.RecordActivity(text)
@@ -64,4 +64,3 @@ class Logging():
             self.Log(stackTrace)
         except:
             pass
-        raise ex

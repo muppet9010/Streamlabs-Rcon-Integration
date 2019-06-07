@@ -24,7 +24,7 @@ class Config():
             "Profile Default": "",
             "Factorio PlayerName": "",
             "Rcon Server Address": "",
-            "Rcon Server Port": "",
+            "Rcon Server Port": 25575,
             "Rcon Server Password": ""
         }
         for name, value in defaults.items():

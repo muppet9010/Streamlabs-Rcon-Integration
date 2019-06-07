@@ -11,9 +11,13 @@ class Rcon:
             "Rcon Server Password")
 
     def TestConnection(self):
-        self.SendCommand('/sc rcon.print("test")')
-        print("Test done")
-        return True
+        try:
+            self.SendCommand('/version')
+            return True
+        except Exception as ex:
+            self.State.Logging.RecordException(ex, "Rcon server test failed")
+            self.State.RecordActivity(str(ex))
+            return False
 
     def SendCommand(self, commandString):
         with MCRcon(self.serverAddress, self.serverPassword, self.serverPort) as mcr:

@@ -32,11 +32,9 @@ Assuming a reaction for the event is found the reaction's filter script is check
 
 The first complying reaction filter will then run an optional manipulator script if configured. This creates a new data item for the event `[MODVALUE]` with the scripts output value. This is used when you want to pass a modified value in to the game.
 
-The action tied to the filter are the Rcon commands that are run in the game. It can utilise any of the events data items in the standard format `[DATA_ITEM_NAME]`. i.e. `/c game.print("[name] supported with $[VALUE] worth $[MODVALUE]")`. There is a special `NOTHING` action that is intended for intentionally ignoring the event. This avoids any warnings about unhandled events.
+The action tied to the filter are the Rcon commands that are run in the game. It can utilise any of the events data items in the standard format `[DATA_ITEM_NAME]`. i.e. `[name] supported with $[VALUE] worth $[MODVALUE]` or `/promote [name]`. There is a special `NOTHING` action that is intended for intentionally ignoring the event. This avoids any warnings about unhandled events. Actions can be either a specific Lua command string or the name of a shared Lua command string within the profile. This is to allow re-use of Lua command strings when its convienent.
 
 All data items used in scripts are replaced with their event data values at execution time. The replaced text may require wrapping in quotes if it needs to be treated as a string. A script is a single python expression that can be processed via the Python eval() function.
-
-Actions can be a locally defined Lua string or use a shared named Lua string within the profile. This is to allow re-use when its convienent.
 
 When the application starts up all profiles in the profile folder are checked for their compliance with the event handler types and their attributes. All conditions and manipulators will be tested with a value of "1" for all attributes to confirm they are valid python scripts. Any issues causes the program to stop loading and the issue is recorded to the log file. This is to avoid failure from mis-configuration at run time.
 Additional profiles can be created within the Profiles folder following the sample profile syntax and the eventDefinitions.json events and attributes.

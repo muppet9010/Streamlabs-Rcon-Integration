@@ -1,14 +1,19 @@
 {
-    "name": "Factorio - Print All",
-    "description": "Prints all events very simply",
+    "name": "Factorio - Dev Test",
+    "description": "Development test profile",
     "reactions": [
         {
             "valueType": "money",
             "filteredActions": [
                 {
+                    "condition": "[VALUE] >= 5",
+                    "manipulator": "int([VALUE]/5)",
+                    "action": "/escape_pod_add_level [MODVALUE]"
+                },
+                {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "[BESTNAME] supported with $[VALUE]. They said, [BESTCOMMENT]"
+                    "action": "[NOTHING]"
                 }
             ]
         },
@@ -18,7 +23,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "[BESTNAME] followed"
+                    "action": "[NOTHING]"
                 }
             ]
         },
@@ -28,7 +33,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "[BESTNAME] hosted with [VALUE] viewers"
+                    "action": "[NOTHING]"
                 }
             ]
         }

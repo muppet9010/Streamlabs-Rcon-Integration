@@ -4,7 +4,9 @@ import tkinter as TK
 class GuiWindow():
     def __init__(self, state):
         root = TK.Tk()
-        root.minsize(500, 400)
+        root.minsize(500, 200)
+        root.geometry("1000x400")
+        root.protocol("WM_DELETE_WINDOW", state.OnQuitButtonHandler)
         self.State = state
         self.Gui = Gui(state, master=root)
 
@@ -20,7 +22,7 @@ class Gui(TK.Frame):
     def CreateWidgets(self):
         self._CreateRunningBar(self.master)
         self._CreateActivityLog(self.master)
-        self._CreateBottomBar(self.master)
+        # self._CreateBottomBar(self.master) # Don't bother with for just a quit button
 
     def _CreateRunningBar(self, parent):
         runningContainer = TK.Frame(parent)
@@ -60,7 +62,7 @@ class Gui(TK.Frame):
             parent, text=self.Translations.currentTexts["Gui ActivityLogTitle"])
         titleFrame.pack(fill=TK.BOTH, expand=True, side=TK.TOP, padx=3, pady=3)
         yScroll = TK.Scrollbar(titleFrame, orient=TK.VERTICAL)
-        yScroll.pack(fill=TK.Y, expand=True, side=TK.RIGHT)
+        yScroll.pack(fill=TK.Y, expand=False, side=TK.RIGHT)
         self.activityLogText = TK.Text(
             titleFrame, height=5, wrap=TK.WORD, yscrollcommand=yScroll.set, state=TK.DISABLED)
         self.activityLogText.pack(fill=TK.BOTH, expand=True, side=TK.LEFT)

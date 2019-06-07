@@ -7,14 +7,14 @@
             "type": "donation",
             "filteredActions": [
                 {
+                    "condition": "[VALUE] >= 5",
+                    "manipulator": "[VALUE] * 1.5",
+                    "action": "Thanks for the $[VALUE] donation [name], its worth $[MODVALUE] to me"
+                },
+                {
                     "condition": "[VALUE] < 5",
                     "manipulator": "",
                     "action": "[ACTION_TaValue]"
-                },
-                {
-                    "condition": "[VALUE] >= 5",
-                    "manipulator": "[VALUE] * 1.5",
-                    "action": "/sc game.print('Thanks for the $[VALUE] donation [name], its worth $[MODVALUE] to me')"
                 }
             ]
         },
@@ -23,14 +23,14 @@
             "type": "subscription",
             "filteredActions": [
                 {
-                    "condition": "[VALUE] < 5",
-                    "manipulator": "",
-                    "action": "[ACTION_TaValue]"
-                },
-                {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "",
-                    "action": "/sc game.print('Thanks for subscribing [display_name] for [months] months')"
+                    "action": "Thanks for subscribing [display_name] for [months] months"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[ACTION_TaValue]"
                 }
             ]
         },
@@ -39,14 +39,14 @@
             "type": "subscription_gift",
             "filteredActions": [
                 {
+                    "condition": "[VALUE] >= 5",
+                    "manipulator": "",
+                    "action": "Thanks [gifter_display_name] for subscribing [display_name]"
+                },
+                {
                     "condition": "[VALUE] < 5",
                     "manipulator": "",
                     "action": "[ACTION_TaValue]"
-                },
-                {
-                    "condition": "[VALUE] >= 5",
-                    "manipulator": "",
-                    "action": "/sc game.print('Thanks [gifter_display_name] for subscribing [display_name]')"
                 }
             ]
         },
@@ -54,14 +54,14 @@
             "valueType": "money",
             "filteredActions": [
                 {
-                    "condition": "[VALUE] < 5",
-                    "manipulator": "",
-                    "action": "[ACTION_TaValue]"
-                },
-                {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "",
-                    "action": "/sc game.print('Cheers for the $[VALUE] support, it really helps. [BESTNAME]: [BESTCOMMENT]')"
+                    "action": "Cheers for the $[VALUE] support, it really helps. [BESTNAME]: [BESTCOMMENT]"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[ACTION_TaValue]"
                 }
             ]
         },
@@ -81,7 +81,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "/sc game.print('[BESTNAME] brought [VALUE] viewers with them')"
+                    "action": "[BESTNAME] brought [VALUE] viewers with them"
                 }
             ]
         }
@@ -90,7 +90,7 @@
         {
             "name": "TaValue",
             "description": "Say thanks for small value stuff",
-            "effect": "/sc game.print('Ta for $[VALUE] [BESTNAME]')"
+            "effect": "Ta for $[VALUE] [BESTNAME]"
         }
     ]
 }

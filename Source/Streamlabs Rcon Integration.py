@@ -42,8 +42,7 @@ class State():
                 self.Gui.OnStopped()
                 return
             if not self.Rcon.TestConnection():
-                # self.RecordActivity(
-                    # self.Translations.currentTexts["Message RconTestFailed"])
+                self.Gui.OnStopped()
                 return
             self.Streamlabs.Connect()
             self.UpdateStatus()
@@ -137,14 +136,23 @@ class State():
                 self.Logging.DebugLog(
                     "No profile action for: " + event.GetEventRawTitlesAsPrettyString())
                 return
+            actionType = ""
             if actionText == "":
+                actionType = "Ignore event"
                 self.Logging.DebugLog(
                     "NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
-                return
-
-            # TODO do RCON now
-            print("actionText: " + actionText)
-            self.RecordActivity("actionText: " + actionText)
+            else:
+                actionType = "Rcon command"
+                try:
+                    self.Rcon.SendCommand(actionText)
+                except Exception as ex:
+                    self.Logging.RecordException(ex, "Rcon event failed")
+                    self.RecordActivity(
+                        self.Translations.currentTexts["Rcon CommandError"] + actionText)
+                    return
+            self.RecordActivity(
+                self.Translations.currentTexts["StreamlabsEvent EventHandled"] + event.GetEventRawTitlesAsPrettyString() + " : " + event.bestName + " : value " + str(event.value) + " : " + actionType)
+            self.Logging.DebugLog("Action done: " + actionText)
         except Exception as ex:
             self.Logging.RecordException(
                 ex, "OBS Event Handler Critical Error - This event won't be processed")
@@ -179,4 +187,3 @@ except Exception as ex:
             ex, "Application Critical Error - Application has been stopped")
     except:
         pass
-    raise ex
