@@ -25,7 +25,7 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "",
-                    "action": "Thanks for subscribing [display_name] for [months] months"
+                    "action": "Thanks for subscribing [BESTNAME] for [months] months"
                 },
                 {
                     "condition": "[ALL]",
