@@ -2,7 +2,7 @@ from Logging import Logging
 from Streamlabs import Streamlabs
 from Gui import Gui, GuiWindow
 from Currency import Currency
-from StreamlabsEvent import StreamlabsEvent
+from StreamlabsEvent import StreamlabsEvent, StreamlabsEventUtils
 import json as Json
 from Config import Config
 from Profiles import Profiles
@@ -21,7 +21,7 @@ class State():
         self.donationsIdsProcessed = {}
         self.translations = Translations(self)
         self.currency = Currency(self)
-        StreamlabsEvent.LoadEventDefinitions()
+        StreamlabsEventUtils.LoadEventDefinitions()
         self.profiles = Profiles(self)
         self.streamlabs = Streamlabs(self)
         self.rcon = Rcon(self)

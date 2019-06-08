@@ -1,6 +1,6 @@
 import json as Json
 import os as Os
-from StreamlabsEvent import StreamlabsEvent
+from StreamlabsEvent import StreamlabsEventUtils
 
 
 class Profiles:
@@ -64,9 +64,9 @@ class Reaction:
         if "platform" in reactionData:
             self.platform = reactionData["platform"]
             self.type = reactionData["type"]
-            self.handlerName = StreamlabsEvent.MakeHandlerString(
+            self.handlerName = StreamlabsEventUtils.MakeHandlerString(
                 self.platform, self.type)
-            if self.handlerName not in StreamlabsEvent.handledEventTypes.keys():
+            if self.handlerName not in StreamlabsEventUtils.handledEventTypes.keys():
                 self.logging.LogQuit(
                     "invalid event handler type: " + self.handlerName)
         else:
@@ -106,23 +106,23 @@ class FilteredAction:
         if self.condition == "":
             self.logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
                                  "' condition can not be blank")
-        eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
+        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttritubeUsed(
             self.reaction.handlerName, self.condition, False)
         if eventAttributeCheckResult != "":
             self.logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
                                  "' condition error: " + eventAttributeCheckResult)
-        scriptParseCheck = StreamlabsEvent.IsScriptValid(self.condition)
+        scriptParseCheck = StreamlabsEventUtils.IsScriptValid(self.condition)
         if scriptParseCheck != "":
             self.logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
                                  "' has an invalid condition script:\n" + scriptParseCheck)
 
         self.manipulator = filteredActionData["manipulator"]
-        eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
+        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttritubeUsed(
             self.reaction.handlerName, self.manipulator, False)
         if eventAttributeCheckResult != "":
             self.logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
                                  "' manipulator error: " + eventAttributeCheckResult)
-        scriptParseCheck = StreamlabsEvent.IsScriptValid(self.manipulator)
+        scriptParseCheck = StreamlabsEventUtils.IsScriptValid(self.manipulator)
         if scriptParseCheck != "":
             self.logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
                                  "' has an invalid manipulator script:\n" + scriptParseCheck)
@@ -134,7 +134,7 @@ class FilteredAction:
             actionName = action[8:-1]
             if actionName in self.reaction.profile.actions.keys():
                 self.action = self.reaction.profile.actions[actionName]
-                eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
+                eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttritubeUsed(
                     self.reaction.handlerName, self.action.effect, True)
                 if eventAttributeCheckResult != "":
                     self.logging.LogQuit("'" + self.reaction.GetPrintHandlerType() + "' referenced action " +
@@ -147,7 +147,7 @@ class FilteredAction:
             if self.actionText == "":
                 self.logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +
                                      "' action can not be blank")
-            eventAttributeCheckResult = StreamlabsEvent.IsBadEventAttritubeUsed(
+            eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttritubeUsed(
                 self.reaction.handlerName, self.actionText, True)
             if eventAttributeCheckResult != "":
                 self.logging.LogQuit("'" + self.reaction.GetPrintHandlerType() +

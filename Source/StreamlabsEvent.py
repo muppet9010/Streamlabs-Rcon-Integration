@@ -4,8 +4,6 @@ import traceback as Traceback
 
 
 class StreamlabsEvent():
-    handledEventTypes = {}
-
     def __init__(self, state, data):
         self.state = state
         self.logging = state.logging
@@ -62,7 +60,7 @@ class StreamlabsEvent():
             self.platform = "streamlabs"
         elif self.platform == "twitch_account" and self.type == "subscription" and "gifter" in self.rawMessage and self.rawMessage["gifter"] != None:
             self.type = "subscription_gift"
-        self.handlerName = self.MakeHandlerString(
+        self.handlerName = StreamlabsEventUtils.MakeHandlerString(
             self.platform, self.type)
 
     @property
@@ -96,14 +94,10 @@ class StreamlabsEvent():
         return ''.join(str_list)
 
     def IsHandledEvent(self):
-        if self.handlerName in self.handledEventTypes.keys():
+        if self.handlerName in StreamlabsEventUtils.handledEventTypes.keys():
             return True
         else:
             return False
-
-    @staticmethod
-    def MakeHandlerString(platform, type):
-        return platform + "-" + type
 
     def ShouldIgnoreEvent(self):
         if (self.type == "streamlabels") or (self.type == "streamlabels.underlying") or (self.type == "alertPlaying") or (self.type == "subscription-playing") or (self.type == "rollEndCredits") or (self.type == "subMysteryGift"):
@@ -174,7 +168,7 @@ class StreamlabsEvent():
         return eventDesc
 
     def SubstituteEventDataIntoString(self, string, modValue="''"):
-        instances = StreamlabsEvent.FindAttributeTagsInString(string)
+        instances = StreamlabsEventUtils.FindAttributeTagsInString(string)
         for instance in instances:
             dataKeyName = instance[1:-1]
             dataKeyValue = "''"
@@ -197,8 +191,23 @@ class StreamlabsEvent():
             elif dataKeyName in self.rawMessage:
                 dataKeyValue = self.rawMessage[dataKeyName]
             string = string.replace(
-                instance, StreamlabsEvent.EspaceStringForRcon(str(dataKeyValue)))
+                instance, StreamlabsEventUtils.EspaceStringForRcon(str(dataKeyValue)))
         return string
+
+
+class StreamlabsEventUtils():
+    handledEventTypes = {}
+
+    @staticmethod
+    def MakeHandlerString(platform, type):
+        return platform + "-" + type
+
+    @staticmethod
+    def EspaceStringForRcon(text):
+        text = text.replace("\\", "\\\\")
+        text = text.replace("'", "\\'")
+        text = text.replace('"', '\\"')
+        return text
 
     @staticmethod
     def FindAttributeTagsInString(string):
@@ -209,20 +218,20 @@ class StreamlabsEvent():
         with open("eventDefinitions.json", "r") as file:
             data = Json.load(file)
         file.closed
-        StreamlabsEvent.handledEventTypes = data
+        StreamlabsEventUtils.handledEventTypes = data
 
     @staticmethod
     def IsBadEventAttritubeUsed(eventType, string, modValueAllowed):
         if string in ["", "[ALL]", "[NOTHING]"]:
             return ""
-        instances = StreamlabsEvent.FindAttributeTagsInString(string)
+        instances = StreamlabsEventUtils.FindAttributeTagsInString(string)
         for instance in instances:
             dataKeyName = instance[1:-1]
             if dataKeyName == "MODVALUE" and not modValueAllowed:
                 return "[MODVALUE] used when not allowed"
-            if dataKeyName in StreamlabsEvent.handledEventTypes['[ALL]'].keys():
+            if dataKeyName in StreamlabsEventUtils.handledEventTypes['[ALL]'].keys():
                 continue
-            if eventType == "" or dataKeyName not in StreamlabsEvent.handledEventTypes[eventType].keys():
+            if eventType == "" or dataKeyName not in StreamlabsEventUtils.handledEventTypes[eventType].keys():
                 return instance + " not a valid attribute for this event"
         return ""
 
@@ -230,7 +239,8 @@ class StreamlabsEvent():
     def IsScriptValid(scriptString):
         if scriptString in ["", "[ALL]", "[NOTHING]"]:
             return ""
-        instances = StreamlabsEvent.FindAttributeTagsInString(scriptString)
+        instances = StreamlabsEventUtils.FindAttributeTagsInString(
+            scriptString)
         testScriptString = scriptString
         for instance in instances:
             testScriptString = testScriptString.replace(instance, str(1))
@@ -239,10 +249,3 @@ class StreamlabsEvent():
         except Exception:
             return "config value: " + scriptString + "\n" + Traceback.format_exc(limit=0, chain=False)
         return ""
-
-    @staticmethod
-    def EspaceStringForRcon(text):
-        text = text.replace("\\", "\\\\")
-        text = text.replace("'", "\\'")
-        text = text.replace('"', '\\"')
-        return text
