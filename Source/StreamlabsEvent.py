@@ -123,7 +123,7 @@ class StreamlabsEvent():
         elif (self.handlerName == "twitch_account-bits"):
             self.valueType = "money"
             self.value = round(float(self.rawMessage["amount"]) / 100, 2)
-        elif (self.handlerName == "twitch_account-subscription") or (self.handlerName == "twitch_account-subscription-gift"):
+        elif (self.handlerName == "twitch_account-subscription") or (self.handlerName == "twitch_account-subscription_gift"):
             self.valueType = "money"
             subPlan = self.rawMessage["sub_plan"]
             if subPlan == "Prime" or subPlan == "1000":
