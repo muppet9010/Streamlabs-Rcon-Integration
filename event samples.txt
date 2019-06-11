@@ -27,3 +27,5 @@ TWITCH REAL WORLD
 00:37:01 : Streamlabs supported raw event received: {'type': 'host', 'message': [{'name': 'UsEr', 'viewers': 157, 'type': 'manual', '_id': '47740b852ebfe74364d1d2123e2cec35', 'event_id': '47740b852ebfe74364d1d2123e2cec35'}], 'for': 'twitch_account'}
 
 22:43:07 : Streamlabs supported raw event received: {'type': 'raid', 'message': [{'id': 'a7ca29ca-03c8-4857-b9d4-915fa03fc275', 'name': 'user', 'display_name': 'UsEr', 'raiders': '28', '_id': 'a7ca29ca-03c8-4857-b9d4-915fa03fc275', 'event_id': 'a7ca29ca-03c8-4857-b9d4-915fa03fc275'}], 'for': 'twitch_account'}
+
+19:37:29 : Streamlabs raw event data: {'type': 'pledge', 'message': [{'name': 'UsEr', 'isTest': True, 'formatted_amount': '£56.00', 'amount': 56, 'currency': 'GBP', 'to': {'name': 'StReAmErNaMe'}, 'from': 'Real Name', '_id': '938e6fdb71d5b11a19d170c3dbca555c'}], 'for': 'patreon', 'event_id': 'evt_a5f4b15b617c16d498f8fdf6d0865aaa'}

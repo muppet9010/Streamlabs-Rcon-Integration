@@ -6,14 +6,14 @@
             "valueType": "money",
             "filteredActions": [
                 {
-                    "condition": "[VALUE] >= 5",
-                    "manipulator": "int([VALUE]/5)",
+                    "condition": "[VALUE] >= 10",
+                    "manipulator": "int([VALUE]/10)",
                     "action": "/a_custom_command [MODVALUE] '[BESTNAME]'"
                 },
                 {
                     "condition": "[ALL]",
-                    "manipulator": "'bob'",
-                    "action": "static manipulator value: \"[MODVALUE]\""
+                    "manipulator": "myValue = floor([VALUE])\nmodValue = myValue * 2",
+                    "action": "special modValue: \"[MODVALUE]\""
                 }
             ]
         },
@@ -22,8 +22,8 @@
             "filteredActions": [
                 {
                     "condition": "[ALL]",
-                    "manipulator": "",
-                    "action": "/sc game.print('[BESTNAME]')"
+                    "manipulator": "'bob'",
+                    "action": "static manipulator value: \"[MODVALUE]\""
                 }
             ]
         },

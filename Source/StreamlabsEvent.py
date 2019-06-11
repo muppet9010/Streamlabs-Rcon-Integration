@@ -100,7 +100,7 @@ class StreamlabsEvent():
             return False
 
     def ShouldIgnoreEvent(self):
-        if (self.type == "streamlabels") or (self.type == "streamlabels.underlying") or (self.type == "alertPlaying") or (self.type == "subscription-playing") or (self.type == "rollEndCredits") or (self.type == "subMysteryGift"):
+        if (self.type == "streamlabels") or (self.type == "streamlabels.underlying") or (self.type == "alertPlaying") or (self.type == "subscription-playing") or (self.type == "rollEndCredits") or (self.type == "subMysteryGift") or (self.type == "eventListSettingsUpdate"):
             return True
         if (self.platform == "widget"):
             return True
@@ -246,6 +246,17 @@ class StreamlabsEventUtils():
             testScriptString = testScriptString.replace(instance, str(1))
         try:
             eval(testScriptString)
-        except Exception:
-            return "config value: " + scriptString + "\n" + Traceback.format_exc(limit=0, chain=False)
+        except:
+            try:
+                StreamlabsEventUtils.ProcessExecScript(testScriptString)
+            except Exception:
+                return "config value: " + scriptString + "\n" + Traceback.format_exc(limit=0, chain=False)
         return ""
+
+    @staticmethod
+    def ProcessExecScript(scriptString):
+        locals = {"modValue": 0}
+        globals = {}
+        script = "from math import *\n" + scriptString + "\n"
+        exec(script, globals, locals)
+        return locals["modValue"]

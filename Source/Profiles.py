@@ -172,7 +172,12 @@ class FilteredAction:
         if self.manipulator != None and self.manipulator != "":
             manipulatorValueString = event.SubstituteEventDataIntoString(
                 self.manipulator)
-            manipulatorValue = eval(manipulatorValueString)
+            manipulatorValue = 0
+            try:
+                manipulatorValue = eval(manipulatorValueString)
+            except:
+                manipulatorValue = StreamlabsEventUtils.ProcessExecScript(
+                    manipulatorValueString)
             return event.SubstituteEventDataIntoString(
                 actionText, manipulatorValue)
         return event.SubstituteEventDataIntoString(

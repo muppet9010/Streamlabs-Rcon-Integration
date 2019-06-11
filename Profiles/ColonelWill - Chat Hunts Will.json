@@ -1,0 +1,46 @@
+{
+    "name": "ColonelWill - Chat Hunts Will",
+    "description": "Chat hunts will buying biters 2019-06-11",
+    "reactions": [
+        {
+            "valueType": "money",
+            "filteredActions": [
+                {
+                    "condition": "[VALUE] >= 1",
+                    "manipulator": "value = floor([VALUE])\nvalue100 = int(value/100)\nmodValue = modValue + (value100 * 1500)\nvalue = value - (value100 * 100)\nvalue50 = int(value/50)\nmodValue = modValue + (value50 * 500)\nvalue = value - (value50 * 50)\nvalue25 = int(value/25)\nmodValue = modValue + (value25 * 175)\nvalue = value - (value25 * 25)\nvalue10 = int(value/10)\nmodValue = modValue + (value10 * 60)\nvalue = value - (value10 * 10)\nvalue5 = int(value/5)\nmodValue = modValue + (value5 * 25)\nvalue = value - (value5 * 5)\nmodValue = modValue + (value * 3)",
+                    "action": "/add-biters [MODVALUE] '[BESTNAME]'"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        },
+        {
+            "valueType": "follow",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/add-biters 10 '[BESTNAME]'"
+                }
+            ]
+        },
+        {
+            "valueType": "viewer",
+            "filteredActions": [
+                {
+                    "condition": "[VALUE] >= 5",
+                    "manipulator": "value = floor([VALUE])\nvalue100 = int(value/100)\nmodValue = modValue + (value100 * 1500)\nvalue = value - (value100 * 100)\nvalue50 = int(value/50)\nmodValue = modValue + (value50 * 500)\nvalue = value - (value50 * 50)\nvalue25 = int(value/25)\nmodValue = modValue + (value25 * 175)\nvalue = value - (value25 * 25)\nvalue10 = int(value/10)\nmodValue = modValue + (value10 * 60)\nvalue = value - (value10 * 10)\nvalue5 = int(value/5)\nmodValue = modValue + (value5 * 25)\nvalue = value - (value5 * 5)\nmodValue = modValue + (value * 3)",
+                    "action": "/add-biters [MODVALUE] '[BESTNAME]'"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        }
+    ]
+}
