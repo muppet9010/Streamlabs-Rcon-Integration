@@ -59,7 +59,7 @@ class StreamlabsEvent():
         if self.type == "donation" and self.platform == "":
             self.platform = "streamlabs"
         elif self.platform == "twitch_account" and self.type == "subscription" and "gifter" in self.rawMessage and self.rawMessage["gifter"] != None:
-            self.type = "subscription_gift"
+            self.type = "subscriptionGift"
         self.handlerName = StreamlabsEventUtils.MakeHandlerString(
             self.platform, self.type)
 
@@ -100,7 +100,7 @@ class StreamlabsEvent():
             return False
 
     def ShouldIgnoreEvent(self):
-        if (self.type == "streamlabels") or (self.type == "streamlabels.underlying") or (self.type == "alertPlaying") or (self.type == "subscription-playing") or (self.type == "rollEndCredits") or (self.type == "subMysteryGift") or (self.type == "eventListSettingsUpdate"):
+        if (self.type == "streamlabels") or (self.type == "streamlabels.underlying") or (self.type == "alertPlaying") or (self.type == "subscription-playing") or (self.type == "rollEndCredits") or (self.type == "eventListSettingsUpdate"):
             return True
         if (self.platform == "widget"):
             return True
@@ -127,15 +127,23 @@ class StreamlabsEvent():
         elif (self.handlerName == "twitch_account-bits"):
             self.valueType = "money"
             self.value = round(float(self.rawMessage["amount"]) / 100, 2)
-        elif (self.handlerName == "twitch_account-subscription") or (self.handlerName == "twitch_account-subscription_gift"):
+        elif (self.handlerName == "twitch_account-subscription") or (self.handlerName == "twitch_account-subscriptionGift"):
             self.valueType = "money"
             subPlan = self.rawMessage["sub_plan"]
-            if subPlan == "Prime" or subPlan == "1000":
-                self.value = 5
-            elif subPlan == "2000":
-                self.value = 10
-            elif subPlan == "3000":
-                self.value = 25
+            subValue = StreamlabsEventUtils.GetTwitchSubscriptionValue(subPlan)
+            if subValue != None:
+                self.value = subValue
+            else:
+                self.state.RecordActivity(
+                    self.state.translations.GetTranslation("StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
+                return False
+        elif (self.handlerName == "twitch_account-subMysteryGift"):
+            self.bestName = self.rawMessage["gifter_display_name"]
+            self.valueType = "money"
+            subPlan = self.rawMessage["sub_plan"]
+            subValue = StreamlabsEventUtils.GetTwitchSubscriptionValue(subPlan)
+            if subValue != None:
+                self.value = subValue * self.rawMessage["amount"]
             else:
                 self.state.RecordActivity(
                     self.state.translations.GetTranslation("StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
@@ -264,3 +272,14 @@ class StreamlabsEventUtils():
         script = "from math import *\n" + scriptString + "\n"
         exec(script, globals, locals)
         return locals["calcValue"]
+
+    @staticmethod
+    def GetTwitchSubscriptionValue(subPlan):
+        if subPlan == "Prime" or subPlan == "1000":
+            return 5
+        elif subPlan == "2000":
+            return 10
+        elif subPlan == "3000":
+            return 25
+        else:
+            return None

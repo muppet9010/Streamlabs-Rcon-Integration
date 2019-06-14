@@ -53,7 +53,7 @@ Profile configuration files must be created with knowledge of quote escaping. Th
 
 Manipulator script's are special in that they support raw python code that will be executed within a Python exec() function in addition to a python expression that is executed within a Python eval() function. The event handler will try to eval() the manipulator script first and should it error then try to exec() the manipulator script. As the manipulator script is supplied via the profile JSON file it must be in a single line format with `\n` for the line breaks. The Python maths module is included within the execution environment. The local variable `calcValue` is passed out of the exec environment as the value of `CALCVALUE`. See the `Factorio - Advanced Usage Example.json` for examples of the some of these combinations.
 
-The config has a `Test Mode` option. When enabled it prints the RCON commands to the activity window rather than sending them. It also skips the RCON connection test which the Start button is clicked within the app. In effect not doing any RCON commands.
+The config has a `Rcon No Commands` option. When enabled it prints the RCON commands to the activity window rather than sending them. It also skips the RCON connection test which the Start button is clicked within the app. In effect not doing any RCON commands.
 
 
 Development Building

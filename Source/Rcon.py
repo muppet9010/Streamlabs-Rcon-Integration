@@ -12,7 +12,7 @@ class Rcon:
         self.testCommand = self.state.config.GetSetting("Rcon Test Command")
 
     def TestConnection(self):
-        if self.state.config.GetSetting("Test Mode"):
+        if self.state.config.GetSetting("Rcon No Commands"):
             return True
         try:
             self.SendCommand(self.testCommand)
@@ -24,9 +24,9 @@ class Rcon:
             return False
 
     def SendCommand(self, commandString):
-        if self.state.config.GetSetting("Test Mode"):
+        if self.state.config.GetSetting("Rcon No Commands"):
             self.state.RecordActivity(
-                self.state.translations.GetTranslation("Rcon TestMode") + commandString)
+                self.state.translations.GetTranslation("Rcon NoCommand") + commandString)
             return ""
         with MCRcon(self.serverAddress, self.serverPassword, self.serverPort) as mcr:
             return mcr.command(commandString)

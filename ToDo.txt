@@ -10,9 +10,7 @@ Handle paused Factorio server accepting but not reply to RCON command. It will h
 
 
 
+At present a mysterySubGift will trigger plus each recipient will trigger the receiving subscription event. As mysterySubGift event comes first this needs to be monitored and receieved sub gift events ignored appropariately.
 
-
-
-add option for getting gift subscriptions from the gifter view as well as from the receiver view
 
 can have multiple payloads per event. need to split these up to separate events internally.

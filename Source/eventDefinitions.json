@@ -74,6 +74,7 @@
         }
     },
     "twitch_account-subscription": {
+        "_comment": "When a user gets themselves a subscription",
         "name": {
             "valueType": "text string",
             "description": "the username of the person who did the event"
@@ -95,7 +96,8 @@
             "description": "the number twitch uses to identify each sub tier: Prime, 1000, 2000, 3000"
         }
     },
-    "twitch_account-subscription_gift": {
+    "twitch_account-subscriptionGift": {
+        "_comment": "When a user is gifted a subscription",
         "name": {
             "valueType": "text string",
             "description": "the username of the person who received the subscription"
@@ -123,6 +125,29 @@
         "gifter_display_name": {
             "valueType": "text string",
             "description": "the display name of the person who gifted the subscription"
+        }
+    },
+    "twitch_account-subMysteryGift": {
+        "_comment": "When a user gifts a number of subscriptions to the community",
+        "name": {
+            "valueType": "text string",
+            "description": "the username of the person who did the event"
+        },
+        "gifter": {
+            "valueType": "text string",
+            "description": "the username of the person who gifted the subscription"
+        },
+        "gifter_display_name": {
+            "valueType": "text string",
+            "description": "the display name of the person who gifted the subscription"
+        },
+        "amount": {
+            "valueType": "number",
+            "description": "the number of subscriptions gifted to the community"
+        },
+        "sub_plan": {
+            "valueType": "number",
+            "description": "the number twitch uses to identify each sub tier: Prime, 1000, 2000, 3000"
         }
     },
     "twitch_account-bits": {

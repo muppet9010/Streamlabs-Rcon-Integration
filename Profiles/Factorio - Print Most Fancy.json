@@ -36,7 +36,7 @@
         },
         {
             "platform": "twitch_account",
-            "type": "subscription_gift",
+            "type": "subscriptionGift",
             "filteredActions": [
                 {
                     "condition": "[VALUE] >= 5",

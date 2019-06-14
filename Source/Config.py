@@ -27,7 +27,7 @@ class Config():
             "Rcon Server Port": 25575,
             "Rcon Server Password": "",
             "Rcon Test Command": "/version",
-            "Test Mode": False
+            "Rcon No Commands": False
         }
         for name, value in defaults.items():
             if not name in self._settings:
