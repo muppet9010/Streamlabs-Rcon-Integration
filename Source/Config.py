@@ -5,14 +5,14 @@ import os as Os
 class Config():
     def __init__(self, state):
         self.state = state
-        self.fileName = "config.json"
-        self.settings = {}
-        if Os.path.isfile(self.fileName):
-            with open(self.fileName, "r") as file:
+        self._fileName = "config.json"
+        self._settings = {}
+        if Os.path.isfile(self._fileName):
+            with open(self._fileName, "r") as file:
                 data = Json.load(file)
             file.closed
-            self.settings = data
-        self.settingsMissing = []
+            self._settings = data
+        self._settingsMissing = []
         self._PopulateMissingConfigDefaults()
 
     def _PopulateMissingConfigDefaults(self):
@@ -26,17 +26,18 @@ class Config():
             "Rcon Server Address": "",
             "Rcon Server Port": 25575,
             "Rcon Server Password": "",
-            "Rcon Test Command": "/version"
+            "Rcon Test Command": "/version",
+            "Test Mode": False
         }
         for name, value in defaults.items():
-            if not name in self.settings:
-                self.settings[name] = value
-                self.settingsMissing.append(name)
+            if not name in self._settings:
+                self._settings[name] = value
+                self._settingsMissing.append(name)
 
     def LogMissingSettings(self):
-        for name in self.settingsMissing:
+        for name in self._settingsMissing:
             self.state.logging.Log(
                 "Config key missing, using default: " + name)
 
     def GetSetting(self, name):
-        return self.settings[name]
+        return self._settings[name]

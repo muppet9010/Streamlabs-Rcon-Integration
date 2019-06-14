@@ -8,5 +8,6 @@
     "Rcon Server Address": "",
     "Rcon Server Port": 25575,
     "Rcon Server Password": "",
-    "Rcon Test Command": "/version"
+    "Rcon Test Command": "/version",
+    "Test Mode": false
 }
