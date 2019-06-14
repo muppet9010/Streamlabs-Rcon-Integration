@@ -7,8 +7,8 @@
             "filteredActions": [
                 {
                     "condition": "[VALUE] >= 1",
-                    "manipulator": "value = floor([VALUE])\nvalue100 = int(value/100)\nmodValue = modValue + (value100 * 1500)\nvalue = value - (value100 * 100)\nvalue50 = int(value/50)\nmodValue = modValue + (value50 * 500)\nvalue = value - (value50 * 50)\nvalue25 = int(value/25)\nmodValue = modValue + (value25 * 175)\nvalue = value - (value25 * 25)\nvalue10 = int(value/10)\nmodValue = modValue + (value10 * 60)\nvalue = value - (value10 * 10)\nvalue5 = int(value/5)\nmodValue = modValue + (value5 * 25)\nvalue = value - (value5 * 5)\nmodValue = modValue + (value * 3)",
-                    "action": "/add-biters [MODVALUE] '[BESTNAME]'"
+                    "manipulator": "value = floor([VALUE])\nvalue100 = int(value/100)\ncalcValue = calcValue + (value100 * 1500)\nvalue = value - (value100 * 100)\nvalue50 = int(value/50)\ncalcValue = calcValue + (value50 * 500)\nvalue = value - (value50 * 50)\nvalue25 = int(value/25)\ncalcValue = calcValue + (value25 * 175)\nvalue = value - (value25 * 25)\nvalue10 = int(value/10)\ncalcValue = calcValue + (value10 * 60)\nvalue = value - (value10 * 10)\nvalue5 = int(value/5)\ncalcValue = calcValue + (value5 * 25)\nvalue = value - (value5 * 5)\ncalcValue = calcValue + (value * 3)",
+                    "action": "/add-biters [CALCVALUE] '[BESTNAME]'"
                 },
                 {
                     "condition": "[ALL]",
@@ -32,8 +32,8 @@
             "filteredActions": [
                 {
                     "condition": "[VALUE] >= 5",
-                    "manipulator": "value = floor([VALUE])\nvalue100 = int(value/100)\nmodValue = modValue + (value100 * 1500)\nvalue = value - (value100 * 100)\nvalue50 = int(value/50)\nmodValue = modValue + (value50 * 500)\nvalue = value - (value50 * 50)\nvalue25 = int(value/25)\nmodValue = modValue + (value25 * 175)\nvalue = value - (value25 * 25)\nvalue10 = int(value/10)\nmodValue = modValue + (value10 * 60)\nvalue = value - (value10 * 10)\nvalue5 = int(value/5)\nmodValue = modValue + (value5 * 25)\nvalue = value - (value5 * 5)\nmodValue = modValue + (value * 3)",
-                    "action": "/add-biters [MODVALUE] '[BESTNAME]'"
+                    "manipulator": "value = floor([VALUE])\nvalue100 = int(value/100)\ncalcValue = calcValue + (value100 * 1500)\nvalue = value - (value100 * 100)\nvalue50 = int(value/50)\ncalcValue = calcValue + (value50 * 500)\nvalue = value - (value50 * 50)\nvalue25 = int(value/25)\ncalcValue = calcValue + (value25 * 175)\nvalue = value - (value25 * 25)\nvalue10 = int(value/10)\ncalcValue = calcValue + (value10 * 60)\nvalue = value - (value10 * 10)\nvalue5 = int(value/5)\ncalcValue = calcValue + (value5 * 25)\nvalue = value - (value5 * 5)\ncalcValue = calcValue + (value * 3)",
+                    "action": "/add-biters [CALCVALUE] '[BESTNAME]'"
                 },
                 {
                     "condition": "[ALL]",

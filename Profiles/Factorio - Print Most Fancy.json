@@ -9,7 +9,7 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "[VALUE] * 1.5",
-                    "action": "Thanks for the $[VALUE] donation [name], its worth $[MODVALUE] to me"
+                    "action": "Thanks for the $[VALUE] donation [name], its worth $[CALCVALUE] to me"
                 },
                 {
                     "condition": "[VALUE] < 5",

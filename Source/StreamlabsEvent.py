@@ -171,13 +171,13 @@ class StreamlabsEvent():
             eventDesc = "No Title Details"
         return eventDesc
 
-    def SubstituteEventDataIntoString(self, string, modValue="''"):
+    def SubstituteEventDataIntoString(self, string, calcValue="''"):
         instances = StreamlabsEventUtils.FindAttributeTagsInString(string)
         for instance in instances:
             dataKeyName = instance[1:-1]
             dataKeyValue = "''"
-            if dataKeyName == "MODVALUE":
-                dataKeyValue = modValue
+            if dataKeyName == "CALCVALUE":
+                dataKeyValue = calcValue
             elif dataKeyName == "VALUE":
                 dataKeyValue = self.GetValueForDisplay()
             elif dataKeyName == "PLATFORM":
@@ -225,14 +225,14 @@ class StreamlabsEventUtils():
         StreamlabsEventUtils.handledEventTypes = data
 
     @staticmethod
-    def IsBadEventAttritubeUsed(eventType, string, modValueAllowed):
+    def IsBadEventAttritubeUsed(eventType, string, calcValueAllowed):
         if string in ["", "[ALL]", "[NOTHING]"]:
             return ""
         instances = StreamlabsEventUtils.FindAttributeTagsInString(string)
         for instance in instances:
             dataKeyName = instance[1:-1]
-            if dataKeyName == "MODVALUE" and not modValueAllowed:
-                return "[MODVALUE] used when not allowed"
+            if dataKeyName == "CALCVALUE" and not calcValueAllowed:
+                return "[CALCVALUE] used when not allowed"
             if dataKeyName in StreamlabsEventUtils.handledEventTypes['[ALL]'].keys():
                 continue
             if eventType == "" or dataKeyName not in StreamlabsEventUtils.handledEventTypes[eventType].keys():
@@ -259,8 +259,8 @@ class StreamlabsEventUtils():
 
     @staticmethod
     def ProcessExecScript(scriptString):
-        locals = {"modValue": 0}
+        locals = {"calcValue": 0}
         globals = {}
         script = "from math import *\n" + scriptString + "\n"
         exec(script, globals, locals)
-        return locals["modValue"]
+        return locals["calcValue"]

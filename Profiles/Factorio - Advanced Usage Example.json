@@ -8,12 +8,12 @@
                 {
                     "condition": "[VALUE] >= 10",
                     "manipulator": "int([VALUE]/10)",
-                    "action": "/a_custom_command [MODVALUE] '[BESTNAME]'"
+                    "action": "/a_custom_command [CALCVALUE] '[BESTNAME]'"
                 },
                 {
                     "condition": "[ALL]",
-                    "manipulator": "myValue = floor([VALUE])\nmodValue = myValue * 2",
-                    "action": "special modValue: \"[MODVALUE]\""
+                    "manipulator": "myValue = floor([VALUE])\ncalcValue = myValue * 2",
+                    "action": "special calcValue: \"[CALCVALUE]\""
                 }
             ]
         },
@@ -23,7 +23,7 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "'bob'",
-                    "action": "static manipulator value: \"[MODVALUE]\""
+                    "action": "static manipulator value: \"[CALCVALUE]\""
                 }
             ]
         },
@@ -33,7 +33,7 @@
                 {
                     "condition": "[VALUE] >= 0",
                     "manipulator": "'bo\\'b'",
-                    "action": "/sc game.print('[MODVALUE]\\'s great' .. ' and ' .. \"[BESTNAME]'s awesome\")"
+                    "action": "/sc game.print('[CALCVALUE]\\'s great' .. ' and ' .. \"[BESTNAME]'s awesome\")"
                 }
             ]
         }

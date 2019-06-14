@@ -4,19 +4,16 @@ Make so that profile startup errors are shown in a GUI and disable running until
 Have seperate Activity and System (status, warning, errors) logs
 Have a way to pause logs from updating and then resume
 Add a way to fire test events data at this to allow better testing of responses than the Streamlabs Test Widgets button.
+Support multiple calculated values via exec. Array in exec, to numbered strings in action script.
+Support multiple rcon commands as an array in JSON.
 
 
 
 
-the integration handles gifted subs for the recipient of the sub, but knowing its been gifted by someone.
-that's probably something to add to the integration list to be able to handle gifted subs as single donation from the gifter.
 
-add option for getting gift subscriptions from the gifter view and not from the receiver view
+
+add option for getting gift subscriptions from the gifter view as well as from the receiver view
 
 can have multiple payloads per event. need to split these up to separate events internally.
 
-Support multiple rcon commands as an array in JSON.
 
-Support multiple calculated values via exec. Array in exec, to numbered strings in action script.
-
-change modvalue to calcvalue
