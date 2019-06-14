@@ -1,7 +1,7 @@
 # Streamlabs-Rcon-Integration
 
 
-A Python exe for integrating Streamlabs and any game supporting Rcon. Its currently being used with Factorio, but should be compatible with any other Rcon interfaced game. 
+A Python exe for integrating Streamlabs and any game supporting Rcon. Its currently being used with Factorio, but should be compatible with any other Rcon interfaced game.
 
 At present only really tested with Twitch, but should work with mixer and youtube based on API spec.
 
@@ -17,6 +17,8 @@ Installation & Usage
 7. The integration is now running between the Streamlabs account and the game using the selected profile.
 
 Should a critical error occur the program may fail to load or close. Details can be found in the most recent log file within the Logs folder.
+
+Note: on clicking `Start` the program checks the RCON connection. If a Factorio server has been paused by a player then the RCON command will never respond and the application will freeze. Make sure that Factorio hasn't been paused by a player when clicking to `Start`. A server with 0 players on is not in this state.
 
 
 Program Execution Concepts

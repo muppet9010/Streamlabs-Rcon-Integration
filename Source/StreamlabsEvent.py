@@ -116,6 +116,10 @@ class StreamlabsEvent():
             self.value = self.state.currency.GetNormalisedValue(
                 self.rawMessage["currency"], float(self.rawMessage["amount"]))
             self.state.donationsIdsProcessed[self.id] = True
+        elif (self.handlerName == "patreon-pledge"):
+            self.valueType = "money"
+            self.value = self.state.currency.GetNormalisedValue(
+                self.rawMessage["currency"], float(self.rawMessage["amount"]))
         elif (self.handlerName == "youtube_account-superchat"):
             self.valueType = "money"
             self.value = self.state.currency.GetNormalisedValue(

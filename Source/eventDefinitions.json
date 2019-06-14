@@ -18,7 +18,7 @@
         },
         "VALUE": {
             "valueType": "number",
-            "description": "the standardised value of the event. Donations and money amounts are converted to USD. Subscriptions have the USD cost of them. Follows and Hosts have the viewer count. This may be a decimal number"
+            "description": "the standardised value of the event. Donations and money amounts are converted to USD with 2 decimal digits for cents if needed. Subscriptions have the USD cost of them. Follows and Hosts have the viewer count."
         },
         "MODVALUE": {
             "valueType": "number",
@@ -49,6 +49,24 @@
         "message": {
             "valueType": "text string",
             "description": "the text message with the donation"
+        },
+        "currency": {
+            "valueType": "text string",
+            "description": "the 3 letter currance code, i.e. USD, GBP"
+        }
+    },
+    "patreon-pledge": {
+        "name": {
+            "valueType": "text string",
+            "description": "the username of the person who did the event"
+        },
+        "formatted_amount": {
+            "valueType": "text string",
+            "description": "the amount as 2 decimal places and the currancy symbol"
+        },
+        "amount": {
+            "valueType": "number",
+            "description": "the amount of the donation with a variable (0-10) number of decimal places"
         },
         "currency": {
             "valueType": "text string",
