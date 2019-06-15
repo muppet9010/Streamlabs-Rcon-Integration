@@ -12,6 +12,9 @@ class Translations:
                 "Gui StopButton": "Stop",
                 "Gui QuitButton": "Quit",
                 "Gui ActivityLogTitle": "Actvity Log",
+                "Gui TestEventButton": "Test Event",
+                "Gui SelectTestEventPlatform": "Select Platform",
+                "Gui SelectTestEventType": "Select Type",
                 "Message NeedProfileBeforeStart": "Must select a profile before starting",
                 "Message Started": "Started",
                 "Message StreamlabsUnexpectedStop": "Error Streamlabs Stopped Unexpectedly",
@@ -30,7 +33,8 @@ class Translations:
                 "Rcon CommandError": "ERROR: Rcon command failed, run manually: ",
                 "Rcon CommandResponseWarning": "WARNING: Rcon got response from server: ",
                 "Rcon TestErrorMessage": "Rcon connection test message: ",
-                "Rcon NoCommand": "Rcon Test Mode: "
+                "Rcon NoCommand": "Rcon Test Mode: ",
+                "TestEvent InvalidTestEvent": "Invalid Test Event Selection: "
             }
 
     def GetTranslation(self, key):
@@ -38,5 +42,5 @@ class Translations:
             return self.currentTexts[key]
         else:
             self.state.logging.Log(
-                "missing translation in '" + self.language + "': " + key)
+                "ERROR: Missing translation in '" + self.language + "': " + key)
             return "MISSING KEY"

@@ -3,12 +3,13 @@ Make a profile manager GUI
 Make so that profile startup errors are shown in a GUI and disable running until fixed.
 Have seperate Activity and System (status, warning, errors) logs
 Have a way to pause logs from updating and then resume
-Add a way to fire test events data at this to allow better testing of responses than the Streamlabs Test Widgets button.
 Support multiple calculated values via exec. Array in exec, to numbered strings in action script.
 Support multiple rcon commands as an array in JSON.
 Handle paused Factorio server accepting but not reply to RCON command. It will honor the command when the server is unpaused. So different between start test connection and event handling.
 
 
+
+Add a way to fire test events data at this to allow better testing of responses than the Streamlabs Test Widgets button. Needed for these new data types.
 
 At present a mysterySubGift will trigger plus each recipient will trigger the receiving subscription event. As mysterySubGift event comes first this needs to be monitored and receieved sub gift events ignored appropariately.
 

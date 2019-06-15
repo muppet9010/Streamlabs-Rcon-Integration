@@ -8,6 +8,7 @@ from Config import Config
 from Profiles import Profiles
 from Rcon import Rcon
 from Translations import Translations
+from TestEvents import TestEvents
 
 
 class State():
@@ -25,9 +26,10 @@ class State():
         self.profiles = Profiles(self)
         self.streamlabs = Streamlabs(self)
         self.rcon = Rcon(self)
+        self.testEvents = TestEvents(self)
         self.guiWindow = GuiWindow(self)
         self.gui = self.guiWindow.gui
-        self.gui.CreateWidgets()
+        self.gui.Setup()
 
     def OnStartButtonHandler(self):
         try:
@@ -161,6 +163,22 @@ class State():
         except Exception as ex:
             self.logging.RecordException(
                 ex, "OBS Event Handler Critical Error - This event won't be processed")
+
+    def OnTestEventButtonHandler(self):
+        try:
+            testEventPlatform = self.gui.selectedTestEventPlatform.get()
+            testEventType = self.gui.selectedTestEventType.get()
+            testEventAmount = self.gui.testEventAmount.get()
+            testEvent = self.testEvents.GenerateTestEvent(
+                testEventPlatform, testEventType, testEventAmount)
+            if testEvent != None:
+                self.OnStreamlabsEventHandler(testEvent)
+            else:
+                self.RecordActivity(
+                    self.translations.GetTranslation("TestEvent InvalidTestEvent") + testEventPlatform + " - " + testEventType)
+        except Exception as ex:
+            self.logging.RecordException(
+                ex, "Test Event Critical Error - Failed to run test event")
 
     def UpdateStatus(self):
         if self.streamlabs.connecting:
