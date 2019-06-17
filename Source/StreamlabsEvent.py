@@ -4,20 +4,12 @@ import traceback as Traceback
 
 
 class StreamlabsEvent():
-    def __init__(self, state, data):
+    def __init__(self, state, platformString, typeString, payload):
         self.state = state
         self.logging = state.logging
 
-        if "for" in data:
-            self.platform = data["for"]
-        else:
-            self.platform = ""
-        if "type" in data:
-            self.type = data["type"]
-        else:
-            self.type = ""
-
-        self.rawData = data
+        self.platform = platformString
+        self.type = typeString
         self.id = ""
         self.handlerName = ""
         self.value = 0
@@ -32,19 +24,7 @@ class StreamlabsEvent():
             self.ignored = True
             return
 
-        if "message" not in data:
-            self.state.RecordActivity(
-                self.state.translations.GetTranslation("StreamlabsEvent MissingEventPayloadCount"))
-            self.errored = True
-            return
-        if len(data["message"]) != 1:
-            self.state.RecordActivity(
-                self.state.translations.GetTranslation("StreamlabsEvent BadEventPayloadCount") + str(
-                    len(data["message"])))
-            self.errored = True
-            return
-        rawMessage = data["message"][0]
-        self.rawMessage = rawMessage
+        self.rawMessage = payload
 
         self.id = self.rawMessage["_id"]
         if "display_name" in self.rawMessage.keys():
@@ -89,7 +69,6 @@ class StreamlabsEvent():
         str_list.append("valueType: '" + self.valueType + "', ")
         str_list.append("value: '" + str(self.value) + "', ")
         str_list.append("bestName: '" + self.bestName + "', ")
-        str_list.append("rawData: " + str(self.rawData))
         str_list.append("}")
         return ''.join(str_list)
 
@@ -283,3 +262,23 @@ class StreamlabsEventUtils():
             return 25
         else:
             return None
+
+    @staticmethod
+    def GenerateEventPerPayload(state, data):
+        if "message" not in data:
+            state.RecordActivity(
+                state.translations.GetTranslation("StreamlabsEvent MissingEventPayloadCount"))
+            return None
+        events = []
+        if "for" in data:
+            platformString = data["for"]
+        else:
+            platformString = ""
+        if "type" in data:
+            typeString = data["type"]
+        else:
+            typeString = ""
+        for payload in data["message"]:
+            events.append(StreamlabsEvent(
+                state, platformString, typeString, payload))
+        return events

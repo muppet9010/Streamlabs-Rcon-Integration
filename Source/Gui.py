@@ -95,6 +95,14 @@ class Gui(TK.Frame):
             bottomBarContainer, textvariable=self.testEventValue, width=10)
         self.testEventValueInput.pack(side=TK.LEFT)
 
+        self.testEventQuantityLabel = TK.Label(
+            bottomBarContainer, text="quantity:")
+        self.testEventQuantityLabel.pack(side=TK.LEFT)
+        self.testEventQuantity = TK.StringVar()
+        self.testEventQuantityInput = TK.Entry(
+            bottomBarContainer, textvariable=self.testEventQuantity, width=10)
+        self.testEventQuantityInput.pack(side=TK.LEFT)
+
         self.testEventPayloadCountLabel = TK.Label(
             bottomBarContainer, text="payload count:")
         self.testEventPayloadCountLabel.pack(side=TK.LEFT)
@@ -117,6 +125,8 @@ class Gui(TK.Frame):
         self.testEventTypeList.config(state=TK.DISABLED)
         self.testEventValueLabel.config(state=TK.DISABLED)
         self.testEventValueInput.config(state=TK.DISABLED)
+        self.testEventQuantityLabel.config(state=TK.DISABLED)
+        self.testEventQuantityInput.config(state=TK.DISABLED)
         self.testEventPayloadCountLabel.config(state=TK.DISABLED)
         self.testEventPayloadCountInput.config(state=TK.DISABLED)
         self.testEventButton.config(state=TK.DISABLED)
@@ -156,23 +166,32 @@ class Gui(TK.Frame):
         self.testEventTypeList.config(state=TK.NORMAL)
         self.testEventValueLabel.config(state=TK.DISABLED)
         self.testEventValueInput.config(state=TK.DISABLED)
+        self.testEventQuantityLabel.config(state=TK.DISABLED)
+        self.testEventQuantityInput.config(state=TK.DISABLED)
         self.testEventPayloadCountLabel.config(state=TK.DISABLED)
         self.testEventPayloadCountInput.config(state=TK.DISABLED)
         self.testEventButton.config(state=TK.DISABLED)
 
     def OnTestEventTypeChanged(self, *args):
         amountEnabled = False
+        quantityEnabled = False
         if self.selectedTestEventType.get() != self.translations.GetTranslation("Gui SelectTestEventType"):
             amountEnabled = self.state.testEvents.GetAttribute(self.selectedTestEventPlatform.get(
             ), self.selectedTestEventType.get(), "valueInput")
+            quantityEnabled = self.state.testEvents.GetAttribute(self.selectedTestEventPlatform.get(
+            ), self.selectedTestEventType.get(), "quantityInput")
         if amountEnabled:
             self.testEventValueLabel.config(state=TK.NORMAL)
             self.testEventValueInput.config(state=TK.NORMAL)
-            self.testEventPayloadCountLabel.config(state=TK.NORMAL)
-            self.testEventPayloadCountInput.config(state=TK.NORMAL)
         else:
             self.testEventValueLabel.config(state=TK.DISABLED)
             self.testEventValueInput.config(state=TK.DISABLED)
-            self.testEventPayloadCountLabel.config(state=TK.DISABLED)
-            self.testEventPayloadCountInput.config(state=TK.DISABLED)
+        if quantityEnabled:
+            self.testEventQuantityLabel.config(state=TK.NORMAL)
+            self.testEventQuantityInput.config(state=TK.NORMAL)
+        else:
+            self.testEventQuantityLabel.config(state=TK.DISABLED)
+            self.testEventQuantityInput.config(state=TK.DISABLED)
+        self.testEventPayloadCountLabel.config(state=TK.NORMAL)
+        self.testEventPayloadCountInput.config(state=TK.NORMAL)
         self.testEventButton.config(state=TK.NORMAL)

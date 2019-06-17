@@ -37,7 +37,8 @@ class Translations:
                 "Rcon StartupNoCommandMode": "Rcon running in No Command mode",
                 "TestEvent InvalidTestEvent": "Invalid Test Event Selection: ",
                 "TestEvent ValueNotFloat": "Test Event Value isn't a number: ",
-                "TestEvent PayloadCountNotInt": "Test Event Payload Count not a positive whole number: "
+                "TestEvent PayloadCountNotInt": "Test Event Payload Count not a positive whole number: ",
+                "TestEvent QuantityCountNotInt": "Test Event Quantity Count not a positive whole number: "
             }
 
     def GetTranslation(self, key):

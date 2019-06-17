@@ -109,57 +109,60 @@ class State():
 
     def OnStreamlabsEventHandler(self, data):
         try:
-            event = StreamlabsEvent(self, data)
-            if event.errored:
-                self.logging.DebugLog(
-                    "Streamlabs event errored during initial handling: " + str(event))
-                return
-            if event.ignored:
-                self.logging.DebugLog(
-                    "Streamlabs event being ignored: " + event.GetEventRawTitlesAsPrettyString())
-                return
             self.logging.DebugLog(
                 "Streamlabs raw event data: " + str(data))
-            if not event.IsHandledEvent():
-                self.RecordActivity(
-                    self.translations.GetTranslation("StreamlabsEvent UnrecognisedEvent") + event.GetEventRawTitlesAsPrettyString())
+            events = StreamlabsEventUtils.GenerateEventPerPayload(self, data)
+            if events == None:
                 return
-            if not event.PopulateNormalisedData():
-                self.RecordActivity(
-                    self.translations.GetTranslation("StreamlabsEvent ErrorProcessingEvent") + event.GetEventRawTitlesAsPrettyString())
-                return
-            self.logging.DebugLog(
-                "Streamlabs processed event: " + str(event))
-
-            actionText = self.profiles.currentProfile.GetActionTextForEvent(
-                event)
-            if actionText == None:
-                self.RecordActivity(
-                    self.translations.GetTranslation("StreamlabsEvent NoProfileAction") + event.GetEventRawTitlesAsPrettyString())
-                self.logging.DebugLog(
-                    "No profile action for: " + event.GetEventRawTitlesAsPrettyString())
-                return
-            actionType = ""
-            response = ""
-            if actionText == "":
-                actionType = "Ignore event"
-                self.logging.DebugLog(
-                    "NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
-            else:
-                actionType = "Rcon command"
-                try:
-                    response = self.rcon.SendCommand(actionText)
-                except Exception as ex:
-                    self.logging.RecordException(ex, "Rcon event failed")
-                    self.RecordActivity(
-                        self.translations.GetTranslation("Rcon CommandError") + actionText)
+            for event in events:
+                if event.errored:
+                    self.logging.DebugLog(
+                        "Streamlabs event errored during initial handling: " + str(event))
                     return
-            self.RecordActivity(
-                self.translations.GetTranslation("StreamlabsEvent EventHandled") + event.GetEventRawTitlesAsPrettyString() + " : " + event.bestName + " : value " + str(event.value) + " : " + actionType)
-            if response != "":
+                if event.ignored:
+                    self.logging.DebugLog(
+                        "Streamlabs event being ignored: " + event.GetEventRawTitlesAsPrettyString())
+                    return
+                if not event.IsHandledEvent():
+                    self.RecordActivity(
+                        self.translations.GetTranslation("StreamlabsEvent UnrecognisedEvent") + event.GetEventRawTitlesAsPrettyString())
+                    return
+                if not event.PopulateNormalisedData():
+                    self.RecordActivity(
+                        self.translations.GetTranslation("StreamlabsEvent ErrorProcessingEvent") + event.GetEventRawTitlesAsPrettyString())
+                    return
+                self.logging.DebugLog(
+                    "Streamlabs processed event: " + str(event))
+
+                actionText = self.profiles.currentProfile.GetActionTextForEvent(
+                    event)
+                if actionText == None:
+                    self.RecordActivity(
+                        self.translations.GetTranslation("StreamlabsEvent NoProfileAction") + event.GetEventRawTitlesAsPrettyString())
+                    self.logging.DebugLog(
+                        "No profile action for: " + event.GetEventRawTitlesAsPrettyString())
+                    return
+                actionType = ""
+                response = ""
+                if actionText == "":
+                    actionType = "Ignore event"
+                    self.logging.DebugLog(
+                        "NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
+                else:
+                    actionType = "Rcon command"
+                    try:
+                        response = self.rcon.SendCommand(actionText)
+                    except Exception as ex:
+                        self.logging.RecordException(ex, "Rcon event failed")
+                        self.RecordActivity(
+                            self.translations.GetTranslation("Rcon CommandError") + actionText)
+                        return
                 self.RecordActivity(
-                    self.translations.GetTranslation("Rcon CommandResponseWarning") + response)
-            self.logging.DebugLog("Action done: " + actionText)
+                    self.translations.GetTranslation("StreamlabsEvent EventHandled") + event.GetEventRawTitlesAsPrettyString() + " : " + event.bestName + " : value " + str(event.value) + " : " + actionType)
+                if response != "":
+                    self.RecordActivity(
+                        self.translations.GetTranslation("Rcon CommandResponseWarning") + response)
+                self.logging.DebugLog("Action done: " + actionText)
         except Exception as ex:
             self.logging.RecordException(
                 ex, "OBS Event Handler Critical Error - This event won't be processed")
@@ -176,6 +179,14 @@ class State():
                     self.RecordActivity(
                         self.translations.GetTranslation("TestEvent ValueNotFloat") + str(testEventValue))
                     return
+            testEventQuantity = self.gui.testEventQuantity.get()
+            if TestEvents.GetAttribute(testEventPlatform, testEventType, "quantityInput"):
+                try:
+                    testEventQuantity = int(testEventQuantity)
+                except:
+                    self.RecordActivity(
+                        self.translations.GetTranslation("TestEvent QuantityCountNotInt") + str(testEventQuantity))
+                    return
             testEventPayloadCount = self.gui.testEventPayloadCount.get()
             try:
                 testEventPayloadCount = int(testEventPayloadCount)
@@ -186,7 +197,7 @@ class State():
                     self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
                 return
             testEvent = self.testEvents.GenerateTestEvent(
-                testEventPlatform, testEventType, testEventValue, testEventPayloadCount)
+                testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
             if testEvent != None:
                 self.OnStreamlabsEventHandler(testEvent)
             else:
