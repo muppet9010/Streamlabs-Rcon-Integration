@@ -1,5 +1,4 @@
 import tkinter as TK
-from TestEvents import TestEventTypes
 
 
 class GuiWindow():
@@ -75,7 +74,7 @@ class Gui(TK.Frame):
         self.selectedTestEventPlatform = TK.StringVar()
         self.selectedTestEventPlatform.trace_variable(
             TK.W, self.OnTestEventPlatformChanged)
-        orderedTestEventPlatforms = list(TestEventTypes.platforms.keys())
+        orderedTestEventPlatforms = self.state.testEvents.GetPlatforms()
         self.testEventPlatformList = TK.OptionMenu(
             bottomBarContainer, self.selectedTestEventPlatform, *orderedTestEventPlatforms)
         self.testEventPlatformList.pack(side=TK.LEFT)
@@ -88,13 +87,22 @@ class Gui(TK.Frame):
             bottomBarContainer, self.selectedTestEventType, *self.orderedTestEventTypes)
         self.testEventTypeList.pack(side=TK.LEFT)
 
-        self.testEventInputLabel = TK.Label(
-            bottomBarContainer, text="amount:")
-        self.testEventInputLabel.pack(side=TK.LEFT)
-        self.testEventAmount = TK.StringVar()
-        self.testEventInput = TK.Entry(
-            bottomBarContainer, textvariable=self.testEventAmount, width=10)
-        self.testEventInput.pack(side=TK.LEFT)
+        self.testEventValueLabel = TK.Label(
+            bottomBarContainer, text="event value:")
+        self.testEventValueLabel.pack(side=TK.LEFT)
+        self.testEventValue = TK.StringVar()
+        self.testEventValueInput = TK.Entry(
+            bottomBarContainer, textvariable=self.testEventValue, width=10)
+        self.testEventValueInput.pack(side=TK.LEFT)
+
+        self.testEventPayloadCountLabel = TK.Label(
+            bottomBarContainer, text="payload count:")
+        self.testEventPayloadCountLabel.pack(side=TK.LEFT)
+        self.testEventPayloadCount = TK.StringVar()
+        self.testEventPayloadCount.set("1")
+        self.testEventPayloadCountInput = TK.Entry(
+            bottomBarContainer, textvariable=self.testEventPayloadCount, width=10)
+        self.testEventPayloadCountInput.pack(side=TK.LEFT)
 
         self.testEventButton = TK.Button(bottomBarContainer, text=self.translations.GetTranslation(
             "Gui TestEventButton"), command=self.state.OnTestEventButtonHandler)
@@ -107,8 +115,10 @@ class Gui(TK.Frame):
 
         self.testEventPlatformList.config(state=TK.DISABLED)
         self.testEventTypeList.config(state=TK.DISABLED)
-        self.testEventInputLabel.config(state=TK.DISABLED)
-        self.testEventInput.config(state=TK.DISABLED)
+        self.testEventValueLabel.config(state=TK.DISABLED)
+        self.testEventValueInput.config(state=TK.DISABLED)
+        self.testEventPayloadCountLabel.config(state=TK.DISABLED)
+        self.testEventPayloadCountInput.config(state=TK.DISABLED)
         self.testEventButton.config(state=TK.DISABLED)
 
     def UpdateStatusText(self, text):
@@ -136,27 +146,33 @@ class Gui(TK.Frame):
         self.testEventTypeList["menu"].delete(0, TK.END)
         orderedTestEventTypes = []
         if self.selectedTestEventPlatform.get() != self.translations.GetTranslation("Gui SelectTestEventPlatform"):
-            orderedTestEventTypes = list(
-                TestEventTypes.platforms[self.selectedTestEventPlatform.get()].keys())
+            orderedTestEventTypes = self.state.testEvents.GetPlatformTypes(
+                self.selectedTestEventPlatform.get())
         for testEventType in orderedTestEventTypes:
             self.testEventTypeList["menu"].add_command(
                 label=testEventType, command=TK._setit(self.selectedTestEventType, testEventType))
         self.selectedTestEventType.set(
             self.translations.GetTranslation("Gui SelectTestEventType"))
         self.testEventTypeList.config(state=TK.NORMAL)
-        self.testEventInputLabel.config(state=TK.DISABLED)
-        self.testEventInput.config(state=TK.DISABLED)
+        self.testEventValueLabel.config(state=TK.DISABLED)
+        self.testEventValueInput.config(state=TK.DISABLED)
+        self.testEventPayloadCountLabel.config(state=TK.DISABLED)
+        self.testEventPayloadCountInput.config(state=TK.DISABLED)
         self.testEventButton.config(state=TK.DISABLED)
 
     def OnTestEventTypeChanged(self, *args):
         amountEnabled = False
         if self.selectedTestEventType.get() != self.translations.GetTranslation("Gui SelectTestEventType"):
-            amountEnabled = TestEventTypes.platforms[self.selectedTestEventPlatform.get(
-            )][self.selectedTestEventType.get()]["valueInput"]
+            amountEnabled = self.state.testEvents.GetAttribute(self.selectedTestEventPlatform.get(
+            ), self.selectedTestEventType.get(), "valueInput")
         if amountEnabled:
-            self.testEventInputLabel.config(state=TK.NORMAL)
-            self.testEventInput.config(state=TK.NORMAL)
+            self.testEventValueLabel.config(state=TK.NORMAL)
+            self.testEventValueInput.config(state=TK.NORMAL)
+            self.testEventPayloadCountLabel.config(state=TK.NORMAL)
+            self.testEventPayloadCountInput.config(state=TK.NORMAL)
         else:
-            self.testEventInputLabel.config(state=TK.DISABLED)
-            self.testEventInput.config(state=TK.DISABLED)
+            self.testEventValueLabel.config(state=TK.DISABLED)
+            self.testEventValueInput.config(state=TK.DISABLED)
+            self.testEventPayloadCountLabel.config(state=TK.DISABLED)
+            self.testEventPayloadCountInput.config(state=TK.DISABLED)
         self.testEventButton.config(state=TK.NORMAL)

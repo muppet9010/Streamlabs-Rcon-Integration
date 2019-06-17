@@ -26,7 +26,7 @@ class State():
         self.profiles = Profiles(self)
         self.streamlabs = Streamlabs(self)
         self.rcon = Rcon(self)
-        self.testEvents = TestEvents(self)
+        self.testEvents = TestEvents()
         self.guiWindow = GuiWindow(self)
         self.gui = self.guiWindow.gui
         self.gui.Setup()
@@ -168,9 +168,25 @@ class State():
         try:
             testEventPlatform = self.gui.selectedTestEventPlatform.get()
             testEventType = self.gui.selectedTestEventType.get()
-            testEventAmount = self.gui.testEventAmount.get()
+            testEventValue = self.gui.testEventValue.get()
+            if TestEvents.GetAttribute(testEventPlatform, testEventType, "valueInput"):
+                try:
+                    testEventValue = float(testEventValue)
+                except:
+                    self.RecordActivity(
+                        self.translations.GetTranslation("TestEvent ValueNotFloat") + str(testEventValue))
+                    return
+            testEventPayloadCount = self.gui.testEventPayloadCount.get()
+            try:
+                testEventPayloadCount = int(testEventPayloadCount)
+                if testEventPayloadCount <= 0:
+                    raise ValueError()
+            except:
+                self.RecordActivity(
+                    self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
+                return
             testEvent = self.testEvents.GenerateTestEvent(
-                testEventPlatform, testEventType, testEventAmount)
+                testEventPlatform, testEventType, testEventValue, testEventPayloadCount)
             if testEvent != None:
                 self.OnStreamlabsEventHandler(testEvent)
             else:

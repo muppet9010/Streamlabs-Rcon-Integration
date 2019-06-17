@@ -34,7 +34,10 @@ class Translations:
                 "Rcon CommandResponseWarning": "WARNING: Rcon got response from server: ",
                 "Rcon TestErrorMessage": "Rcon connection test message: ",
                 "Rcon NoCommand": "Rcon Test Mode: ",
-                "TestEvent InvalidTestEvent": "Invalid Test Event Selection: "
+                "Rcon StartupNoCommandMode": "Rcon running in No Command mode",
+                "TestEvent InvalidTestEvent": "Invalid Test Event Selection: ",
+                "TestEvent ValueNotFloat": "Test Event Value isn't a number: ",
+                "TestEvent PayloadCountNotInt": "Test Event Payload Count not a positive whole number: "
             }
 
     def GetTranslation(self, key):

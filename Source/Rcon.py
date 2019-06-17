@@ -13,6 +13,8 @@ class Rcon:
 
     def TestConnection(self):
         if self.state.config.GetSetting("Rcon No Commands"):
+            self.state.RecordActivity(
+                self.state.translations.GetTranslation("Rcon StartupNoCommandMode"))
             return True
         try:
             self.SendCommand(self.testCommand)
