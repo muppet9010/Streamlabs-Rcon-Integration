@@ -97,7 +97,7 @@
         }
     },
     "twitch_account-subscriptionGift": {
-        "_comment": "When a specific user is gifted a subscription.",
+        "_comment": "When a user is gifted a subscription. If the gift was too the community and not the specific viewer then the 'twitchMysterSubGiftMode' option must be set to 'receiver' in the profile for this event to be triggered in this situation.",
         "name": {
             "valueType": "text string",
             "description": "the username of the person who received the subscription"

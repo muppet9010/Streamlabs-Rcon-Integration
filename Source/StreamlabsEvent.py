@@ -39,6 +39,8 @@ class StreamlabsEvent():
             self.bestComment = self.rawMessage["message"]
         elif "comment" in self.rawMessage.keys():
             self.bestComment = self.rawMessage["comment"]
+        if self.bestComment == None:
+            self.bestComment = ""
 
         self.handlerName = StreamlabsEventUtils.MakeHandlerString(
             self.platform, self.type)
