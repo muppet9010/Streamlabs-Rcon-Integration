@@ -32,5 +32,8 @@
                 }
             ]
         }
-    ]
+    ],
+    "options": {
+        "twitchMysterSubGiftMode": "donator"
+    }
 }

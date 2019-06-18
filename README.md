@@ -3,18 +3,19 @@
 
 A Python exe for integrating Streamlabs and any game supporting Rcon. It receives the Streamlabs events and uses configurable logic to send an approperiate RCON command to the game server to do something. Its currently being used with Factorio, but should be compatible with any other Rcon interfaced game.
 
-At present only really tested with Twitch, but should work with mixer and youtube based on API spec.
+At present only really tested with Twitch, but should work with mixer and youtube based on API spec. The tool runs fully on your pc removing any risk of sharing access keys or donators details.
 
 
 Installation & Usage
 ==========
-1. Get the [latest version zip](https://github.com/muppet9010/Streamlabs-Rcon-Integration).
-2. Create a free account at [Currency Layer website](https://currencylayer.com) and make a note of the API access key as needs to be entered in to the programs config later on.
-3. Unzip the files in to the desired folder.
-4. Open config.json in a text editor and add in your details.
-5. Run the program: Streamlabs Rcon Integration.exe
-6. Select the desired profile from the dropdown and click Start.
-7. The integration is now running between the Streamlabs account and the game using the selected profile.
+1. Install the current release of Python 3.7 with default options: https://www.python.org/downloads
+2. Get the [latest version zip](https://github.com/muppet9010/Streamlabs-Rcon-Integration).
+3. Create a free account at [Currency Layer website](https://currencylayer.com) and make a note of the API access key as needs to be entered in to the programs config later on.
+4. Unzip the files in to the desired folder.
+5. Open config.json in a text editor and add in your details.
+6. Run the program: Streamlabs Rcon Integration.exe
+7. Select the desired profile from the dropdown and click Start.
+8. The integration is now running between the Streamlabs account and the game using the selected profile.
 
 Should a critical error occur the program may fail to load or close. Details can be found in the most recent log file within the Logs folder.
 
@@ -54,6 +55,11 @@ Profile configuration files must be created with knowledge of quote escaping. Th
 Manipulator script's are special in that they support raw python code that will be executed within a Python exec() function in addition to a python expression that is executed within a Python eval() function. The event handler will try to eval() the manipulator script first and should it error then try to exec() the manipulator script. As the manipulator script is supplied via the profile JSON file it must be in a single line format with `\n` for the line breaks. The Python maths module is included within the execution environment. The local variable `calcValue` is passed out of the exec environment as the value of `CALCVALUE`. See the `Factorio - Advanced Usage Example.json` for examples of the some of these combinations.
 
 The config has a `Rcon No Commands` option. When enabled it prints the RCON commands to the activity window rather than sending them. It also skips the RCON connection test which the Start button is clicked within the app. In effect not doing any RCON commands.
+
+Profiles can have `options` specified for them to control specific program behavior:
+- twitchMysterSubGiftMode = when Twitch Subscription Mystery Gifts are given out by a viewer to random other viewers the event can either be reacted to for the donator or receiver. The programs default is the `donator` value if the setting isn't specified in the profile's options. The `money` valyeType will obey this setting and the other event type won't be triggered for Twitch Subscription Mystery Gifts to avoid duplicate reactions.
+    - `donator` - react to it as one large donation using the `subMysteryGift` event reaction.
+    - `receiver` - react to each viewer getting the gifted subscription using the `subscriptionGift` event reaction.
 
 
 Development Building

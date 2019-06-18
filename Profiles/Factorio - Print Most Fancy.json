@@ -92,5 +92,8 @@
             "description": "Say thanks for small value stuff",
             "effect": "Ta for $[VALUE] [BESTNAME]"
         }
-    ]
+    ],
+    "options": {
+        "twitchMysterSubGiftMode": "donator"
+    }
 }

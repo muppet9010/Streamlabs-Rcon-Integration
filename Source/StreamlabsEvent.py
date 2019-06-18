@@ -19,12 +19,16 @@ class StreamlabsEvent():
         self.rawMessage = {}
         self.errored = False
         self.ignored = False
+        self.rawMessage = payload
+
+        if self.type == "donation" and self.platform == "":
+            self.platform = "streamlabs"
+        elif self.platform == "twitch_account" and self.type == "subscription" and "gifter" in self.rawMessage and self.rawMessage["gifter"] != None:
+            self.type = "subscriptionGift"
 
         if self.ShouldIgnoreEvent():
             self.ignored = True
             return
-
-        self.rawMessage = payload
 
         self.id = self.rawMessage["_id"]
         if "display_name" in self.rawMessage.keys():
@@ -36,10 +40,6 @@ class StreamlabsEvent():
         elif "comment" in self.rawMessage.keys():
             self.bestComment = self.rawMessage["comment"]
 
-        if self.type == "donation" and self.platform == "":
-            self.platform = "streamlabs"
-        elif self.platform == "twitch_account" and self.type == "subscription" and "gifter" in self.rawMessage and self.rawMessage["gifter"] != None:
-            self.type = "subscriptionGift"
         self.handlerName = StreamlabsEventUtils.MakeHandlerString(
             self.platform, self.type)
 
@@ -83,6 +83,14 @@ class StreamlabsEvent():
             return True
         if (self.platform == "widget"):
             return True
+        if self.platform == "twitch_account":
+            if self.state.profiles.currentProfile.options.twitchMysterSubGiftMode == "receiver" and self.type == "subMysteryGift":
+                return True
+            elif self.state.profiles.currentProfile.options.twitchMysterSubGiftMode == "donator" and self.type == "subscriptionGift":
+                gifterName = self.rawMessage["gifter_display_name"]
+                if gifterName in self.state.mysterySubGifts and self.state.mysterySubGifts[gifterName] > 0:
+                    self.state.mysterySubGifts[gifterName]-=1
+                    return True
         if self.id in self.state.donationsIdsProcessed:
             self.logging.DebugLog(
                 "Streamlabs donation event being ignored as in processed list: " + self.id)
@@ -121,12 +129,14 @@ class StreamlabsEvent():
             self.valueType = "money"
             subPlan = self.rawMessage["sub_plan"]
             subValue = StreamlabsEventUtils.GetTwitchSubscriptionValue(subPlan)
+            amount = self.rawMessage["amount"]
             if subValue != None:
-                self.value = subValue * self.rawMessage["amount"]
+                self.value = subValue * amount
             else:
                 self.state.RecordActivity(
                     self.state.translations.GetTranslation("StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
                 return False
+            self.state.mysterySubGifts[self.bestName] = amount
         elif (self.handlerName == "youtube_account-subscription"):
             self.valueType = "money"
             self.value = 5

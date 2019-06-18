@@ -8,7 +8,7 @@ from Config import Config
 from Profiles import Profiles
 from Rcon import Rcon
 from Translations import Translations
-from TestEvents import TestEvents
+from TestEvents import TestEventUtils
 
 
 class State():
@@ -20,13 +20,14 @@ class State():
 
     def Setup(self):
         self.donationsIdsProcessed = {}
+        self.mysterySubGifts = {}
         self.translations = Translations(self)
         self.currency = Currency(self)
         StreamlabsEventUtils.LoadEventDefinitions()
         self.profiles = Profiles(self)
         self.streamlabs = Streamlabs(self)
         self.rcon = Rcon(self)
-        self.testEvents = TestEvents()
+        self.testEventUtils = TestEventUtils()
         self.guiWindow = GuiWindow(self)
         self.gui = self.guiWindow.gui
         self.gui.Setup()
@@ -171,18 +172,22 @@ class State():
         try:
             testEventPlatform = self.gui.selectedTestEventPlatform.get()
             testEventType = self.gui.selectedTestEventType.get()
-            testEventValue = self.gui.testEventValue.get()
-            if TestEvents.GetAttribute(testEventPlatform, testEventType, "valueInput"):
+            testEventValue = ""
+            if TestEventUtils.GetAttribute(testEventPlatform, testEventType, "valueInput"):
                 try:
+                    testEventValue = self.gui.testEventValue.get()
                     testEventValue = float(testEventValue)
                 except:
                     self.RecordActivity(
                         self.translations.GetTranslation("TestEvent ValueNotFloat") + str(testEventValue))
                     return
-            testEventQuantity = self.gui.testEventQuantity.get()
-            if TestEvents.GetAttribute(testEventPlatform, testEventType, "quantityInput"):
+            testEventQuantity = ""
+            if TestEventUtils.GetAttribute(testEventPlatform, testEventType, "quantityInput"):
                 try:
+                    testEventQuantity = self.gui.testEventQuantity.get()
                     testEventQuantity = int(testEventQuantity)
+                    if testEventQuantity <= 0:
+                        raise ValueError()
                 except:
                     self.RecordActivity(
                         self.translations.GetTranslation("TestEvent QuantityCountNotInt") + str(testEventQuantity))
@@ -196,10 +201,11 @@ class State():
                 self.RecordActivity(
                     self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
                 return
-            testEvent = self.testEvents.GenerateTestEvent(
+            testEventArray = self.testEventUtils.GenerateTestEventArray(
                 testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
-            if testEvent != None:
-                self.OnStreamlabsEventHandler(testEvent)
+            if len(testEventArray) > 0:
+                for testEvent in testEventArray:
+                    self.OnStreamlabsEventHandler(testEvent)
             else:
                 self.RecordActivity(
                     self.translations.GetTranslation("TestEvent InvalidTestEvent") + testEventPlatform + " - " + testEventType)

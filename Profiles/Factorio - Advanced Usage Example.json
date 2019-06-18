@@ -3,6 +3,39 @@
     "description": "Example of some more complicated uses",
     "reactions": [
         {
+            "platform": "twitch_account",
+            "type": "subscription",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[BESTNAME] subscribed themselves"
+                }
+            ]
+        },
+        {
+            "platform": "twitch_account",
+            "type": "subscriptionGift",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[BESTNAME] was subscribed by [gifter_display_name]"
+                }
+            ]
+        },
+        {
+            "platform": "twitch_account",
+            "type": "subMysteryGift",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "subMysterGift donator enabled: [BESTNAME] subscribed [amount] users"
+                }
+            ]
+        },
+        {
             "valueType": "money",
             "filteredActions": [
                 {
@@ -37,5 +70,8 @@
                 }
             ]
         }
-    ]
+    ],
+    "options": {
+        "twitchMysterSubGiftMode": "donator"
+    }
 }

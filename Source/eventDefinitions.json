@@ -26,7 +26,7 @@
         },
         "BESTNAME": {
             "valueType": "text string",
-            "description": "the best name for the user the event was done by. This will be the display name if one is available, otherwise the username."
+            "description": "the best name for the user the event was done for. This will be the display name if one is available, otherwise the username."
         },
         "BESTCOMMENT": {
             "valueType": "text string",
@@ -97,7 +97,7 @@
         }
     },
     "twitch_account-subscriptionGift": {
-        "_comment": "When a user is gifted a subscription",
+        "_comment": "When a specific user is gifted a subscription.",
         "name": {
             "valueType": "text string",
             "description": "the username of the person who received the subscription"
@@ -128,7 +128,7 @@
         }
     },
     "twitch_account-subMysteryGift": {
-        "_comment": "When a user gifts a number of subscriptions to the community",
+        "_comment": "When a user gifts a number of subscriptions to the community. The 'twitchMysterSubGiftMode' option must be set to 'donator' in the profile for this event to be triggered.",
         "name": {
             "valueType": "text string",
             "description": "the username of the person who did the event"

@@ -3,7 +3,7 @@ import random as Random
 import datetime as DateTime
 
 
-class TestEvents:
+class TestEventUtils:
     _types = {
         "Streamlabs": {
             "Donation": {
@@ -52,7 +52,19 @@ class TestEvents:
     }
 
     @staticmethod
-    def GenerateTestEvent(eventPlatform, eventType, value, quantity, payloadCount):
+    def GenerateTestEventArray(eventPlatform, eventType, value, special, payloadCount):
+        primaryEvent = TestEventUtils.GenerateTestEvent(
+            eventPlatform, eventType, value, special, payloadCount)
+        testEventArray = [primaryEvent]
+        if eventPlatform == "Twitch" and eventType == "Give Random Gift Subscriptions":
+            for i in range(special):
+                childEvent = TestEventUtils.GenerateTestEvent(
+                    eventPlatform, "Give Specific Gift Subscription", value, i+2, 1)
+                testEventArray.append(childEvent)
+        return testEventArray
+
+    @staticmethod
+    def GenerateTestEvent(eventPlatform, eventType, value, special, payloadCount):
         eventTypeString = ""
         eventForString = ""
         eventMessageConstructor = None
@@ -62,10 +74,10 @@ class TestEvents:
             if eventType == "Donation":
                 eventTypeString = "donation"
 
-                def EventMessageConstructor(value, quantity, iterator):
+                def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEvents.GenerateUuid()
-                    id8Digits = TestEvents.GenerateRandomDigits(8)
+                    eventId = TestEventUtils.GenerateUuid()
+                    id8Digits = TestEventUtils.GenerateRandomDigits(8)
                     return {
                         'id': id8Digits,
                         'name': 'UsEr' + str(iterator),
@@ -90,9 +102,9 @@ class TestEvents:
             if eventType == "Pledge":
                 eventTypeString = "pledge"
 
-                def EventMessageConstructor(value, quantity, iterator):
+                def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEvents.GenerateUuid()
+                    eventId = TestEventUtils.GenerateUuid()
                     return {
                         'name': 'UsEr' + str(iterator),
                         'isTest': False,
@@ -111,10 +123,10 @@ class TestEvents:
             if eventType == "Follow":
                 eventTypeString = "follow"
 
-                def EventMessageConstructor(value, quantity, iterator):
+                def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEvents.GenerateUuid()
-                    id8Digits = TestEvents.GenerateRandomDigits(8)
+                    eventId = TestEventUtils.GenerateUuid()
+                    id8Digits = TestEventUtils.GenerateRandomDigits(8)
                     return {
                         'created_at': DateTime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                         'id': id8Digits,
@@ -126,10 +138,10 @@ class TestEvents:
             elif eventType == "Subscribe":
                 eventTypeString = "subscription"
 
-                def EventMessageConstructor(value, quantity, iterator):
+                def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEvents.GenerateUuid()
-                    id8Digits = TestEvents.GenerateRandomDigits(8)
+                    eventId = TestEventUtils.GenerateUuid()
+                    id8Digits = TestEventUtils.GenerateRandomDigits(8)
                     return {
                         'name': 'user' + str(iterator),
                         'display_name': 'UsEr' + str(iterator),
@@ -149,17 +161,20 @@ class TestEvents:
             elif eventType == "Give Specific Gift Subscription":
                 eventTypeString = "subscription"
 
-                def EventMessageConstructor(value, quantity, iterator):
+                def EventMessageConstructor(value, special, iterator):
                     iterator += 1
                     giver = iterator + 1
-                    eventId = TestEvents.GenerateUuid()
-                    receiver8Digits = TestEvents.GenerateRandomDigits(8)
-                    giver8Digits = TestEvents.GenerateRandomDigits(8)
+                    if special != None and special != "":
+                        iterator = special
+                        giver = 1
+                    eventId = TestEventUtils.GenerateUuid()
+                    receiver8Digits = TestEventUtils.GenerateRandomDigits(8)
+                    giver8Digits = TestEventUtils.GenerateRandomDigits(8)
                     return {
                         'name': 'user' + str(iterator),
                         'display_name': 'UsEr' + str(iterator),
                         'months': '2',
-                        'message': 'a test subscription gift',
+                        'message': 'a test subscription gift received',
                         'emotes': '1:25-26',
                         'sub_plan': str(int(value)),
                         'sub_plan_name': 'Channel\\sSubscription\\s(streamer)',
@@ -176,16 +191,16 @@ class TestEvents:
             elif eventType == "Give Random Gift Subscriptions":
                 eventTypeString = "subMysteryGift"
 
-                def EventMessageConstructor(value, quantity, iterator):
+                def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEvents.GenerateUuid()
+                    eventId = TestEventUtils.GenerateUuid()
                     return {
                         'sub_plan': str(int(value)),
                         'sub_type': 'submysterygift',
                         'gifter': 'user' + str(iterator),
                         'gifter_display_name': 'UsEr' + str(iterator),
                         'name': 'user' + str(iterator),
-                        'amount': quantity,
+                        'amount': special,
                         '_id': eventId,
                         'event_id': eventId
                     }
@@ -193,9 +208,9 @@ class TestEvents:
             elif eventType == "Host":
                 eventTypeString = "host"
 
-                def EventMessageConstructor(value, quantity, iterator):
+                def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEvents.GenerateUuid()
+                    eventId = TestEventUtils.GenerateUuid()
                     return {
                         'name': 'UsEr' + str(iterator),
                         'viewers': int(value),
@@ -207,9 +222,9 @@ class TestEvents:
             elif eventType == "Raid":
                 eventTypeString = "raid"
 
-                def EventMessageConstructor(value, quantity, iterator):
+                def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEvents.GenerateUuid()
+                    eventId = TestEventUtils.GenerateUuid()
                     return {
                         'id': eventId,
                         'name': 'user' + str(iterator),
@@ -220,31 +235,31 @@ class TestEvents:
                     }
                 eventMessageConstructor = EventMessageConstructor
 
-        return TestEvents._ConstructTestEventDict(eventForString, eventTypeString, eventMessageConstructor, value, quantity, payloadCount)
+        return TestEventUtils._ConstructTestEventDict(eventForString, eventTypeString, eventMessageConstructor, value, special, payloadCount)
 
     @staticmethod
-    def _ConstructTestEventDict(forString, typeString, messageConstructor, value, quantity, payloadCount):
+    def _ConstructTestEventDict(forString, typeString, messageConstructor, value, special, payloadCount):
         eventDict = {
             "for": forString,
             "type": typeString,
             "message": []
         }
         for i in range(payloadCount):
-            eventDict["message"].append(messageConstructor(value, quantity, i))
+            eventDict["message"].append(messageConstructor(value, special, i))
 
         return eventDict
 
     @staticmethod
     def GetAttribute(platformString, typeString, attributeName):
-        return TestEvents._types[platformString][typeString][attributeName]
+        return TestEventUtils._types[platformString][typeString][attributeName]
 
     @staticmethod
     def GetPlatforms():
-        return list(TestEvents._types.keys())
+        return list(TestEventUtils._types.keys())
 
     @staticmethod
     def GetPlatformTypes(platformString):
-        return list(TestEvents._types[platformString].keys())
+        return list(TestEventUtils._types[platformString].keys())
 
     @staticmethod
     def GenerateUuid():

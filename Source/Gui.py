@@ -74,7 +74,7 @@ class Gui(TK.Frame):
         self.selectedTestEventPlatform = TK.StringVar()
         self.selectedTestEventPlatform.trace_variable(
             TK.W, self.OnTestEventPlatformChanged)
-        orderedTestEventPlatforms = self.state.testEvents.GetPlatforms()
+        orderedTestEventPlatforms = self.state.testEventUtils.GetPlatforms()
         self.testEventPlatformList = TK.OptionMenu(
             bottomBarContainer, self.selectedTestEventPlatform, *orderedTestEventPlatforms)
         self.testEventPlatformList.pack(side=TK.LEFT)
@@ -156,7 +156,7 @@ class Gui(TK.Frame):
         self.testEventTypeList["menu"].delete(0, TK.END)
         orderedTestEventTypes = []
         if self.selectedTestEventPlatform.get() != self.translations.GetTranslation("Gui SelectTestEventPlatform"):
-            orderedTestEventTypes = self.state.testEvents.GetPlatformTypes(
+            orderedTestEventTypes = self.state.testEventUtils.GetPlatformTypes(
                 self.selectedTestEventPlatform.get())
         for testEventType in orderedTestEventTypes:
             self.testEventTypeList["menu"].add_command(
@@ -176,9 +176,9 @@ class Gui(TK.Frame):
         amountEnabled = False
         quantityEnabled = False
         if self.selectedTestEventType.get() != self.translations.GetTranslation("Gui SelectTestEventType"):
-            amountEnabled = self.state.testEvents.GetAttribute(self.selectedTestEventPlatform.get(
+            amountEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(
             ), self.selectedTestEventType.get(), "valueInput")
-            quantityEnabled = self.state.testEvents.GetAttribute(self.selectedTestEventPlatform.get(
+            quantityEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(
             ), self.selectedTestEventType.get(), "quantityInput")
         if amountEnabled:
             self.testEventValueLabel.config(state=TK.NORMAL)

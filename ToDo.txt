@@ -1,9 +1,7 @@
 Bugs / Outstanding
 ===================
 
-At present a mysterySubGift will trigger plus each recipient will trigger the receiving subscription event. As mysterySubGift event comes first this needs to be monitored and receieved sub gift events ignored appropariately.
 
-When using the mysterySubGift test button the appropariate user subscription events need to be raised for the gifted subs.
 
 
 
@@ -15,7 +13,7 @@ Make a settings manager GUI
 Make a profile manager GUI
 Make so that profile startup errors are shown in a GUI and disable running until fixed.
 Have seperate Activity and System (status, warning, errors) logs
-Have a way to pause logs from updating and then resume
+Have a way to pause logs from updating and then resume to allow scrolling
 Support multiple calculated values via exec. Array in exec, to numbered strings in action script.
 Support multiple rcon commands as an array in JSON.
 Handle paused Factorio server accepting but not reply to RCON command. It will honor the command when the server is unpaused. So different between start test connection and event handling.

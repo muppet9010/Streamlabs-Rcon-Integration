@@ -38,6 +38,10 @@ class Profile:
                 self.reactionPriorities[1].append(reaction)
             elif "valueType" in reactionData:
                 self.reactionPriorities[2].append(reaction)
+        if "options" in profileData:
+            self.options = Options(self, profileData["options"])
+        else:
+            self.options = Options(self, {})
 
     def GetActionTextForEvent(self, event):
         for reaction in self.reactionPriorities[1]:
@@ -191,3 +195,15 @@ class Action:
         self.name = actionData["name"]
         self.description = actionData["description"]
         self.effect = actionData["effect"]
+
+
+class Options:
+    def __init__(self, profile, optionData):
+        self.profile = profile
+        self.logging = self.profile.profiles.state.logging
+        self.twitchMysterSubGiftMode = "donator"
+        if "twitchMysterSubGiftMode" in optionData:
+            self.twitchMysterSubGiftMode = optionData["twitchMysterSubGiftMode"]
+        if self.twitchMysterSubGiftMode not in ("donator", "receiver"):
+            self.logging.LogQuit(self.profile.name +
+                                 " : has invalid twitchMysterSubGiftMode option value: " + self.twitchMysterSubGiftMode)
