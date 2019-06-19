@@ -7,4 +7,6 @@ if not exist "%outputFolder%\config.json" (
 )
 xcopy "Source\eventDefinitions.json" "%outputFolder%" /q /y /i
 xcopy "Profiles" "%outputFolder%\Profiles" /q /s /y /i
+xcopy "README.md" "%outputFolder%" /q /y /i
+xcopy "LICENSE" "%outputFolder%" /q /y /i
 pause
