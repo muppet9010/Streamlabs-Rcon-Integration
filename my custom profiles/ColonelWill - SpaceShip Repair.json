@@ -1,0 +1,44 @@
+{
+    "name": "ColonelWill - SpaceShip Repair",
+    "description": "Wills Spaceship repair playthrough 2019-07-09",
+    "reactions": [
+        {
+            "valueType": "money",
+            "filteredActions": [
+                {
+                    "condition": "[VALUE] >= 1",
+                    "manipulator": "round([VALUE] * 100, 0)",
+                    "action": "/wills_spaceship_repair-add_investment '[BESTNAME]' [CALCVALUE]"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        },
+        {
+            "valueType": "follow",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        },
+        {
+            "valueType": "viewer",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        }
+    ],
+    "options": {
+        "twitchMysterSubGiftMode": "donator"
+    }
+}
