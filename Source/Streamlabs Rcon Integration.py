@@ -152,6 +152,8 @@ class State():
                 else:
                     actionType = "Rcon command"
                     try:
+                        self.logging.DebugLog(
+                        "Doing Rcon command: " + actionText)
                         response = self.rcon.SendCommand(actionText)
                     except Exception as ex:
                         self.logging.RecordException(ex, "Rcon event failed")
