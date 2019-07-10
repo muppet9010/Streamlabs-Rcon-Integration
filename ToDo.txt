@@ -1,7 +1,6 @@
 Bugs / Outstanding
 ===================
 
-No Twitch Bits option on testing list
 
 
 

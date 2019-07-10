@@ -34,6 +34,10 @@ class TestEventUtils:
                 "valueInput": True,
                 "quantityInput": True
             },
+            "Bits": {
+                "valueInput": True,
+                "quantityInput": False
+            },
             "Host": {
                 "valueInput": True,
                 "quantityInput": False
@@ -201,6 +205,24 @@ class TestEventUtils:
                         'gifter_display_name': 'UsEr' + str(iterator),
                         'name': 'user' + str(iterator),
                         'amount': special,
+                        '_id': eventId,
+                        'event_id': eventId
+                    }
+                eventMessageConstructor = EventMessageConstructor
+            elif eventType == "Bits":
+                eventTypeString = "bits"
+
+                def EventMessageConstructor(value, special, iterator):
+                    iterator += 1
+                    eventId = TestEventUtils.GenerateUuid()
+                    idGuid = TestEventUtils.GenerateUuid()
+                    return {
+                        'id': idGuid,
+                        'name': 'user' + str(iterator),
+                        'display_name': 'UsEr' + str(iterator),
+                        'amount': value,
+                        'emotes': None,
+                        'message': 'test bits',
                         '_id': eventId,
                         'event_id': eventId
                     }
