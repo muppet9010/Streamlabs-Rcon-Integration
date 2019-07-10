@@ -2,7 +2,7 @@ Bugs / Outstanding
 ===================
 
 No Twitch Bits option on testing list
-
+Add for:"widget" to ignore list. {'type': 'reload.instant', 'for': 'widget', 'event_id': 'evt_b977516287b607f9a899dc2936fff74a'}
 
 
 

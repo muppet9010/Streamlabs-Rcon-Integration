@@ -131,7 +131,7 @@ class StreamlabsEvent():
             self.valueType = "money"
             subPlan = self.rawMessage["sub_plan"]
             subValue = StreamlabsEventUtils.GetTwitchSubscriptionValue(subPlan)
-            amount = self.rawMessage["amount"]
+            amount = float(self.rawMessage["amount"])
             if subValue != None:
                 self.value = subValue * amount
             else:
@@ -150,10 +150,10 @@ class StreamlabsEvent():
             self.value = 1
         elif (self.handlerName == "twitch_account-host" or self.handlerName == "mixer_account-host"):
             self.valueType = "viewer"
-            self.value = self.rawMessage["viewers"]
+            self.value = int(self.rawMessage["viewers"])
         elif (self.handlerName == "twitch_account-raid"):
             self.valueType = "viewer"
-            self.value = self.rawMessage["raiders"]
+            self.value = int(self.rawMessage["raiders"])
         else:
             return False
         return True
