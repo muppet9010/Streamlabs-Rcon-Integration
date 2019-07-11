@@ -9,11 +9,14 @@ from Profiles import Profiles
 from Rcon import Rcon
 from Translations import Translations
 from TestEvents import TestEventUtils
+import random as Random
+import time as Time
+import threading as Threading
 
 
 class State():
     def __init__(self):
-        self.version = "0.1.0"
+        self.version = "0.1.1"
         self.config = Config(self)
         self.logging = Logging(self)
         self.config.LogMissingSettings()
@@ -110,6 +113,11 @@ class State():
 
     def OnStreamlabsEventHandler(self, data):
         try:
+            random = Random.Random()
+            random.seed(Threading.get_ident())
+            sleepTime = random.random()
+            self.logging.DebugLog("Sleeping event for: " + str(sleepTime))
+            Time.sleep(sleepTime)
             self.logging.DebugLog(
                 "Streamlabs raw event data: " + str(data))
             events = StreamlabsEventUtils.GenerateEventPerPayload(self, data)
