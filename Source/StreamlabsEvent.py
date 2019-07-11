@@ -44,6 +44,7 @@ class StreamlabsEvent():
 
         self.handlerName = StreamlabsEventUtils.MakeHandlerString(
             self.platform, self.type)
+        self.state.eventIdsProcessed[self.id] = True
 
     @property
     def value(self):
@@ -91,11 +92,11 @@ class StreamlabsEvent():
             elif self.state.profiles.currentProfile.options.twitchMysterSubGiftMode == "donator" and self.type == "subscriptionGift":
                 gifterName = self.rawMessage["gifter_display_name"]
                 if gifterName in self.state.mysterySubGifts and self.state.mysterySubGifts[gifterName] > 0:
-                    self.state.mysterySubGifts[gifterName]-=1
+                    self.state.mysterySubGifts[gifterName] -= 1
                     return True
-        if self.id in self.state.donationsIdsProcessed:
+        if self.id in self.state.eventIdsProcessed:
             self.logging.DebugLog(
-                "Streamlabs donation event being ignored as in processed list: " + self.id)
+                "Event being ignored as in processed list: " + self.id)
             return True
         return False
 
@@ -104,7 +105,6 @@ class StreamlabsEvent():
             self.valueType = "money"
             self.value = self.state.currency.GetNormalisedValue(
                 self.rawMessage["currency"], float(self.rawMessage["amount"]))
-            self.state.donationsIdsProcessed[self.id] = True
         elif (self.handlerName == "patreon-pledge"):
             self.valueType = "money"
             self.value = self.state.currency.GetNormalisedValue(

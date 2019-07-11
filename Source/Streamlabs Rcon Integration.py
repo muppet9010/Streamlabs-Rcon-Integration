@@ -19,7 +19,7 @@ class State():
         self.config.LogMissingSettings()
 
     def Setup(self):
-        self.donationsIdsProcessed = {}
+        self.eventIdsProcessed = {}
         self.mysterySubGifts = {}
         self.translations = Translations(self)
         self.currency = Currency(self)
@@ -153,7 +153,7 @@ class State():
                     actionType = "Rcon command"
                     try:
                         self.logging.DebugLog(
-                        "Doing Rcon command: " + actionText)
+                            "Doing Rcon command: " + actionText)
                         response = self.rcon.SendCommand(actionText)
                     except Exception as ex:
                         self.logging.RecordException(ex, "Rcon event failed")
