@@ -21,6 +21,9 @@ class StreamlabsEvent():
         self.ignored = False
         self.rawMessage = payload
 
+        if "_id" in self.rawMessage:
+            self.id = self.rawMessage["_id"]
+
         if self.type == "donation" and self.platform == "":
             self.platform = "streamlabs"
         elif self.platform == "twitch_account" and self.type == "subscription" and "gifter" in self.rawMessage and self.rawMessage["gifter"] != None:
@@ -30,7 +33,6 @@ class StreamlabsEvent():
             self.ignored = True
             return
 
-        self.id = self.rawMessage["_id"]
         if "display_name" in self.rawMessage.keys():
             self.bestName = self.rawMessage["display_name"]
         elif "name" in self.rawMessage.keys():
