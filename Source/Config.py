@@ -22,7 +22,6 @@ class Config():
             "Currency ApiLayerAccessKey": "",
             "Streamlabs SocketApiToken": "",
             "Profile Default": "",
-            "Factorio PlayerName": "",
             "Rcon Server Address": "",
             "Rcon Server Port": 25575,
             "Rcon Server Password": "",
