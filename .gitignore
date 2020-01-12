@@ -3,6 +3,4 @@ __pycache__
 currency data cache.json
 /Logs
 eventDefinitions.json
-config.json
-[!.]*.py.[!.]*.py/config-Muppet-LocalServer.json
-/config-Muppet-LocalServer.json
+/configs
