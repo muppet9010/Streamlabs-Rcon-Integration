@@ -251,7 +251,7 @@ except Exception as ex:
     except:
         pass
     try:
-        state.logging.RecordException(
+        self.logging.RecordException(
             ex, "Application Critical Error - Application has been stopped")
     except:
         pass

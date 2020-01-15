@@ -220,7 +220,7 @@ class StreamlabsEventUtils():
 
     @staticmethod
     def LoadEventDefinitions():
-        with open("eventDefinitions.json", "r") as file:
+        with open("eventDefinitions.json", "r", encoding='utf-8') as file:
             data = Json.load(file)
         file.closed
         StreamlabsEventUtils.handledEventTypes = data

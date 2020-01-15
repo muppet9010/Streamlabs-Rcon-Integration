@@ -13,7 +13,7 @@ class Profiles:
             Os.mkdir(self.profileFolder)
         else:
             for fileName in Os.listdir(self.profileFolder):
-                with open(self.profileFolder + "/" + fileName, "r") as file:
+                with open(self.profileFolder + "/" + fileName, "r", encoding='utf-8') as file:
                     data = Json.load(file)
                 file.closed
                 self.profiles[data["name"]] = Profile(data, self)
