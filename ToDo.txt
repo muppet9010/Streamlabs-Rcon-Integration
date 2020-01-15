@@ -1,6 +1,7 @@
 Bugs / Outstanding
 ===================
 
+Support multiple rcon commands as an array in JSON.
 
 
 
@@ -13,6 +14,6 @@ Make so that profile startup errors are shown in a GUI and disable running until
 Have seperate Activity and System (status, warning, errors) logs
 Have a way to pause logs from updating and then resume to allow scrolling
 Support multiple calculated values via exec. Array in exec, to numbered strings in action script.
-Support multiple rcon commands as an array in JSON.
 Handle paused Factorio server accepting but not reply to RCON command. It will honor the command when the server is unpaused. So different between start test connection and event handling.
 Add a more complete test GUI with options to select subscription types, donation currencies, etc.
+Look at supporting Twitch PubSub directly so I can get the Channel Points. May also open up othe opportunities: https://github.com/twitchdev/pubsub-samples/tree/1638781c0c096c4be43493a86f2a75401256583b/python

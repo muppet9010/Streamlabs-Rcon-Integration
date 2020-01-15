@@ -202,15 +202,17 @@ class State():
                     self.RecordActivity(
                         self.translations.GetTranslation("TestEvent QuantityCountNotInt") + str(testEventQuantity))
                     return
-            testEventPayloadCount = self.gui.testEventPayloadCount.get()
-            try:
-                testEventPayloadCount = int(testEventPayloadCount)
-                if testEventPayloadCount <= 0:
-                    raise ValueError()
-            except:
-                self.RecordActivity(
-                    self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
-                return
+            testEventPayloadCount = 1
+            if TestEventUtils.GetAttribute(testEventPlatform, testEventType, "payloadInput"):
+                try:
+                    testEventPayloadCount = self.gui.testEventPayloadCount.get()
+                    testEventPayloadCount = int(testEventPayloadCount)
+                    if testEventPayloadCount <= 0:
+                        raise ValueError()
+                except:
+                    self.RecordActivity(
+                        self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
+                    return
             testEventArray = self.testEventUtils.GenerateTestEventArray(
                 testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
             if len(testEventArray) > 0:

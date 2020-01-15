@@ -292,7 +292,12 @@ class StreamlabsEventUtils():
             typeString = data["type"]
         else:
             typeString = ""
-        for payload in data["message"]:
+        # twitch alerts only have a dictionary as message and not an array of dictionaries like all other scenarios
+        if isinstance(data["message"], dict):
             events.append(StreamlabsEvent(
-                state, platformString, typeString, payload))
+                state, platformString, typeString, data["message"]))
+        else:
+            for payload in data["message"]:
+                events.append(StreamlabsEvent(
+                    state, platformString, typeString, payload))
         return events

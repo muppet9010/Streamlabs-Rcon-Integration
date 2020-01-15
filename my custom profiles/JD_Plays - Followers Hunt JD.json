@@ -1,0 +1,39 @@
+{
+    "name": "JD_Plays - Followers Hunt JD",
+    "description": "JD_Plays Followers add biter hunting groups 2020-01-12",
+    "reactions": [
+        {
+            "valueType": "money",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        },
+        {
+            "valueType": "follow",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/biters_hunt_group_add_biters 1 1 /biters_hunt_group_reset_group_timer 1" NEEDS MULTI ACTION SUPPORT!
+                }
+            ]
+        },
+        {
+            "valueType": "viewer",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        }
+    ],
+    "options": {
+        "twitchMysterSubGiftMode": "donator"
+    }
+}
