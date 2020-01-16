@@ -44,6 +44,11 @@
                     "action": "/a_custom_command [CALCVALUE] '[BESTNAME]'"
                 },
                 {
+                    "condition": "[VALUE] >= 0",
+                    "manipulator": "int([VALUE]/10)",
+                    "action": "I run with any value, including when the >10 action runs"
+                },
+                {
                     "condition": "[ALL]",
                     "manipulator": "myValue = floor([VALUE])\ncalcValue = myValue * 2",
                     "action": "special calcValue: \"[CALCVALUE]\""

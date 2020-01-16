@@ -143,37 +143,39 @@ class State():
                 self.logging.DebugLog(
                     "Streamlabs processed event: " + str(event))
 
-                actionText = self.profiles.currentProfile.GetActionTextForEvent(
+                actionTexts = self.profiles.currentProfile.GetActionTextsForEvent(
                     event)
-                if actionText == None:
+                if len(actionTexts) == 0:
                     self.RecordActivity(
                         self.translations.GetTranslation("StreamlabsEvent NoProfileAction") + event.GetEventRawTitlesAsPrettyString())
                     self.logging.DebugLog(
                         "No profile action for: " + event.GetEventRawTitlesAsPrettyString())
                     return
-                actionType = ""
-                response = ""
-                if actionText == "":
-                    actionType = "Ignore event"
-                    self.logging.DebugLog(
-                        "NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
-                else:
-                    actionType = "Rcon command"
-                    try:
+                for actionText in actionTexts:
+                    actionType = ""
+                    response = ""
+                    if actionText == "":
+                        actionType = "Ignore event"
                         self.logging.DebugLog(
-                            "Doing Rcon command: " + actionText)
-                        response = self.rcon.SendCommand(actionText)
-                    except Exception as ex:
-                        self.logging.RecordException(ex, "Rcon event failed")
+                            "NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
+                    else:
+                        actionType = "Rcon command"
+                        try:
+                            self.logging.DebugLog(
+                                "Doing Rcon command: " + actionText)
+                            response = self.rcon.SendCommand(actionText)
+                        except Exception as ex:
+                            self.logging.RecordException(
+                                ex, "Rcon event failed")
+                            self.RecordActivity(
+                                self.translations.GetTranslation("Rcon CommandError") + actionText)
+                            return
+                    if response != "":
                         self.RecordActivity(
-                            self.translations.GetTranslation("Rcon CommandError") + actionText)
-                        return
+                            self.translations.GetTranslation("Rcon CommandResponseWarning") + response)
+                    self.logging.DebugLog("Action done: " + actionText)
                 self.RecordActivity(
                     self.translations.GetTranslation("StreamlabsEvent EventHandled") + event.GetEventRawTitlesAsPrettyString() + " : " + event.bestName + " : value " + str(event.value) + " : " + actionType)
-                if response != "":
-                    self.RecordActivity(
-                        self.translations.GetTranslation("Rcon CommandResponseWarning") + response)
-                self.logging.DebugLog("Action done: " + actionText)
         except Exception as ex:
             self.logging.RecordException(
                 ex, "OBS Event Handler Critical Error - This event won't be processed")

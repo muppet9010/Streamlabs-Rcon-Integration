@@ -1,7 +1,6 @@
 Bugs / Outstanding
 ===================
 
-Support multiple rcon commands as an array in JSON.
 
 
 
