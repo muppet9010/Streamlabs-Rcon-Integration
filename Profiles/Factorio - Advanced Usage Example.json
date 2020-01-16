@@ -8,8 +8,8 @@
             "filteredActions": [
                 {
                     "condition": "[ALL]",
-                    "manipulator": "",
-                    "action": "[BESTNAME] subscribed themselves"
+                    "manipulator": "'themselves'",
+                    "action": "[ACTION_SubscriptionBy]"
                 }
             ]
         },
@@ -19,8 +19,8 @@
             "filteredActions": [
                 {
                     "condition": "[ALL]",
-                    "manipulator": "",
-                    "action": "[BESTNAME] was subscribed by [gifter_display_name]"
+                    "manipulator": "'[gifter_display_name]'",
+                    "action": "[ACTION_SubscriptionBy]"
                 }
             ]
         },
@@ -69,6 +69,13 @@
                     "action": "/sc game.print('[CALCVALUE]\\'s great' .. ' and ' .. \"[BESTNAME]'s awesome\")"
                 }
             ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "SubscriptionBy",
+            "description": "prints who subscribed and by whom. CALCVALUE must be provided as a string as otherwise it will be run like code",
+            "effect": "[BESTNAME] subscribed by [CALCVALUE]"
         }
     ],
     "options": {
