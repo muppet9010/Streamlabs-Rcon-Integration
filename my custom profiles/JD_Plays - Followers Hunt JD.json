@@ -18,12 +18,17 @@
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "/biters_hunt_group_add_biters 1 1"
+                    "action": "/biter_hunt_group_add_biters 1 1"
                 },
                 {
                     "condition": "[ALL]",
                     "manipulator": "",
-                    "action": "/biters_hunt_group_reset_group_timer 1"
+                    "action": "/biter_hunt_group_reset_group_timer 1"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/muppet_gui_show_message {\"audience\": {\"players\":[], \"logic\":\"all\"}, \"message\":{\"simpleText\":\"[BESTNAME] followed the biter pack, you gonna join him?\", \"position\":\"top\", \"fontSize\":\"large\", \"fontStyle\":\"bold\", \"fontColor\":\"lightred\"}, \"close\":{\"timeout\":5}}"
                 }
             ]
         },
