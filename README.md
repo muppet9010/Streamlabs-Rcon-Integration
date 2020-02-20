@@ -10,7 +10,7 @@ At present only really tested with Twitch, but should work with mixer and youtub
 Installation & Usage
 ==========
 1. Install the current release of Python 3.7 with default options: https://www.python.org/downloads
-2. Get the exe from the [latest version zip](https://github.com/muppet9010/Streamlabs-Rcon-Integration).
+2. Get the files from the [latest release zip](https://github.com/muppet9010/Streamlabs-Rcon-Integration/releases).
 3. Create a free account at [Currency Layer website](https://currencylayer.com) and make a note of the API access key as needs to be entered into the program's config later on.
 4. Unzip the files into the desired folder.
 5. Open config.json in a text editor and add in your details.
