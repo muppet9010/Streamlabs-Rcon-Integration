@@ -175,11 +175,14 @@ class Gui(TK.Frame):
     def OnTestEventTypeChanged(self, *args):
         amountEnabled = False
         quantityEnabled = False
+        payloadCountEnabled = False
         if self.selectedTestEventType.get() != self.translations.GetTranslation("Gui SelectTestEventType"):
             amountEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(
             ), self.selectedTestEventType.get(), "valueInput")
             quantityEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(
             ), self.selectedTestEventType.get(), "quantityInput")
+            payloadCountEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(
+            ), self.selectedTestEventType.get(), "payloadInput")
         if amountEnabled:
             self.testEventValueLabel.config(state=TK.NORMAL)
             self.testEventValueInput.config(state=TK.NORMAL)
@@ -192,6 +195,10 @@ class Gui(TK.Frame):
         else:
             self.testEventQuantityLabel.config(state=TK.DISABLED)
             self.testEventQuantityInput.config(state=TK.DISABLED)
-        self.testEventPayloadCountLabel.config(state=TK.NORMAL)
-        self.testEventPayloadCountInput.config(state=TK.NORMAL)
+        if payloadCountEnabled:
+            self.testEventPayloadCountLabel.config(state=TK.NORMAL)
+            self.testEventPayloadCountInput.config(state=TK.NORMAL)
+        else:
+            self.testEventPayloadCountLabel.config(state=TK.DISABLED)
+            self.testEventPayloadCountInput.config(state=TK.DISABLED)
         self.testEventButton.config(state=TK.NORMAL)

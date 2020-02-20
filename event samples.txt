@@ -1,8 +1,13 @@
 STREAMLABS:
 
 DONATION:
-21:22:41 : Streamlabs raw event received: {'type': 'donation', 'message': [{'id': 12345678, 'name': 'UsEr', 'amount': '5.0000000000', 'formatted_amount': '｣5.00', 'formattedAmount': '｣5.00', 'message': 'No Help!', 'currency': 'GBP', 'emotes': '', 'iconClassName': 'fab paypal', 'to': {'name': 'StreamerNaMe'}, 'from': 'UsEr', 'from_user_id': None, 'donation_currency': 'GBP', '_id': '7c4d7e3b4b79d5e1346e4b99b150b94f'}], 'event_id': 'evt_48f0fe1b9ff83cc086f58791bfead86a'}
+{'type': 'donation', 'message': [{'id': 12345678, 'name': 'UsEr', 'amount': '5.0000000000', 'formatted_amount': '｣5.00', 'formattedAmount': '｣5.00', 'message': 'No Help!', 'currency': 'GBP', 'emotes': '', 'iconClassName': 'fab paypal', 'to': {'name': 'StreamerNaMe'}, 'from': 'UsEr', 'from_user_id': None, 'donation_currency': 'GBP', '_id': '7c4d7e3b4b79d5e1346e4b99b150b94f'}], 'event_id': 'evt_48f0fe1b9ff83cc086f58791bfead86a'}
 
+ALERT:
+{'type': 'alertPlaying', 'message': [{'priority': 10, '_id': 'de6e2959dda03e4148195773468a1d88', 'from': 'UsEr', 'to': '', 'message': '', 'payload': {'name': 'UsEr', 'isTest': True, '_id': 'de6e2959dda03e4148195773468a1d88', 'priority': 10}, 'name': 'UsEr', 'repeat': False, 'isTest': True, 'createdAt': '2020-01-13 05:31:35', 'createdAtTimestamp': 1578893495292, 'platform': 'twitch_account', 'type': 'follow', 'hash': 'follow:StReAmEr:', 'read': False, 'wotcCode': None}]}
+
+ALERT NON ARRAY MESSAGE:
+{'type': 'alertPlaying', 'message': {'priority': 10, '_id': 'de6e2959dda03e4148195773468a1d88', 'from': 'UsEr', 'to': '', 'message': '', 'payload': {'name': 'UsEr', 'isTest': True, '_id': 'de6e2959dda03e4148195773468a1d88', 'priority': 10}, 'name': 'UsEr', 'repeat': False, 'isTest': True, 'createdAt': '2020-01-13 05:31:35', 'createdAtTimestamp': 1578893495292, 'platform': 'twitch_account', 'type': 'follow', 'hash': 'follow:StReAmEr:', 'read': False, 'wotcCode': None}}
 
 
 
@@ -10,7 +15,7 @@ DONATION:
 PATREON:
 
 PLEDGE:
-19:37:29 : Streamlabs raw event data: {'type': 'pledge', 'message': [{'name': 'UsEr', 'isTest': True, 'formatted_amount': '£56.00', 'amount': 56, 'currency': 'GBP', 'to': {'name': 'StReAmErNaMe'}, 'from': 'Real Name', '_id': '938e6fdb71d5b11a19d170c3dbca555c'}], 'for': 'patreon', 'event_id': 'evt_a5f4b15b617c16d498f8fdf6d0865aaa'}
+{'type': 'pledge', 'message': [{'name': 'UsEr', 'isTest': True, 'formatted_amount': '£56.00', 'amount': 56, 'currency': 'GBP', 'to': {'name': 'StReAmErNaMe'}, 'from': 'Real Name', '_id': '938e6fdb71d5b11a19d170c3dbca555c'}], 'for': 'patreon', 'event_id': 'evt_a5f4b15b617c16d498f8fdf6d0865aaa'}
 
 
 
@@ -19,36 +24,35 @@ PLEDGE:
 TWITCH REAL WORLD
 
 SUB:
-20:01:04 : Streamlabs raw event received: {'type': 'subscription', 'message': [{'name': 'user', 'display_name': 'UsEr', 'months': '4', 'message': 'haha add some more parts :)', 'emotes': '1:25-26', 'sub_plan': '1000', 'sub_plan_name': 'Channel\\sSubscription\\s(streamer)', 'sub_type': 'resub', 'gifter': None, 'subscriber_twitch_id': '12345678', 'streak_months': '2', '_id': 'f5b4860c38313d4564d277ccc521a4a0', 'event_id': 'f5b4860c38313d4564d277ccc521a4a0'}], 'for': 'twitch_account'}
+{'type': 'subscription', 'message': [{'name': 'user', 'display_name': 'UsEr', 'months': '4', 'message': 'haha add some more parts :)', 'emotes': '1:25-26', 'sub_plan': '1000', 'sub_plan_name': 'Channel\\sSubscription\\s(streamer)', 'sub_type': 'resub', 'gifter': None, 'subscriber_twitch_id': '12345678', 'streak_months': '2', '_id': 'f5b4860c38313d4564d277ccc521a4a0', 'event_id': 'f5b4860c38313d4564d277ccc521a4a0'}], 'for': 'twitch_account'}
 
 SUBS GIFTED TO COMMUNITY (GIVER):
 {type: 'subMysteryGift',  message: [ { sub_plan: '1000', sub_type: 'submysterygift', gifter: 'user1', gifter_display_name: 'UsEr1', name: 'user1', amount: '1', _id: 'bc04a15a6755024aeece5bf932717054', event_id: 'bc04a15a6755024aeece5bf932717054' } ], for: 'twitch_account'}
 
 GIFTED SUB RECEIVED:
-18:09:23 : Streamlabs supported raw event received: {'type': 'subscription', 'message': [{'name': 'user1', 'display_name': 'UsEr1', 'months': '1', 'message': None, 'emotes': None, 'sub_plan': '1000', 'sub_plan_name': 'Channel\\sSubscription\\s(streamer)', 'sub_type': 'subgift', 'gifter': 'user2', 'gifter_display_name': 'UsEr2', 'streak_months': None, 'gifter_twitch_id': '0123456', 'subscriber_twitch_id': '5678900', '_id': 'e9d61c910409da7539562adcdfda8ae8', 'event_id': 'e9d61c910409da7539562adcdfda8ae8'}], 'for': 'twitch_account'}
+{'type': 'subscription', 'message': [{'name': 'user1', 'display_name': 'UsEr1', 'months': '1', 'message': None, 'emotes': None, 'sub_plan': '1000', 'sub_plan_name': 'Channel\\sSubscription\\s(streamer)', 'sub_type': 'subgift', 'gifter': 'user2', 'gifter_display_name': 'UsEr2', 'streak_months': None, 'gifter_twitch_id': '0123456', 'subscriber_twitch_id': '5678900', '_id': 'e9d61c910409da7539562adcdfda8ae8', 'event_id': 'e9d61c910409da7539562adcdfda8ae8'}], 'for': 'twitch_account'}
 
 FOLLOW:
-21:05:14 : Streamlabs raw event received: {'type': 'follow', 'message': [{'created_at': '2019-05-14 20:05:00', 'id': '12345678', 'name': 'UsEr', '_id': '7b80748a12eec3c274cc46631bb8908f', 'event_id': '7b80748a12eec3c274cc46631bb8908f'}], 'for': 'twitch_account'}
+{'type': 'follow', 'message': [{'created_at': '2019-05-14 20:05:00', 'id': '12345678', 'name': 'UsEr', '_id': '7b80748a12eec3c274cc46631bb8908f', 'event_id': '7b80748a12eec3c274cc46631bb8908f'}], 'for': 'twitch_account'}
 
 BITS:
-21:21:55 : Streamlabs raw event received: {'type': 'bits', 'message': [{'id': 'e1ded2fa-9b63-421a-92c9-74e147b55a96', 'name': 'user', 'display_name': 'UsEr', 'amount': '500', 'emotes': None, 'message': 'willlococheer500', '_id': 'c1f8c7a360456152d09cda8330da17e9', 'event_id': 'c1f8c7a360456152d09cda8330da17e9'}], 'for': 'twitch_account'}
+{'type': 'bits', 'message': [{'id': 'e1ded2fa-9b63-421a-92c9-74e147b55a96', 'name': 'user', 'display_name': 'UsEr', 'amount': '500', 'emotes': None, 'message': 'willlococheer500', '_id': 'c1f8c7a360456152d09cda8330da17e9', 'event_id': 'c1f8c7a360456152d09cda8330da17e9'}], 'for': 'twitch_account'}
 
 HOST:
-00:37:01 : Streamlabs supported raw event received: {'type': 'host', 'message': [{'name': 'UsEr', 'viewers': 157, 'type': 'manual', '_id': '47740b852ebfe74364d1d2123e2cec35', 'event_id': '47740b852ebfe74364d1d2123e2cec35'}], 'for': 'twitch_account'}
+{'type': 'host', 'message': [{'name': 'UsEr', 'viewers': 157, 'type': 'manual', '_id': '47740b852ebfe74364d1d2123e2cec35', 'event_id': '47740b852ebfe74364d1d2123e2cec35'}], 'for': 'twitch_account'}
 
 RAID:
-22:43:07 : Streamlabs supported raw event received: {'type': 'raid', 'message': [{'id': 'a7ca29ca-03c8-4857-b9d4-915fa03fc275', 'name': 'user', 'display_name': 'UsEr', 'raiders': '28', '_id': 'a7ca29ca-03c8-4857-b9d4-915fa03fc275', 'event_id': 'a7ca29ca-03c8-4857-b9d4-915fa03fc275'}], 'for': 'twitch_account'}
-
+{'type': 'raid', 'message': [{'id': 'a7ca29ca-03c8-4857-b9d4-915fa03fc275', 'name': 'user', 'display_name': 'UsEr', 'raiders': '28', '_id': 'a7ca29ca-03c8-4857-b9d4-915fa03fc275', 'event_id': 'a7ca29ca-03c8-4857-b9d4-915fa03fc275'}], 'for': 'twitch_account'}
 
 
 
 
 YOUTUBE TEST WIDGETS
 
-13:03:17 : Streamlabs raw event data: {'type': 'follow', 'message': [{'name': 'Muppet 9010', 'isTest': True, '_id': '58f1c497c371e0b590f088facedfce2e'}], 'for': 'youtube_account', 'event_id': 'evt_f32c159b6c6b1d4b48fc268e578d02ec'}
+{'type': 'follow', 'message': [{'name': 'Muppet 9010', 'isTest': True, '_id': '58f1c497c371e0b590f088facedfce2e'}], 'for': 'youtube_account', 'event_id': 'evt_f32c159b6c6b1d4b48fc268e578d02ec'}
 
-13:03:29 : Streamlabs raw event data: {'type': 'subscription', 'message': [{'name': 'Muppet 9010', 'isTest': True, 'months': 2, 'message': 'This is a test', 'emotes': None, 'sub_plan': '1000', '_id': 'dc32848c75c66cc2c3b8fdcc1520f5db'}], 'for': 'youtube_account', 'event_id': 'evt_c30e399ad166ead4e2053611a3754526'}
+{'type': 'subscription', 'message': [{'name': 'Muppet 9010', 'isTest': True, 'months': 2, 'message': 'This is a test', 'emotes': None, 'sub_plan': '1000', '_id': 'dc32848c75c66cc2c3b8fdcc1520f5db'}], 'for': 'youtube_account', 'event_id': 'evt_c30e399ad166ead4e2053611a3754526'}
 
-13:03:33 : Streamlabs raw event data: {'type': 'donation', 'message': [{'name': 'Muppet 9010', 'isTest': True, 'formatted_amount': '$29.00', 'amount': 29, 'message': 'This is a test donation for $29.00.', 'currency': 'USD', 'to': {'name': 'Muppet 9010'}, 'from': 'John', 'from_user_id': 1, '_id': 'e59e21afbd16eb7cf1e7a739c08186ad'}], 'for': 'streamlabs', 'event_id': 'evt_48e98f1d0b75c42ef0b4e0ec9b1a6431'}
+{'type': 'donation', 'message': [{'name': 'Muppet 9010', 'isTest': True, 'formatted_amount': '$29.00', 'amount': 29, 'message': 'This is a test donation for $29.00.', 'currency': 'USD', 'to': {'name': 'Muppet 9010'}, 'from': 'John', 'from_user_id': 1, '_id': 'e59e21afbd16eb7cf1e7a739c08186ad'}], 'for': 'streamlabs', 'event_id': 'evt_48e98f1d0b75c42ef0b4e0ec9b1a6431'}
 
-13:03:35 : Streamlabs raw event data: {'type': 'superchat', 'message': [{'name': 'Muppet 9010', 'isTest': True, 'amount': 85,000,000, 'displayString': '$85.00', 'comment': 'This is a test super chat alert for $85.', 'id': 22, 'channelId': 'UC0G2qz-hoaCswQNgoWU_LTw', 'currency': 'USD', 'payload': {'currency': 'USD'}, '_id': 'a4ffcb027c3b34418307e206c4606ae2'}], 'for': 'youtube_account', 'event_id': 'evt_aa331e25a53aaa2f7042102ffb6ab484'}
+{'type': 'superchat', 'message': [{'name': 'Muppet 9010', 'isTest': True, 'amount': 85,000,000, 'displayString': '$85.00', 'comment': 'This is a test super chat alert for $85.', 'id': 22, 'channelId': 'UC0G2qz-hoaCswQNgoWU_LTw', 'currency': 'USD', 'payload': {'currency': 'USD'}, '_id': 'a4ffcb027c3b34418307e206c4606ae2'}], 'for': 'youtube_account', 'event_id': 'evt_aa331e25a53aaa2f7042102ffb6ab484'}

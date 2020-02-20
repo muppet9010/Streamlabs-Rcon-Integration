@@ -8,43 +8,62 @@ class TestEventUtils:
         "Streamlabs": {
             "Donation": {
                 "valueInput": True,
-                "quantityInput": False
+                "quantityInput": False,
+                "payloadInput": True
+            },
+            "Alert (IGNORED)": {
+                "valueInput": False,
+                "quantityInput": False,
+                "payloadInput": True
+            },
+            "Alert Non List Message (IGNORED)": {
+                "valueInput": False,
+                "quantityInput": False,
+                "payloadInput": False
             }
         },
         "Patreon": {
             "Pledge": {
                 "valueInput": True,
-                "quantityInput": False
+                "quantityInput": False,
+                "payloadInput": True
             }
         },
         "Twitch": {
             "Follow": {
                 "valueInput": False,
-                "quantityInput": False
+                "quantityInput": False,
+                "payloadInput": True
             },
             "Subscribe": {
                 "valueInput": True,
-                "quantityInput": False
+                "quantityInput": False,
+                "payloadInput": True
             },
             "Give Specific Gift Subscription": {
                 "valueInput": True,
-                "quantityInput": False
+                "quantityInput": False,
+                "payloadInput": True
             },
             "Give Random Gift Subscriptions": {
                 "valueInput": True,
-                "quantityInput": True
+                "quantityInput": True,
+                "payloadInput": True
             },
             "Bits": {
                 "valueInput": True,
-                "quantityInput": False
+                "quantityInput": False,
+                "payloadInput": True
             },
             "Host": {
                 "valueInput": True,
-                "quantityInput": False
+                "quantityInput": False,
+                "payloadInput": True
             },
             "Raid": {
                 "valueInput": True,
-                "quantityInput": False
+                "quantityInput": False,
+                "payloadInput": True
             }
         },
         "Youtube": {
@@ -72,6 +91,7 @@ class TestEventUtils:
         eventTypeString = ""
         eventForString = ""
         eventMessageConstructor = None
+        messageIsTypeList = True
 
         if eventPlatform == "Streamlabs":
             eventForString = "streamlabs"
@@ -99,6 +119,74 @@ class TestEventUtils:
                         'from_user_id': None,
                         'donation_currency': 'USD',
                         '_id': eventId
+                    }
+                eventMessageConstructor = EventMessageConstructor
+            elif eventType == "Alert (IGNORED)":
+                eventTypeString = "alertPlaying"
+                messageIsTypeList = True
+                eventForString = ""
+
+                def EventMessageConstructor(value, special, iterator):
+                    iterator += 1
+                    eventId = TestEventUtils.GenerateUuid()
+                    return {
+                        'id': eventId,
+                        'name': 'user' + str(iterator),
+                        '_id': eventId,
+                        'event_id': eventId,
+                        'priority': 10,
+                        'from': 'UsEr' + str(iterator),
+                        'to': '',
+                        'message': 'Test Follow Alert',
+                        'repeat': False,
+                        'isTest': True,
+                        'createdAt': '2020-01-13 05:31:35',
+                        'createdAtTimestamp': 1578893495292,
+                        'platform': 'twitch_account',
+                        'type': 'follow',
+                        'hash': 'follow:StReAmEr:',
+                        'read': False,
+                        'wotcCode': None,
+                        'payload': {
+                            'name': 'UsEr' + str(iterator),
+                            'isTest': True,
+                            '_id': eventId,
+                            'priority': 10
+                        }
+                    }
+                eventMessageConstructor = EventMessageConstructor
+            elif eventType == "Alert Non List Message (IGNORED)":
+                eventTypeString = "alertPlaying"
+                messageIsTypeList = False
+                eventForString = ""
+
+                def EventMessageConstructor(value, special, iterator):
+                    iterator += 1
+                    eventId = TestEventUtils.GenerateUuid()
+                    return {
+                        'id': eventId,
+                        'name': 'user' + str(iterator),
+                        '_id': eventId,
+                        'event_id': eventId,
+                        'priority': 10,
+                        'from': 'UsEr' + str(iterator),
+                        'to': '',
+                        'message': 'Test Follow Alert',
+                        'repeat': False,
+                        'isTest': True,
+                        'createdAt': '2020-01-13 05:31:35',
+                        'createdAtTimestamp': 1578893495292,
+                        'platform': 'twitch_account',
+                        'type': 'follow',
+                        'hash': 'follow:StReAmEr:',
+                        'read': False,
+                        'wotcCode': None,
+                        'payload': {
+                            'name': 'UsEr' + str(iterator),
+                            'isTest': True,
+                            '_id': eventId,
+                            'priority': 10
+                        }
                     }
                 eventMessageConstructor = EventMessageConstructor
         elif eventPlatform == "Patreon":
@@ -257,17 +345,21 @@ class TestEventUtils:
                     }
                 eventMessageConstructor = EventMessageConstructor
 
-        return TestEventUtils._ConstructTestEventDict(eventForString, eventTypeString, eventMessageConstructor, value, special, payloadCount)
+        return TestEventUtils._ConstructTestEventDict(eventForString, eventTypeString, eventMessageConstructor, value, special, payloadCount, messageIsTypeList)
 
     @staticmethod
-    def _ConstructTestEventDict(forString, typeString, messageConstructor, value, special, payloadCount):
+    def _ConstructTestEventDict(forString, typeString, messageConstructor, value, special, payloadCount, messageIsTypeList):
         eventDict = {
             "for": forString,
-            "type": typeString,
-            "message": []
+            "type": typeString
         }
-        for i in range(payloadCount):
-            eventDict["message"].append(messageConstructor(value, special, i))
+        if messageIsTypeList:
+            eventDict["message"] = []
+            for i in range(payloadCount):
+                eventDict["message"].append(
+                    messageConstructor(value, special, i))
+        else:
+            eventDict["message"] = messageConstructor(value, special, 1)
 
         return eventDict
 

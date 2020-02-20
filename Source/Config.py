@@ -8,7 +8,7 @@ class Config():
         self._fileName = "config.json"
         self._settings = {}
         if Os.path.isfile(self._fileName):
-            with open(self._fileName, "r") as file:
+            with open(self._fileName, "r", encoding='utf-8') as file:
                 data = Json.load(file)
             file.closed
             self._settings = data
@@ -22,7 +22,6 @@ class Config():
             "Currency ApiLayerAccessKey": "",
             "Streamlabs SocketApiToken": "",
             "Profile Default": "",
-            "Factorio PlayerName": "",
             "Rcon Server Address": "",
             "Rcon Server Port": 25575,
             "Rcon Server Password": "",

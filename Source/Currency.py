@@ -17,7 +17,7 @@ class Currency():
         if Os.path.isfile(self.cacheFileName):
             self.logging.DebugLog(
                 "Trying to get currancy rates from cache file")
-            with open(self.cacheFileName, "r") as file:
+            with open(self.cacheFileName, "r", encoding='utf-8') as file:
                 data = Json.load(file)
             file.closed
             cacheDateTime = Datetime.date.fromtimestamp(data["timestamp"])
@@ -52,7 +52,7 @@ class Currency():
             self.state.RecordActivity(
                 self.state.translations.GetTranslation("Currency WebsiteDownloadFailed"))
             return False
-        with open(self.cacheFileName, "w") as file:
+        with open(self.cacheFileName, "w", encoding='utf-8') as file:
             file.write(Json.dumps(response))
         file.closed
         for name, rate in response["quotes"].items():

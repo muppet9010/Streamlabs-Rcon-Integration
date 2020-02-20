@@ -13,7 +13,7 @@ class Profiles:
             Os.mkdir(self.profileFolder)
         else:
             for fileName in Os.listdir(self.profileFolder):
-                with open(self.profileFolder + "/" + fileName, "r") as file:
+                with open(self.profileFolder + "/" + fileName, "r", encoding='utf-8') as file:
                     data = Json.load(file)
                 file.closed
                 self.profiles[data["name"]] = Profile(data, self)
@@ -43,18 +43,15 @@ class Profile:
         else:
             self.options = Options(self, {})
 
-    def GetActionTextForEvent(self, event):
+    def GetActionTextsForEvent(self, event):
+        results = []
         for reaction in self.reactionPriorities[1]:
             if reaction.handlerName == event.handlerName:
-                result = reaction.GetActionTextForEvent(event)
-                if result != None:
-                    return result
+                results += reaction.GetActionTextsForEvent(event)
         for reaction in self.reactionPriorities[2]:
             if reaction.valueType == event.valueType:
-                result = reaction.GetActionTextForEvent(event)
-                if result != None:
-                    return result
-        return None
+                results += reaction.GetActionTextsForEvent(event)
+        return results
 
 
 class Reaction:
@@ -86,14 +83,15 @@ class Reaction:
             else:
                 self.filterActionPriorities[1].append(filteredAction)
 
-    def GetActionTextForEvent(self, event):
+    def GetActionTextsForEvent(self, event):
+        results = []
         for filterAction in self.filterActionPriorities[1]:
             if filterAction.DoesEventTriggerAction(event):
-                return filterAction.GetActionText(event)
+                results.append(filterAction.GetActionText(event))
         for filterAction in self.filterActionPriorities[2]:
             if filterAction.DoesEventTriggerAction(event):
-                return filterAction.GetActionText(event)
-        return None
+                results.append(filterAction.GetActionText(event))
+        return results
 
     def GetPrintHandlerType(self):
         if self.handlerName != "":

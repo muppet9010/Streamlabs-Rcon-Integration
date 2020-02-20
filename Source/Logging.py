@@ -33,7 +33,7 @@ class Logging():
     def Log(self, text):
         self.DebugLog(text)
         fileName = self.logFilePath
-        with open(fileName, "a") as file:
+        with open(fileName, "a", encoding='utf-8') as file:
             file.write(self.TimestampText(text) + "\n")
         file.closed
 
@@ -45,7 +45,7 @@ class Logging():
         if not self.debugLogging:
             return
         fileName = self.debugLogFilePath
-        with open(fileName, "a") as file:
+        with open(fileName, "a", encoding='utf-8') as file:
             file.write(self.TimestampText(text) + "\n")
         file.closed
 

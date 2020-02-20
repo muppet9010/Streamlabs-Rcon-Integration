@@ -9,11 +9,14 @@ from Profiles import Profiles
 from Rcon import Rcon
 from Translations import Translations
 from TestEvents import TestEventUtils
+import random as Random
+import time as Time
+import threading as Threading
 
 
 class State():
     def __init__(self):
-        self.version = "0.1.0"
+        self.version = "0.1.1"
         self.config = Config(self)
         self.logging = Logging(self)
         self.config.LogMissingSettings()
@@ -110,6 +113,11 @@ class State():
 
     def OnStreamlabsEventHandler(self, data):
         try:
+            random = Random.Random()
+            random.seed(Threading.get_ident())
+            sleepTime = random.random()
+            self.logging.DebugLog("Sleeping event for: " + str(sleepTime))
+            Time.sleep(sleepTime)
             self.logging.DebugLog(
                 "Streamlabs raw event data: " + str(data))
             events = StreamlabsEventUtils.GenerateEventPerPayload(self, data)
@@ -135,37 +143,39 @@ class State():
                 self.logging.DebugLog(
                     "Streamlabs processed event: " + str(event))
 
-                actionText = self.profiles.currentProfile.GetActionTextForEvent(
+                actionTexts = self.profiles.currentProfile.GetActionTextsForEvent(
                     event)
-                if actionText == None:
+                if len(actionTexts) == 0:
                     self.RecordActivity(
                         self.translations.GetTranslation("StreamlabsEvent NoProfileAction") + event.GetEventRawTitlesAsPrettyString())
                     self.logging.DebugLog(
                         "No profile action for: " + event.GetEventRawTitlesAsPrettyString())
                     return
-                actionType = ""
-                response = ""
-                if actionText == "":
-                    actionType = "Ignore event"
-                    self.logging.DebugLog(
-                        "NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
-                else:
-                    actionType = "Rcon command"
-                    try:
+                for actionText in actionTexts:
+                    actionType = ""
+                    response = ""
+                    if actionText == "":
+                        actionType = "Ignore event"
                         self.logging.DebugLog(
-                            "Doing Rcon command: " + actionText)
-                        response = self.rcon.SendCommand(actionText)
-                    except Exception as ex:
-                        self.logging.RecordException(ex, "Rcon event failed")
+                            "NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
+                    else:
+                        actionType = "Rcon command"
+                        try:
+                            self.logging.DebugLog(
+                                "Doing Rcon command: " + actionText)
+                            response = self.rcon.SendCommand(actionText)
+                        except Exception as ex:
+                            self.logging.RecordException(
+                                ex, "Rcon event failed")
+                            self.RecordActivity(
+                                self.translations.GetTranslation("Rcon CommandError") + actionText)
+                            return
+                    if response != "":
                         self.RecordActivity(
-                            self.translations.GetTranslation("Rcon CommandError") + actionText)
-                        return
+                            self.translations.GetTranslation("Rcon CommandResponseWarning") + response)
+                    self.logging.DebugLog("Action done: " + actionText)
                 self.RecordActivity(
                     self.translations.GetTranslation("StreamlabsEvent EventHandled") + event.GetEventRawTitlesAsPrettyString() + " : " + event.bestName + " : value " + str(event.value) + " : " + actionType)
-                if response != "":
-                    self.RecordActivity(
-                        self.translations.GetTranslation("Rcon CommandResponseWarning") + response)
-                self.logging.DebugLog("Action done: " + actionText)
         except Exception as ex:
             self.logging.RecordException(
                 ex, "OBS Event Handler Critical Error - This event won't be processed")
@@ -194,15 +204,17 @@ class State():
                     self.RecordActivity(
                         self.translations.GetTranslation("TestEvent QuantityCountNotInt") + str(testEventQuantity))
                     return
-            testEventPayloadCount = self.gui.testEventPayloadCount.get()
-            try:
-                testEventPayloadCount = int(testEventPayloadCount)
-                if testEventPayloadCount <= 0:
-                    raise ValueError()
-            except:
-                self.RecordActivity(
-                    self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
-                return
+            testEventPayloadCount = 1
+            if TestEventUtils.GetAttribute(testEventPlatform, testEventType, "payloadInput"):
+                try:
+                    testEventPayloadCount = self.gui.testEventPayloadCount.get()
+                    testEventPayloadCount = int(testEventPayloadCount)
+                    if testEventPayloadCount <= 0:
+                        raise ValueError()
+                except:
+                    self.RecordActivity(
+                        self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
+                    return
             testEventArray = self.testEventUtils.GenerateTestEventArray(
                 testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
             if len(testEventArray) > 0:
@@ -241,7 +253,7 @@ except Exception as ex:
     except:
         pass
     try:
-        state.logging.RecordException(
+        self.logging.RecordException(
             ex, "Application Critical Error - Application has been stopped")
     except:
         pass

@@ -3,5 +3,5 @@ __pycache__
 currency data cache.json
 /Logs
 eventDefinitions.json
-config.json
-[!.]*.py.[!.]*.py
+/configs
+/config.json

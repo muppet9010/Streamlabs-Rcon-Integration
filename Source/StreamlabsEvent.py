@@ -21,6 +21,9 @@ class StreamlabsEvent():
         self.ignored = False
         self.rawMessage = payload
 
+        if "_id" in self.rawMessage:
+            self.id = self.rawMessage["_id"]
+
         if self.type == "donation" and self.platform == "":
             self.platform = "streamlabs"
         elif self.platform == "twitch_account" and self.type == "subscription" and "gifter" in self.rawMessage and self.rawMessage["gifter"] != None:
@@ -30,7 +33,6 @@ class StreamlabsEvent():
             self.ignored = True
             return
 
-        self.id = self.rawMessage["_id"]
         if "display_name" in self.rawMessage.keys():
             self.bestName = self.rawMessage["display_name"]
         elif "name" in self.rawMessage.keys():
@@ -218,7 +220,7 @@ class StreamlabsEventUtils():
 
     @staticmethod
     def LoadEventDefinitions():
-        with open("eventDefinitions.json", "r") as file:
+        with open("eventDefinitions.json", "r", encoding='utf-8') as file:
             data = Json.load(file)
         file.closed
         StreamlabsEventUtils.handledEventTypes = data
@@ -290,7 +292,12 @@ class StreamlabsEventUtils():
             typeString = data["type"]
         else:
             typeString = ""
-        for payload in data["message"]:
+        # twitch alerts only have a dictionary as message and not an array of dictionaries like all other scenarios
+        if isinstance(data["message"], dict):
             events.append(StreamlabsEvent(
-                state, platformString, typeString, payload))
+                state, platformString, typeString, data["message"]))
+        else:
+            for payload in data["message"]:
+                events.append(StreamlabsEvent(
+                    state, platformString, typeString, payload))
         return events
