@@ -1,7 +1,10 @@
 Bugs / Outstanding
 ===================
 
-
+Look to use yaml in rcon integration configs as they may be nicer to read and may support the action commands and passing JSON to Factorio nicer.
+Should I just ignore any event without an ID string? Came up ages ago during Will's playthrough. But not enough of an issue to be done at the time.
+If you close the GUI when internet is dead after being connected via RCOn the python window never closes. Gues its waiting for something to close.
+Change profile loading to not error on startup for bad profiles, but error on trying to start them.
 
 
 Ideas
