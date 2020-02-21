@@ -29,7 +29,7 @@ Program Execution Concepts
 
 The app takes in Streamlabs events and processes them through configurable reactions to trigger the desired action via Rcon in game. These reactions are grouped together as savable profiles.
 
-The complete list of Streamlabs events and their contained data attributes can be found in the [eventDefinitions.json file](https://github.com/muppet9010/Streamlabs-Rcon-Integration/eventDefinitions.json). The top section under `[ALL]` are generated and normalised by the program to provide some standard entries across all event types. The list of platform and event specific attributes are what Streamlabs is currently sending. These often vary from their documentation and change periodically.
+The complete list of Streamlabs events and their contained data attributes can be found in the [eventDefinitions.json file](https://github.com/muppet9010/Streamlabs-Rcon-Integration/blob/master/Source/eventDefinitions.json). The top section under `[ALL]` are generated and normalised by the program to provide some standard entries across all event types. The list of platform and event specific attributes are what Streamlabs is currently sending. These often vary from their documentation and change periodically.
 
 The app runs a single grouping of reactions at a time, being loaded and saved as a profile. During the process if no suitable option is found it will be shown within the app and that events processing stops. It's assumed you want to handle any event you get. Special options at each level exist for more simple uses cases.
 
