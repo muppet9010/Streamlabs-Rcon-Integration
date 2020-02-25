@@ -1,5 +1,10 @@
 # Streamlabs-Rcon-Integration
 
+This tool's setup is a little technical at present, but is fully functional and used by a few streamers. Any usage questions or issues grab me on discord: muppet9010#2645
+============
+
+Overview
+=============
 
 A Python exe for integrating Streamlabs and any game supporting Rcon. It receives the Streamlabs events and uses configurable logic to send an appropriate RCON command to the game server to do something. Its currently being used with Factorio, but should be compatible with any other Rcon interfaced game.
 
