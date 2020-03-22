@@ -1,0 +1,74 @@
+{
+    "name": "ColonelWill - Prime SpaceX Deathworld",
+    "description": "Wills SpaceX death playthrough with Prime shopping",
+    "reactions": [
+        {
+            "valueType": "money",
+            "filteredActions": [
+                {
+                    "condition": "[VALUE] < 1",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                },
+                {
+                    "condition": "[VALUE] >= 1 and [VALUE] < 5",
+                    "manipulator": "[VALUE] * 100",
+                    "action": "/item_delivery_pod-call_crash_ship \"ColonelWill\" 150 \"tiny\" {\"coin\":[CALCVALUE]}"
+                },
+                {
+                    "condition": "[VALUE] >= 5 and [VALUE] < 10",
+                    "manipulator": "[VALUE] * 100",
+                    "action": "/item_delivery_pod-call_crash_ship \"ColonelWill\" 100 \"small\" {\"coin\":[CALCVALUE]}"
+                },
+                {
+                    "condition": "[VALUE] >= 10 and [VALUE] < 25",
+                    "manipulator": "[VALUE] * 100",
+                    "action": "/item_delivery_pod-call_crash_ship \"ColonelWill\" 75 \"medium\" {\"coin\":[CALCVALUE]}"
+                },
+                {
+                    "condition": "[VALUE] >= 25 and [VALUE] < 50",
+                    "manipulator": "[VALUE] * 100",
+                    "action": "/item_delivery_pod-call_crash_ship \"ColonelWill\" 50 \"large\" {\"coin\":[CALCVALUE]}"
+                },
+                {
+                    "condition": "[VALUE] >= 50 and [VALUE] < 100",
+                    "manipulator": "[VALUE] * 100",
+                    "action": "/item_delivery_pod-call_crash_ship \"ColonelWill\" 25 \"modular-auto-[VALUE]\" {\"coin\":[CALCVALUE]}"
+                },
+                {
+                    "condition": "[VALUE] >= 100 and [VALUE] < 200",
+                    "manipulator": "[VALUE] * 100",
+                    "action": "/item_delivery_pod-call_crash_ship \"ColonelWill\" 0 \"modular-auto-[VALUE]\" {\"coin\":[CALCVALUE]}"
+                },
+                {
+                    "condition": "[VALUE] >= 200",
+                    "manipulator": "[VALUE] * 100",
+                    "action": "/item_delivery_pod-call_crash_ship \"ColonelWill\" 0 \"modular-auto-[VALUE]\" {\"coin\":[CALCVALUE]}"
+                }
+            ]
+        },
+        {
+            "valueType": "follow",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/item_delivery_pod-call_crash_ship \"ColonelWill\" 150 \"tiny\" {\"coin\":100}"
+                }
+            ]
+        },
+        {
+            "valueType": "viewer",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        }
+    ],
+    "options": {
+        "twitchMysterSubGiftMode": "donator"
+    }
+}
