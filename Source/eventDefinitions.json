@@ -56,6 +56,7 @@
         }
     },
     "patreon-pledge": {
+        "_comment": "There isn't a currency type provided in streamlabs API any more, so this won't be converted to USD. Use with caution as amount will be in *some* currency.",
         "name": {
             "valueType": "text string",
             "description": "the username of the person who did the event"
@@ -67,10 +68,6 @@
         "amount": {
             "valueType": "number",
             "description": "the amount of the donation with a variable (0-10) number of decimal places"
-        },
-        "currency": {
-            "valueType": "text string",
-            "description": "the 3 letter currance code, i.e. USD, GBP"
         }
     },
     "twitch_account-subscription": {
@@ -121,10 +118,6 @@
         "gifter": {
             "valueType": "text string",
             "description": "the username of the person who gifted the subscription"
-        },
-        "gifter_display_name": {
-            "valueType": "text string",
-            "description": "the display name of the person who gifted the subscription"
         }
     },
     "twitch_account-subMysteryGift": {
@@ -175,6 +168,7 @@
         }
     },
     "twitch_account-host": {
+        "WARNING": "NOT UPDATED WITH OTHER TWITCH CHANGES AS NO SAMPLE DATA: 2021-04-09",
         "name": {
             "valueType": "text string",
             "description": "the username of the person who did the event"
@@ -185,6 +179,7 @@
         }
     },
     "twitch_account-raid": {
+        "WARNING": "NOT UPDATED WITH OTHER TWITCH CHANGES AS NO SAMPLE DATA: 2021-04-09",
         "name": {
             "valueType": "text string",
             "description": "the username of the person who did the event"

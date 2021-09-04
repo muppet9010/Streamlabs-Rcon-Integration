@@ -212,11 +212,9 @@ class State():
                     if testEventPayloadCount <= 0:
                         raise ValueError()
                 except:
-                    self.RecordActivity(
-                        self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
+                    self.RecordActivity(self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
                     return
-            testEventArray = self.testEventUtils.GenerateTestEventArray(
-                testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
+            testEventArray = self.testEventUtils.GenerateTestEventArray(testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
             if len(testEventArray) > 0:
                 for testEvent in testEventArray:
                     self.OnStreamlabsEventHandler(testEvent)

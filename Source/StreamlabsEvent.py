@@ -21,7 +21,7 @@ class StreamlabsEvent():
         self.ignored = False
         self.rawMessage = payload
 
-        if "_id" in self.rawMessage:
+        if "_id" in self.rawMessage.keys():
             self.id = self.rawMessage["_id"]
 
         if self.type == "donation" and self.platform == "":
@@ -92,7 +92,7 @@ class StreamlabsEvent():
             if self.state.profiles.currentProfile.options.twitchMysterSubGiftMode == "receiver" and self.type == "subMysteryGift":
                 return True
             elif self.state.profiles.currentProfile.options.twitchMysterSubGiftMode == "donator" and self.type == "subscriptionGift":
-                gifterName = self.rawMessage["gifter_display_name"]
+                gifterName = self.rawMessage["gifter"]
                 if gifterName in self.state.mysterySubGifts and self.state.mysterySubGifts[gifterName] > 0:
                     self.state.mysterySubGifts[gifterName] -= 1
                     return True
@@ -105,16 +105,25 @@ class StreamlabsEvent():
     def PopulateNormalisedData(self):
         if (self.handlerName == "streamlabs-donation"):
             self.valueType = "money"
-            self.value = self.state.currency.GetNormalisedValue(
-                self.rawMessage["currency"], float(self.rawMessage["amount"]))
+            if "currency" in self.rawMessage.keys():
+                currency = self.rawMessage["currency"]
+            else:
+                currency = "USD"
+            self.value = self.state.currency.GetNormalisedValue(currency, float(self.rawMessage["amount"]))
         elif (self.handlerName == "patreon-pledge"):
             self.valueType = "money"
-            self.value = self.state.currency.GetNormalisedValue(
-                self.rawMessage["currency"], float(self.rawMessage["amount"]))
+            if "currency" in self.rawMessage.keys():
+                currency = self.rawMessage["currency"]
+            else:
+                currency = "USD"
+            self.value = self.state.currency.GetNormalisedValue(currency, float(self.rawMessage["amount"]))
         elif (self.handlerName == "youtube_account-superchat"):
             self.valueType = "money"
-            self.value = self.state.currency.GetNormalisedValue(
-                self.rawMessage["currency"], float(self.rawMessage["amount"])/1000000)
+            if "currency" in self.rawMessage.keys():
+                currency = self.rawMessage["currency"]
+            else:
+                currency = "USD"
+            self.value = self.state.currency.GetNormalisedValue(currency, float(self.rawMessage["amount"])/1000000)
         elif (self.handlerName == "twitch_account-bits"):
             self.valueType = "money"
             self.value = round(float(self.rawMessage["amount"]) / 100, 2)
@@ -125,8 +134,7 @@ class StreamlabsEvent():
             if subValue != None:
                 self.value = subValue
             else:
-                self.state.RecordActivity(
-                    self.state.translations.GetTranslation("StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
+                self.state.RecordActivity(self.state.translations.GetTranslation("StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
                 return False
         elif (self.handlerName == "twitch_account-subMysteryGift"):
             self.bestName = self.rawMessage["gifter_display_name"]
@@ -137,8 +145,7 @@ class StreamlabsEvent():
             if subValue != None:
                 self.value = subValue * amount
             else:
-                self.state.RecordActivity(
-                    self.state.translations.GetTranslation("StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
+                self.state.RecordActivity(self.state.translations.GetTranslation("StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
                 return False
             self.state.mysterySubGifts[self.bestName] = amount
         elif (self.handlerName == "youtube_account-subscription"):
@@ -244,8 +251,7 @@ class StreamlabsEventUtils():
     def IsScriptValid(scriptString):
         if scriptString in ["", "[ALL]", "[NOTHING]"]:
             return ""
-        instances = StreamlabsEventUtils.FindAttributeTagsInString(
-            scriptString)
+        instances = StreamlabsEventUtils.FindAttributeTagsInString(scriptString)
         testScriptString = scriptString
         for instance in instances:
             testScriptString = testScriptString.replace(instance, str(1))
@@ -280,8 +286,7 @@ class StreamlabsEventUtils():
     @staticmethod
     def GenerateEventPerPayload(state, data):
         if "message" not in data:
-            state.RecordActivity(
-                state.translations.GetTranslation("StreamlabsEvent MissingEventPayloadCount"))
+            state.RecordActivity(state.translations.GetTranslation("StreamlabsEvent MissingEventPayloadCount"))
             return None
         events = []
         if "for" in data:
@@ -294,10 +299,8 @@ class StreamlabsEventUtils():
             typeString = ""
         # twitch alerts only have a dictionary as message and not an array of dictionaries like all other scenarios
         if isinstance(data["message"], dict):
-            events.append(StreamlabsEvent(
-                state, platformString, typeString, data["message"]))
+            events.append(StreamlabsEvent(state, platformString, typeString, data["message"]))
         else:
             for payload in data["message"]:
-                events.append(StreamlabsEvent(
-                    state, platformString, typeString, payload))
+                events.append(StreamlabsEvent(state, platformString, typeString, payload))
         return events
