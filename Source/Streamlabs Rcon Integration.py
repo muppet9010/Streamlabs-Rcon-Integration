@@ -16,7 +16,7 @@ import threading as Threading
 
 class State():
     def __init__(self):
-        self.version = "0.1.1"
+        self.version = "0.1.2"
         self.config = Config(self)
         self.logging = Logging(self)
         self.config.LogMissingSettings()
@@ -249,11 +249,11 @@ try:
     state.Run()
 except Exception as ex:
     try:
-        self.streamlabs.Disconnect()
+        state.streamlabs.Disconnect()
     except:
         pass
     try:
-        self.logging.RecordException(
+        state.logging.RecordException(
             ex, "Application Critical Error - Application has been stopped")
     except:
         pass
