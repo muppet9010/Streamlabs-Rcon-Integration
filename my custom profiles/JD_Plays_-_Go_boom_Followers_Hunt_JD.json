@@ -1,0 +1,60 @@
+{
+    "name": "JD_Plays - JD Go Boom & Followers Hunt JD",
+    "description": "JD_Plays JD Go Boom and Followers add biter hunting groups 2021-09-04",
+    "reactions": [
+        {
+            "valueType": "money",
+            "filteredActions": [
+				{
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/muppet_gui_show_message {\"audience\": {\"players\":[\"JD-Plays\"], \"logic\":\"only\"}, \"message\":{\"simpleText\":\"[BESTNAME] Made JD Go Boom\", \"position\":\"left\", \"fontSize\":\"large\", \"fontStyle\":\"bold\", \"fontColor\":\"lightred\"}, \"close\":{\"timeout\":60}}"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/jd_goes_boom JD-Plays [VALUE]"
+                }
+
+            ]
+        },
+        {
+            "valueType": "follow",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/biter_hunt_group_add_biters 1 1"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/biter_hunt_group_reset_group_timer 1"
+                },
+				{
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/muppet_gui_show_message {\"audience\": {\"players\":[\"JD-Plays\"], \"logic\":\"only\"}, \"message\":{\"simpleText\":\"[BESTNAME] followed the biter pack, you gonna join him?\", \"position\":\"left\", \"fontSize\":\"large\", \"fontStyle\":\"bold\", \"fontColor\":\"lightred\"}, \"close\":{\"timeout\":60}}"
+                },
+				{
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/muppet_gui_show_message {\"audience\": {\"players\":[\"JD-Plays\"], \"logic\":\"not\"}, \"message\":{\"simpleText\":\"[BESTNAME] followed the biter pack, you gonna join him?\", \"position\":\"left\", \"fontSize\":\"large\", \"fontStyle\":\"bold\", \"fontColor\":\"lightred\"}, \"close\":{\"timeout\":15}}"
+                }
+            ]
+        },
+        {
+            "valueType": "viewer",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        }
+    ],
+    "options": {
+        "twitchMysterSubGiftMode": "donator"
+    }
+}

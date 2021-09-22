@@ -1,25 +1,23 @@
 from uuid import uuid4 as Uuid4
+from uuid import UUID as Uuid
 import random as Random
 import datetime as DateTime
-
+import string as String
+import random as Random
+import json as Json
 
 class TestEventUtils:
     _types = {
         "Streamlabs": {
-            "Donation": {
+            "Donation - Generic": {
                 "valueInput": True,
                 "quantityInput": False,
                 "payloadInput": True
             },
-            "Alert (IGNORED)": {
-                "valueInput": False,
+            "Donation - Paypal": {
+                "valueInput": True,
                 "quantityInput": False,
                 "payloadInput": True
-            },
-            "Alert Non List Message (IGNORED)": {
-                "valueInput": False,
-                "quantityInput": False,
-                "payloadInput": False
             }
         },
         "Patreon": {
@@ -76,18 +74,17 @@ class TestEventUtils:
 
     @staticmethod
     def GenerateTestEventArray(eventPlatform, eventType, value, special, payloadCount):
-        primaryEvent = TestEventUtils.GenerateTestEvent(
-            eventPlatform, eventType, value, special, payloadCount)
+        primaryEvent = TestEventUtils._GenerateTestEvent(eventPlatform, eventType, value, special, payloadCount)
         testEventArray = [primaryEvent]
         if eventPlatform == "Twitch" and eventType == "Give Random Gift Subscriptions":
             for i in range(special):
-                childEvent = TestEventUtils.GenerateTestEvent(
+                childEvent = TestEventUtils._GenerateTestEvent(
                     eventPlatform, "Give Specific Gift Subscription", value, i+2, 1)
                 testEventArray.append(childEvent)
         return testEventArray
 
     @staticmethod
-    def GenerateTestEvent(eventPlatform, eventType, value, special, payloadCount):
+    def _GenerateTestEvent(eventPlatform, eventType, value, special, payloadCount):
         eventTypeString = ""
         eventForString = ""
         eventMessageConstructor = None
@@ -95,16 +92,31 @@ class TestEventUtils:
 
         if eventPlatform == "Streamlabs":
             eventForString = "streamlabs"
-            if eventType == "Donation":
+            if eventType == "Donation - Generic":
                 eventTypeString = "donation"
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
-                    id8Digits = TestEventUtils.GenerateRandomDigits(8)
+                    usernameCamalCase = 'UsEr' + str(iterator)
                     return {
-                        'id': id8Digits,
-                        'name': 'UsEr' + str(iterator),
+                        'name': usernameCamalCase,
+                        'from': usernameCamalCase,
+                        'amount': value,
+                        'crate_item': None,
+                        'message': 'Test donation',
+                        'formatted_amount': '$' + "{:.2f}".format(value)
+                    }
+                eventOptions = TestEventOptions()
+                eventMessageConstructor = EventMessageConstructor
+            if eventType == "Donation - Paypal":
+                eventTypeString = "donation"
+
+                def EventMessageConstructor(value, special, iterator):
+                    iterator += 1
+                    usernameCamalCase = 'UsEr' + str(iterator)
+                    return {
+                        'id': TestEventUtils.GenerateRandomDigits(8),
+                        'name': usernameCamalCase,
                         'amount': value,
                         'formatted_amount': '$' + "{:.2f}".format(value),
                         'formattedAmount': '$' + "{:.2f}".format(value),
@@ -112,82 +124,14 @@ class TestEventUtils:
                         'currency': 'USD',
                         'emotes': '',
                         'iconClassName': 'fab paypal',
-                        'to': {
-                            'name': 'StreamerNaMe'
-                        },
-                        'from': 'UsEr' + str(iterator),
+                        'to': {'name': 'JDPlays'},
+                        'from': usernameCamalCase,
                         'from_user_id': None,
                         'donation_currency': 'USD',
-                        '_id': eventId
+                        'source': 'paypal',
+                        '_id': TestEventUtils.GenerateUuidNoHyphens()
                     }
-                eventMessageConstructor = EventMessageConstructor
-            elif eventType == "Alert (IGNORED)":
-                eventTypeString = "alertPlaying"
-                messageIsTypeList = True
-                eventForString = ""
-
-                def EventMessageConstructor(value, special, iterator):
-                    iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
-                    return {
-                        'id': eventId,
-                        'name': 'user' + str(iterator),
-                        '_id': eventId,
-                        'event_id': eventId,
-                        'priority': 10,
-                        'from': 'UsEr' + str(iterator),
-                        'to': '',
-                        'message': 'Test Follow Alert',
-                        'repeat': False,
-                        'isTest': True,
-                        'createdAt': '2020-01-13 05:31:35',
-                        'createdAtTimestamp': 1578893495292,
-                        'platform': 'twitch_account',
-                        'type': 'follow',
-                        'hash': 'follow:StReAmEr:',
-                        'read': False,
-                        'wotcCode': None,
-                        'payload': {
-                            'name': 'UsEr' + str(iterator),
-                            'isTest': True,
-                            '_id': eventId,
-                            'priority': 10
-                        }
-                    }
-                eventMessageConstructor = EventMessageConstructor
-            elif eventType == "Alert Non List Message (IGNORED)":
-                eventTypeString = "alertPlaying"
-                messageIsTypeList = False
-                eventForString = ""
-
-                def EventMessageConstructor(value, special, iterator):
-                    iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
-                    return {
-                        'id': eventId,
-                        'name': 'user' + str(iterator),
-                        '_id': eventId,
-                        'event_id': eventId,
-                        'priority': 10,
-                        'from': 'UsEr' + str(iterator),
-                        'to': '',
-                        'message': 'Test Follow Alert',
-                        'repeat': False,
-                        'isTest': True,
-                        'createdAt': '2020-01-13 05:31:35',
-                        'createdAtTimestamp': 1578893495292,
-                        'platform': 'twitch_account',
-                        'type': 'follow',
-                        'hash': 'follow:StReAmEr:',
-                        'read': False,
-                        'wotcCode': None,
-                        'payload': {
-                            'name': 'UsEr' + str(iterator),
-                            'isTest': True,
-                            '_id': eventId,
-                            'priority': 10
-                        }
-                    }
+                eventOptions = TestEventOptions()
                 eventMessageConstructor = EventMessageConstructor
         elif eventPlatform == "Patreon":
             eventForString = "patreon"
@@ -196,19 +140,14 @@ class TestEventUtils:
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
+                    usernameCamalCase = 'UsEr' + str(iterator)
                     return {
-                        'name': 'UsEr' + str(iterator),
-                        'isTest': False,
-                        'formatted_amount': '$' + "{:.2f}".format(value),
+                        'name': usernameCamalCase,
+                        'from': usernameCamalCase,
                         'amount': value,
-                        'currency': 'USD',
-                        'to': {
-                            'name': 'StReAmErNaMe'
-                        },
-                        'from': 'Users Real Name',
-                        '_id': eventId
+                        'formatted_amount': '$' + "{:.2f}".format(value)
                     }
+                eventOptions = TestEventOptions()
                 eventMessageConstructor = EventMessageConstructor
         elif eventPlatform == "Twitch":
             eventForString = "twitch_account"
@@ -217,38 +156,32 @@ class TestEventUtils:
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
-                    id8Digits = TestEventUtils.GenerateRandomDigits(8)
+                    usernameCamalCase = 'UsEr' + str(iterator)
                     return {
-                        'created_at': DateTime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        'id': id8Digits,
-                        'name': 'UsEr' + str(iterator),
-                        '_id': eventId,
-                        'event_id': eventId
+                        'name': usernameCamalCase,
+                        'from': usernameCamalCase
                     }
+                eventOptions = TestEventOptions()
                 eventMessageConstructor = EventMessageConstructor
             elif eventType == "Subscribe":
                 eventTypeString = "subscription"
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
-                    id8Digits = TestEventUtils.GenerateRandomDigits(8)
+                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameLowerCase = 'user' + str(iterator)
                     return {
-                        'name': 'user' + str(iterator),
-                        'display_name': 'UsEr' + str(iterator),
-                        'months': '2',
+                        'name': usernameLowerCase,
+                        'from': usernameLowerCase,
+                        'display_name': usernameCamalCase,
+                        'from_display_name': usernameCamalCase,
                         'message': 'a test subscription',
-                        'emotes': '1:25-26',
                         'sub_plan': str(int(value)),
-                        'sub_plan_name': 'Channel\\sSubscription\\s(streamer)',
-                        'sub_type': 'resub',
-                        'gifter': None,
-                        'subscriber_twitch_id': id8Digits,
+                        'months': '2',
                         'streak_months': '2',
-                        '_id': eventId,
-                        'event_id': eventId
+                        'gifter': None
                     }
+                eventOptions = TestEventOptions()
                 eventMessageConstructor = EventMessageConstructor
             elif eventType == "Give Specific Gift Subscription":
                 eventTypeString = "subscription"
@@ -259,113 +192,156 @@ class TestEventUtils:
                     if special != None and special != "":
                         iterator = special
                         giver = 1
-                    eventId = TestEventUtils.GenerateUuid()
-                    receiver8Digits = TestEventUtils.GenerateRandomDigits(8)
-                    giver8Digits = TestEventUtils.GenerateRandomDigits(8)
+                    recieverUsernameCamalCase = 'UsEr' + str(iterator)
+                    recieverUsernameLowerCase = 'user' + str(iterator)
+                    gifterUsernameLowerCase = 'user' + str(giver)
                     return {
-                        'name': 'user' + str(iterator),
-                        'display_name': 'UsEr' + str(iterator),
-                        'months': '2',
-                        'message': 'a test subscription gift received',
-                        'emotes': '1:25-26',
+                        'name': recieverUsernameLowerCase,
+                        'from': recieverUsernameLowerCase,
+                        'display_name': recieverUsernameCamalCase,
+                        'from_display_name': recieverUsernameCamalCase,
+                        'message': 'a test subscription',
                         'sub_plan': str(int(value)),
-                        'sub_plan_name': 'Channel\\sSubscription\\s(streamer)',
-                        'sub_type': 'subgift',
-                        'gifter': 'user' + str(giver),
-                        'gifter_display_name': 'UsEr' + str(giver),
-                        'gifter_twitch_id': giver8Digits,
-                        'subscriber_twitch_id': receiver8Digits,
+                        'months': '2',
                         'streak_months': '2',
-                        '_id': eventId,
-                        'event_id': eventId
+                        'gifter': gifterUsernameLowerCase
                     }
+                eventOptions = TestEventOptions()
                 eventMessageConstructor = EventMessageConstructor
             elif eventType == "Give Random Gift Subscriptions":
                 eventTypeString = "subMysteryGift"
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
+                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameLowerCase = 'user' + str(iterator)
+                    messageEventId = TestEventUtils.GenerateUuidNoHyphens()
                     return {
                         'sub_plan': str(int(value)),
                         'sub_type': 'submysterygift',
-                        'gifter': 'user' + str(iterator),
-                        'gifter_display_name': 'UsEr' + str(iterator),
-                        'name': 'user' + str(iterator),
+                        'gifter': usernameLowerCase,
+                        'gifter_display_name': usernameCamalCase,
+                        'name': usernameCamalCase,
                         'amount': special,
-                        '_id': eventId,
-                        'event_id': eventId
+                        '_id': messageEventId,
+                        'event_id': messageEventId
                     }
+                eventOptions = TestEventOptions()
+                eventOptions.globalEventId = False
+                eventOptions.eventDefaultAttributes = False
                 eventMessageConstructor = EventMessageConstructor
             elif eventType == "Bits":
                 eventTypeString = "bits"
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
-                    idGuid = TestEventUtils.GenerateUuid()
+                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameLowerCase = 'user' + str(iterator)
                     return {
-                        'id': idGuid,
-                        'name': 'user' + str(iterator),
-                        'display_name': 'UsEr' + str(iterator),
+                        'name': usernameLowerCase,
+                        'from': usernameLowerCase,
+                        'display_name': usernameCamalCase,
+                        'from_display_name': usernameCamalCase,
                         'amount': value,
-                        'emotes': None,
-                        'message': 'test bits',
-                        '_id': eventId,
-                        'event_id': eventId
+                        'message': 'test bits'
                     }
+                eventOptions = TestEventOptions()
                 eventMessageConstructor = EventMessageConstructor
             elif eventType == "Host":
+                # NOTE: NOT UPDATED WITH OTHER TWITCH CHANGES AS NO SAMPLE DATA: 2021-04-09
                 eventTypeString = "host"
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
+                    messageEventId = TestEventUtils.GenerateUuid()
                     return {
                         'name': 'UsEr' + str(iterator),
                         'viewers': int(value),
                         'type': 'manual',
-                        '_id': eventId,
-                        'event_id': eventId
+                        '_id': messageEventId,
+                        'event_id': messageEventId
                     }
+                eventOptions = TestEventOptions()
                 eventMessageConstructor = EventMessageConstructor
             elif eventType == "Raid":
+                # NOTE: NOT UPDATED WITH OTHER TWITCH CHANGES AS NO SAMPLE DATA: 2021-04-09
                 eventTypeString = "raid"
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    eventId = TestEventUtils.GenerateUuid()
+                    messageEventId = TestEventUtils.GenerateUuid()
                     return {
-                        'id': eventId,
+                        'id': messageEventId,
                         'name': 'user' + str(iterator),
                         'display_name': 'UsEr' + str(iterator),
                         'raiders': int(value),
-                        '_id': eventId,
-                        'event_id': eventId
+                        '_id': messageEventId,
+                        'event_id': messageEventId
                     }
+                eventOptions = TestEventOptions()
                 eventMessageConstructor = EventMessageConstructor
 
-        return TestEventUtils._ConstructTestEventDict(eventForString, eventTypeString, eventMessageConstructor, value, special, payloadCount, messageIsTypeList)
+        return TestEventUtils._ConstructTestEventDict(eventForString, eventTypeString, eventMessageConstructor, value, special, payloadCount, messageIsTypeList, eventOptions)
 
     @staticmethod
-    def _ConstructTestEventDict(forString, typeString, messageConstructor, value, special, payloadCount, messageIsTypeList):
+    def _ConstructTestEventDict(forString, typeString, messageConstructor, value, special, payloadCount, messageIsTypeList, eventOptions):
         eventDict = {
             "for": forString,
             "type": typeString
         }
+        if eventOptions.globalEventId == None or eventOptions.globalEventId == True:
+            eventDict["event_id"] = TestEventUtils.GenerateEvtUuid()
         if messageIsTypeList:
             eventDict["message"] = []
             for i in range(payloadCount):
-                eventDict["message"].append(
-                    messageConstructor(value, special, i))
+                messageEntry = messageConstructor(value, special, i)
+                eventDict["message"].append(TestEventUtils._MakeTestEventMessageEntry(messageEntry, forString, typeString, eventOptions))
         else:
-            eventDict["message"] = messageConstructor(value, special, 1)
-
+            messageEntry = messageConstructor(value, special, 1)
+            eventDict["message"] = TestEventUtils._MakeTestEventMessageEntry(messageEntry, forString, typeString, eventOptions)
         return eventDict
+
+    @staticmethod
+    def _MakeTestEventMessageEntry(messageEntry, forString, typeString, eventOptions):
+        if eventOptions.eventDefaultAttributes == False:
+            return messageEntry
+
+        nowDateTime = DateTime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        pastDateTime = (DateTime.datetime.now() - DateTime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+
+        messageEntry["type"] = typeString
+        messageEntry["platform"] = forString
+        messageEntry["created_at"] = pastDateTime
+
+        hashString = typeString + ":" + messageEntry["name"]
+        if "message" in messageEntry.keys():
+            hashString += ":"
+            if messageEntry["message"] != None:
+                hashString += messageEntry["message"]
+        if "amount" in messageEntry.keys():
+            hashString += ":"
+            if messageEntry["amount"] != None:
+                hashString += "{:.0f}".format(messageEntry["amount"])
+        messageEntry["hash"] = hashString
+
+        messageEntry["uuid"] = TestEventUtils.GenerateUuid()
+        messageEntry["read"] = False
+        messageEntry["createdAt"] = str(nowDateTime)
+        messageEntry["repeat"]= True
+        messageEntry["_id"] = TestEventUtils.GenerateRandomAlphaDigits(13)
+        messageEntry["priority"] = 10
+
+        return messageEntry
 
     @staticmethod
     def GetAttribute(platformString, typeString, attributeName):
         return TestEventUtils._types[platformString][typeString][attributeName]
+
+    def DoesAttributeExist(platformString, typeString, attributeName):
+        if attributeName in TestEventUtils._types[platformString][typeString].keys():
+            return True
+        else:
+            return False
 
     @staticmethod
     def GetPlatforms():
@@ -380,8 +356,25 @@ class TestEventUtils:
         return Uuid4().hex
 
     @staticmethod
+    def GenerateUuidNoHyphens():
+        return Uuid(Uuid4().hex).hex
+
+    @staticmethod
+    def GenerateEvtUuid():
+        return "evt" + Uuid(Uuid4().hex).hex
+
+    @staticmethod
     def GenerateRandomDigits(count):
         number = ""
         for _ in range(count):
             number += str(Random.randint(0, 9))
         return number
+
+    @staticmethod
+    def GenerateRandomAlphaDigits(count):
+        return ''.join(Random.choices(String.ascii_uppercase + String.digits, k=count))
+
+class TestEventOptions:
+    def __init__(self):
+        self.globalEventId = True
+        self.eventDefaultAttributes = True

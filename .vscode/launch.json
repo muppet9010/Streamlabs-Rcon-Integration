@@ -6,6 +6,7 @@
     "configurations": [
         {
             "name": "Streamlabs Rcon Integration",
+            "preLaunchTask": "Build Debug Files",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/Source/Streamlabs Rcon Integration.py"

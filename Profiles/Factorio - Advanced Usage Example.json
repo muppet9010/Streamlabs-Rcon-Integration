@@ -19,7 +19,7 @@
             "filteredActions": [
                 {
                     "condition": "[ALL]",
-                    "manipulator": "'[gifter_display_name]'",
+                    "manipulator": "'[gifter]'",
                     "action": "[ACTION_SubscriptionBy]"
                 }
             ]

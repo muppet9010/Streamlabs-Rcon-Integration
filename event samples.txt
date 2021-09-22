@@ -1,21 +1,22 @@
+Updates (updated vs checked):
+    - 2021-09-04: Twitch APIs changed and caused errors. Tagged all events which have been updated for changes. No events were checked and unchanged.
+
+
 STREAMLABS:
 
-DONATION:
-{'type': 'donation', 'message': [{'id': 12345678, 'name': 'UsEr', 'amount': '5.0000000000', 'formatted_amount': '｣5.00', 'formattedAmount': '｣5.00', 'message': 'No Help!', 'currency': 'GBP', 'emotes': '', 'iconClassName': 'fab paypal', 'to': {'name': 'StreamerNaMe'}, 'from': 'UsEr', 'from_user_id': None, 'donation_currency': 'GBP', '_id': '7c4d7e3b4b79d5e1346e4b99b150b94f'}], 'event_id': 'evt_48f0fe1b9ff83cc086f58791bfead86a'}
+DONATION Types- Updated 2021-09-04:
+{'type': 'donation', 'message': [{'name': 'UsEr', 'from': 'UsEr', 'type': 'donation', 'platform': 'streamlabs', 'created_at': '2021-08-22 17:03:16', 'amount': '50.0000000000', 'crate_item': None, 'message': '', 'formatted_amount': '$50.00', 'hash': 'donation:UsEr::50', 'uuid': 'ec0825ff-fe2f-4d73-b20e-94ecd8a3d03e', 'read': False, 'createdAt': '2021-09-04 09:30:10', 'repeat': True, '_id': '61333ca253278', 'priority': 10}], 'for': 'streamlabs', 'event_id': 'evt_a45550a738878c768d178fc6cd0efb45'}
 
-ALERT:
-{'type': 'alertPlaying', 'message': [{'priority': 10, '_id': 'de6e2959dda03e4148195773468a1d88', 'from': 'UsEr', 'to': '', 'message': '', 'payload': {'name': 'UsEr', 'isTest': True, '_id': 'de6e2959dda03e4148195773468a1d88', 'priority': 10}, 'name': 'UsEr', 'repeat': False, 'isTest': True, 'createdAt': '2020-01-13 05:31:35', 'createdAtTimestamp': 1578893495292, 'platform': 'twitch_account', 'type': 'follow', 'hash': 'follow:StReAmEr:', 'read': False, 'wotcCode': None}]}
+{'type': 'donation', 'message': [{'id': 156593309, 'name': 'UsEr', 'amount': '50.0000000000', 'formatted_amount': 'A$50.00', 'formattedAmount': 'A$50.00', 'message': 'Untested you say... well shit... might aswell hit the button and see what it does..', 'currency': 'AUD', 'emotes': '', 'iconClassName': 'fab paypal', 'to': {'name': 'JDPlays'}, 'from': 'UsEr', 'from_user_id': None, 'donation_currency': 'AUD', 'source': 'paypal', '_id': 'a3a9c224f780ec43bdf3a59138d1ac31', 'priority': 10}], 'event_id': 'evt_e0f6853d2b9a35ab7ee7f6865681205a'}
 
-ALERT NON ARRAY MESSAGE:
-{'type': 'alertPlaying', 'message': {'priority': 10, '_id': 'de6e2959dda03e4148195773468a1d88', 'from': 'UsEr', 'to': '', 'message': '', 'payload': {'name': 'UsEr', 'isTest': True, '_id': 'de6e2959dda03e4148195773468a1d88', 'priority': 10}, 'name': 'UsEr', 'repeat': False, 'isTest': True, 'createdAt': '2020-01-13 05:31:35', 'createdAtTimestamp': 1578893495292, 'platform': 'twitch_account', 'type': 'follow', 'hash': 'follow:StReAmEr:', 'read': False, 'wotcCode': None}}
 
 
 
 
 PATREON:
 
-PLEDGE:
-{'type': 'pledge', 'message': [{'name': 'UsEr', 'isTest': True, 'formatted_amount': '£56.00', 'amount': 56, 'currency': 'GBP', 'to': {'name': 'StReAmErNaMe'}, 'from': 'Real Name', '_id': '938e6fdb71d5b11a19d170c3dbca555c'}], 'for': 'patreon', 'event_id': 'evt_a5f4b15b617c16d498f8fdf6d0865aaa'}
+PLEDGE - Updated 2021-09-04:
+{'type': 'pledge', 'message': [{'name': 'UsEr ', 'from': 'UsEr ', 'type': 'pledge', 'platform': 'patreon', 'created_at': '2021-09-03 11:45:44', 'amount': 43.5, 'formatted_amount': 'A$43.50', 'hash': 'pledge:UsEr :43:UsEr ', 'uuid': 'd8179b07-77d1-47f6-bc5b-6a98d3b37233', 'read': False, 'createdAt': '2021-09-04 09:30:20', 'repeat': True, '_id': '61333cacb3cbd', 'priority': 10}], 'for': 'patreon', 'event_id': 'evt_fa947eedb0fbc9f0b4e4fc30f65225f6'}
 
 
 
@@ -23,20 +24,20 @@ PLEDGE:
 
 TWITCH REAL WORLD
 
-SUB:
-{'type': 'subscription', 'message': [{'name': 'user', 'display_name': 'UsEr', 'months': '4', 'message': 'haha add some more parts :)', 'emotes': '1:25-26', 'sub_plan': '1000', 'sub_plan_name': 'Channel\\sSubscription\\s(streamer)', 'sub_type': 'resub', 'gifter': None, 'subscriber_twitch_id': '12345678', 'streak_months': '2', '_id': 'f5b4860c38313d4564d277ccc521a4a0', 'event_id': 'f5b4860c38313d4564d277ccc521a4a0'}], 'for': 'twitch_account'}
+SUB - Updated 2021-09-04:
+{'type': 'subscription', 'message': [{'name': 'user', 'from': 'user', 'type': 'subscription', 'platform': 'twitch_account', 'created_at': '2021-09-03 18:49:09', 'display_name': 'UsEr', 'from_display_name': 'UsEr', 'message': None, 'sub_plan': '1000', 'months': 3, 'streak_months': None, 'gifter': None, 'hash': 'subscription:user:', 'uuid': '0a9635eb-44ef-482a-b5d7-a3c5f0397a86', 'read': False, 'createdAt': '2021-09-04 09:29:25', 'repeat': True, '_id': '61333c7558960', 'priority': 10}], 'for': 'twitch_account', 'event_id': 'evt_75b1b156e38afc0adc9c6558e4bee925'}
 
-SUBS GIFTED TO COMMUNITY (GIVER):
-{type: 'subMysteryGift',  message: [ { sub_plan: '1000', sub_type: 'submysterygift', gifter: 'user1', gifter_display_name: 'UsEr1', name: 'user1', amount: '1', _id: 'bc04a15a6755024aeece5bf932717054', event_id: 'bc04a15a6755024aeece5bf932717054' } ], for: 'twitch_account'}
+SUBS GIFTED TO COMMUNITY (GIVER) - Updated 2021-09-04:
+{'type': 'subMysteryGift', 'message': [{'sub_plan': '1000', 'sub_type': 'submysterygift', 'gifter': 'user1', 'gifter_display_name': 'UsEr1', 'name': 'UsEr1', 'amount': '1', '_id': '14330fde31a96e463916564f78066165', 'event_id': '14330fde31a96e463916564f78066165'}], 'for': 'twitch_account'}
 
-GIFTED SUB RECEIVED:
-{'type': 'subscription', 'message': [{'name': 'user1', 'display_name': 'UsEr1', 'months': '1', 'message': None, 'emotes': None, 'sub_plan': '1000', 'sub_plan_name': 'Channel\\sSubscription\\s(streamer)', 'sub_type': 'subgift', 'gifter': 'user2', 'gifter_display_name': 'UsEr2', 'streak_months': None, 'gifter_twitch_id': '0123456', 'subscriber_twitch_id': '5678900', '_id': 'e9d61c910409da7539562adcdfda8ae8', 'event_id': 'e9d61c910409da7539562adcdfda8ae8'}], 'for': 'twitch_account'}
+GIFTED SUB RECEIVED - Updated 2021-09-04:
+{'type': 'subscription', 'message': [{'name': 'user1', 'from': 'user1', 'type': 'subscription', 'platform': 'twitch_account', 'created_at': '2021-09-03 17:38:00', 'display_name': 'UsEr1', 'from_display_name': 'UsEr1', 'message': None, 'sub_plan': '1000', 'months': 3, 'streak_months': None, 'gifter': 'user2', 'hash': 'subscription:user1:', 'uuid': '123122ad-9fb1-41f1-ab8b-9231cc7f432d', 'read': False, 'createdAt': '2021-09-04 09:29:50', 'repeat': True, '_id': '61333c8eb8bfd', 'priority': 10}], 'for': 'twitch_account', 'event_id': 'evt_f40363ac44abaab4c30ac6e35e1b6461'}
 
-FOLLOW:
-{'type': 'follow', 'message': [{'created_at': '2019-05-14 20:05:00', 'id': '12345678', 'name': 'UsEr', '_id': '7b80748a12eec3c274cc46631bb8908f', 'event_id': '7b80748a12eec3c274cc46631bb8908f'}], 'for': 'twitch_account'}
+FOLLOW - Updated 2021-09-04:
+{'type': 'follow', 'message': [{'name': 'UsEr', 'from': 'UsEr', 'type': 'follow', 'platform': 'twitch_account', 'created_at': '2021-09-03 23:46:48', 'hash': 'follow:UsEr:', 'uuid': '441a4656-3198-46b6-97b2-433873b9092d', 'read': False, 'createdAt': '2021-09-04 09:29:13', 'repeat': True, '_id': '61333c693db20', 'priority': 10}], 'for': 'twitch_account', 'event_id': 'evt_c25b3d1a64498ee6c6e47b0e1222973b'}
 
-BITS:
-{'type': 'bits', 'message': [{'id': 'e1ded2fa-9b63-421a-92c9-74e147b55a96', 'name': 'user', 'display_name': 'UsEr', 'amount': '500', 'emotes': None, 'message': 'willlococheer500', '_id': 'c1f8c7a360456152d09cda8330da17e9', 'event_id': 'c1f8c7a360456152d09cda8330da17e9'}], 'for': 'twitch_account'}
+BITS - Updated 2021-09-04:
+{'type': 'bits', 'message': [{'name': 'user', 'from': 'user', 'type': 'bits', 'platform': 'twitch_account', 'created_at': '2021-08-22 18:21:34', 'display_name': 'UsEr', 'from_display_name': 'UsEr', 'amount': 100, 'message': 'FailFish100', 'hash': 'bits:user:FailFish100:100', 'uuid': '07f4fbba-3679-454c-baaf-68d3015c3440', 'read': False, 'createdAt': '2021-09-04 09:29:40', 'repeat': True, '_id': '61333c841c4ce', 'priority': 10}], 'for': 'twitch_account', 'event_id': 'evt_e50b619db13e21eef7d08843a04dfdc1'}
 
 HOST:
 {'type': 'host', 'message': [{'name': 'UsEr', 'viewers': 157, 'type': 'manual', '_id': '47740b852ebfe74364d1d2123e2cec35', 'event_id': '47740b852ebfe74364d1d2123e2cec35'}], 'for': 'twitch_account'}
@@ -48,6 +49,11 @@ RAID:
 
 
 YOUTUBE TEST WIDGETS
+
+
+NEW - 2021-09-05 - NEED TO UPDATE IN TO TEST CODE.
+{'type': 'follow', 'message': [{'publishedAt': '2021-09-05 14:33:27', 'id': 'UC1YLRyQbA9VI8zJ20JcbVTA', 'name': 'Horry Porier', '_id': 'f18266139a1772f580703c389b148b4b', 'event_id': 'f18266139a1772f580703c389b148b4b'}], 'for': 'youtube_account'}
+
 
 {'type': 'follow', 'message': [{'name': 'Muppet 9010', 'isTest': True, '_id': '58f1c497c371e0b590f088facedfce2e'}], 'for': 'youtube_account', 'event_id': 'evt_f32c159b6c6b1d4b48fc268e578d02ec'}
 

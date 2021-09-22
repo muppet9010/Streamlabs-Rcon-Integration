@@ -41,7 +41,7 @@
                 {
                     "condition": "[VALUE] >= 5",
                     "manipulator": "",
-                    "action": "Thanks [gifter_display_name] for subscribing [display_name]"
+                    "action": "Thanks [gifter] for subscribing [display_name]"
                 },
                 {
                     "condition": "[VALUE] < 5",
