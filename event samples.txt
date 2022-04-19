@@ -27,6 +27,10 @@ TWITCH REAL WORLD
 SUB - Updated 2021-09-04:
 {'type': 'subscription', 'message': [{'name': 'user', 'from': 'user', 'type': 'subscription', 'platform': 'twitch_account', 'created_at': '2021-09-03 18:49:09', 'display_name': 'UsEr', 'from_display_name': 'UsEr', 'message': None, 'sub_plan': '1000', 'months': 3, 'streak_months': None, 'gifter': None, 'hash': 'subscription:user:', 'uuid': '0a9635eb-44ef-482a-b5d7-a3c5f0397a86', 'read': False, 'createdAt': '2021-09-04 09:29:25', 'repeat': True, '_id': '61333c7558960', 'priority': 10}], 'for': 'twitch_account', 'event_id': 'evt_75b1b156e38afc0adc9c6558e4bee925'}
 
+SUB - Prime - Updated 2021-09-04:
+{'type': 'subscription', 'message': [{'name': 'user', 'from': 'user', 'type': 'subscription', 'platform': 'twitch_account', 'created_at': '2021-09-03 18:49:09', 'display_name': 'UsEr', 'from_display_name': 'UsEr', 'message': None, 'sub_plan': 'Prime', 'months': 3, 'streak_months': None, 'gifter': None, 'hash': 'subscription:user:', 'uuid': '0a9635eb-44ef-482a-b5d7-a3c5f0397a86', 'read': False, 'createdAt': '2021-09-04 09:29:25', 'repeat': True, '_id': '61333c7558960', 'priority': 10}], 'for': 'twitch_account', 'event_id': 'evt_75b1b156e38afc0adc9c6558e4bee925'}
+
+
 SUBS GIFTED TO COMMUNITY (GIVER) - Updated 2021-09-04:
 {'type': 'subMysteryGift', 'message': [{'sub_plan': '1000', 'sub_type': 'submysterygift', 'gifter': 'user1', 'gifter_display_name': 'UsEr1', 'name': 'UsEr1', 'amount': '1', '_id': '14330fde31a96e463916564f78066165', 'event_id': '14330fde31a96e463916564f78066165'}], 'for': 'twitch_account'}
 

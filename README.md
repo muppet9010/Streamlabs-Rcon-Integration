@@ -11,7 +11,7 @@ This tool's setup is a little technical at present, but is fully functional and 
 
 Installation & Usage
 ==========
-1. Install the current release of Python 3.7 with default options: https://www.python.org/downloads
+1. Install Python 3.7.3 32bit with default options: https://www.python.org/downloads/release/python-373/
 2. Get the files from the [latest release zip](https://github.com/muppet9010/Streamlabs-Rcon-Integration/releases).
 3. Create a free account at [Currency Layer website](https://currencylayer.com) and make a note of the API access key as needs to be entered into the program's config later on.
 4. Unzip the files into the desired folder.
@@ -193,12 +193,13 @@ The program has a `config.json` that stores its global configuration. The settin
 
 Development Building
 =============
-Uses the python modules and their dependencies:
+Uses the python modules and their dependencies. Built and tested against these old versions:
 
-- Python 3.7 and default install modules
-- python-socketio[client]  =  https://python-socketio.readthedocs.io/en/latest/
-- PyInstaller  =  https://www.pyinstaller.org/
-- MCRcon  =  https://github.com/uncaught-exceptions/mcrcon
+- Python 3.7.3 32bit - default install modules  =  https://www.python.org/downloads/release/python-373
+- python-engineio 3.5.1  (pre-req of socketio, but if not done first the wrong dependant versin gets installed by socketio) =  pip install python-engineio==3.5.1
+- python-socketio[client] 4.0.1  =  https://python-socketio.readthedocs.io/en/latest  =  pip install python-socketio[client]==4.0.1
+- PyInstaller 3.4  =  https://www.pyinstaller.org  =  pip install -U pyinstaller==3.4
+- MCRcon 0.5.2 =  https://github.com/uncaught-exceptions/mcrcon  =  pip install mcrcon==0.5.2
 
 It can either be built or run directly from a Python environment via the `Streamlabs Rcon Integration.py`.
 
