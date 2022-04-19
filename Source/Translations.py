@@ -39,6 +39,7 @@ class Translations:
                 "TestEvent ValueNotFloat": "Test Event Value isn't a number: ",
                 "TestEvent PayloadCountNotInt": "Test Event Payload Count not a positive whole number: ",
                 "TestEvent QuantityCountNotInt": "Test Event Quantity Count not a positive whole number: ",
+                "TestEvent ValueNotFloatOrPrime": "Test Event Value isn't a number or \"Prime\": "
             }
 
     def GetTranslation(self, key):

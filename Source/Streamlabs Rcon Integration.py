@@ -186,13 +186,26 @@ class State():
             testEventType = self.gui.selectedTestEventType.get()
             testEventValue = ""
             if TestEventUtils.GetAttribute(testEventPlatform, testEventType, "valueInput"):
-                try:
-                    testEventValue = self.gui.testEventValue.get()
-                    testEventValue = float(testEventValue)
-                except:
-                    self.RecordActivity(
-                        self.translations.GetTranslation("TestEvent ValueNotFloat") + str(testEventValue))
-                    return
+                testEventValue = self.gui.testEventValue.get()
+                # Twitch Subscribe events allow special values.
+                if testEventPlatform == "Twitch" and testEventType == "Subscribe":
+                    # If the value is "Prime" then just accept it.
+                    if testEventValue != "Prime":
+                        # Value isn't "Prime" so make sure its a number.
+                        try:
+                            testEventValue = float(testEventValue)
+                        except:
+                            self.RecordActivity(
+                                self.translations.GetTranslation("TestEvent ValueNotFloatOrPrime") + str(testEventValue))
+                            return
+                else:
+                    # As a standard event type the value must be a number
+                    try:
+                        testEventValue = float(testEventValue)
+                    except:
+                        self.RecordActivity(
+                            self.translations.GetTranslation("TestEvent ValueNotFloat") + str(testEventValue))
+                        return
             testEventQuantity = ""
             if TestEventUtils.GetAttribute(testEventPlatform, testEventType, "quantityInput"):
                 try:
@@ -212,9 +225,11 @@ class State():
                     if testEventPayloadCount <= 0:
                         raise ValueError()
                 except:
-                    self.RecordActivity(self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
+                    self.RecordActivity(self.translations.GetTranslation(
+                        "TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
                     return
-            testEventArray = self.testEventUtils.GenerateTestEventArray(testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
+            testEventArray = self.testEventUtils.GenerateTestEventArray(
+                testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
             if len(testEventArray) > 0:
                 for testEvent in testEventArray:
                     self.OnStreamlabsEventHandler(testEvent)

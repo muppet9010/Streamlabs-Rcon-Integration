@@ -6,6 +6,7 @@ import string as String
 import random as Random
 import json as Json
 
+
 class TestEventUtils:
     _types = {
         "Streamlabs": {
@@ -74,7 +75,8 @@ class TestEventUtils:
 
     @staticmethod
     def GenerateTestEventArray(eventPlatform, eventType, value, special, payloadCount):
-        primaryEvent = TestEventUtils._GenerateTestEvent(eventPlatform, eventType, value, special, payloadCount)
+        primaryEvent = TestEventUtils._GenerateTestEvent(
+            eventPlatform, eventType, value, special, payloadCount)
         testEventArray = [primaryEvent]
         if eventPlatform == "Twitch" and eventType == "Give Random Gift Subscriptions":
             for i in range(special):
@@ -176,7 +178,7 @@ class TestEventUtils:
                         'display_name': usernameCamalCase,
                         'from_display_name': usernameCamalCase,
                         'message': 'a test subscription',
-                        'sub_plan': str(int(value)),
+                        'sub_plan': TestEventUtils.TwitchSubscriptionSubPlanValueToString(value),
                         'months': '2',
                         'streak_months': '2',
                         'gifter': None
@@ -201,7 +203,7 @@ class TestEventUtils:
                         'display_name': recieverUsernameCamalCase,
                         'from_display_name': recieverUsernameCamalCase,
                         'message': 'a test subscription',
-                        'sub_plan': str(int(value)),
+                        'sub_plan': TestEventUtils.TwitchSubscriptionSubPlanValueToString(value),
                         'months': '2',
                         'streak_months': '2',
                         'gifter': gifterUsernameLowerCase
@@ -217,7 +219,7 @@ class TestEventUtils:
                     usernameLowerCase = 'user' + str(iterator)
                     messageEventId = TestEventUtils.GenerateUuidNoHyphens()
                     return {
-                        'sub_plan': str(int(value)),
+                        'sub_plan': str(value),
                         'sub_type': 'submysterygift',
                         'gifter': usernameLowerCase,
                         'gifter_display_name': usernameCamalCase,
@@ -295,10 +297,12 @@ class TestEventUtils:
             eventDict["message"] = []
             for i in range(payloadCount):
                 messageEntry = messageConstructor(value, special, i)
-                eventDict["message"].append(TestEventUtils._MakeTestEventMessageEntry(messageEntry, forString, typeString, eventOptions))
+                eventDict["message"].append(TestEventUtils._MakeTestEventMessageEntry(
+                    messageEntry, forString, typeString, eventOptions))
         else:
             messageEntry = messageConstructor(value, special, 1)
-            eventDict["message"] = TestEventUtils._MakeTestEventMessageEntry(messageEntry, forString, typeString, eventOptions)
+            eventDict["message"] = TestEventUtils._MakeTestEventMessageEntry(
+                messageEntry, forString, typeString, eventOptions)
         return eventDict
 
     @staticmethod
@@ -307,7 +311,8 @@ class TestEventUtils:
             return messageEntry
 
         nowDateTime = DateTime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        pastDateTime = (DateTime.datetime.now() - DateTime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+        pastDateTime = (DateTime.datetime.now() -
+                        DateTime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
 
         messageEntry["type"] = typeString
         messageEntry["platform"] = forString
@@ -327,7 +332,7 @@ class TestEventUtils:
         messageEntry["uuid"] = TestEventUtils.GenerateUuid()
         messageEntry["read"] = False
         messageEntry["createdAt"] = str(nowDateTime)
-        messageEntry["repeat"]= True
+        messageEntry["repeat"] = True
         messageEntry["_id"] = TestEventUtils.GenerateRandomAlphaDigits(13)
         messageEntry["priority"] = 10
 
@@ -337,6 +342,7 @@ class TestEventUtils:
     def GetAttribute(platformString, typeString, attributeName):
         return TestEventUtils._types[platformString][typeString][attributeName]
 
+    @staticmethod
     def DoesAttributeExist(platformString, typeString, attributeName):
         if attributeName in TestEventUtils._types[platformString][typeString].keys():
             return True
@@ -373,6 +379,15 @@ class TestEventUtils:
     @staticmethod
     def GenerateRandomAlphaDigits(count):
         return ''.join(Random.choices(String.ascii_uppercase + String.digits, k=count))
+
+    # Have to use as the values all come as string in JSON from streamlabs, but we auto convert anything number to a number. So the test event data needs to match this int/string data type.
+    @staticmethod
+    def TwitchSubscriptionSubPlanValueToString(value):
+        if value == "Prime":
+            return value
+        else:
+            return str(int(value))
+
 
 class TestEventOptions:
     def __init__(self):

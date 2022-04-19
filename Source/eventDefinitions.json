@@ -89,8 +89,8 @@
             "description": "the text message with the subscription"
         },
         "sub_plan": {
-            "valueType": "number",
-            "description": "the number twitch uses to identify each sub tier: Prime, 1000, 2000, 3000"
+            "valueType": "number or text string",
+            "description": "the number twitch uses to identify each sub tier. If a Prime subscription then a text string of 'Prime'. If a paid for subscription then for level 1, 2 or 3 its the corrisponding numbers: 1000, 2000 or 3000. This sub_plan is an oddity as the other Twitch Subscription types don;t support a sub_plan of 'Prime'."
         }
     },
     "twitch_account-subscriptionGift": {
