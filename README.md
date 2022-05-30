@@ -15,11 +15,12 @@ Installation & Usage
 2. Get the files from the [latest release zip](https://github.com/muppet9010/Streamlabs-Rcon-Integration/releases).
 3. Create a free account at [Currency Layer website](https://currencylayer.com) and make a note of the API access key as needs to be entered into the program's config later on.
 4. Unzip the files into the desired folder.
-5. Open config.json in a text editor and add in your details - see later in readme for details
-6. Run the program: Streamlabs Rcon Integration.exe
-7. Select the desired profile from the dropdown. Suggested are the `Print All` and `Print Most Fancy`.
-8. Click the Start button to connect the integration between Streamlabs and Factorio.
-9. The integration is now running between the Streamlabs account and the game using the selected profile. Test event sfrom streamlabs or from within the integration tool will now trigger activity within Factorio.
+5. Rename `config.sample.json` to be just `config.json`. This is so that future updates don't overwrite your config files.
+6. Open `config.json` in a text editor and add in your details - see later in readme for details
+7. Run the program: Streamlabs Rcon Integration.exe
+8. Select the desired profile from the dropdown. Suggested are the `Print All` and `Print Most Fancy`.
+9. Click the Start button to connect the integration between Streamlabs and Factorio.
+10. The integration is now running between the Streamlabs account and the game using the selected profile. Test event sfrom streamlabs or from within the integration tool will now trigger activity within Factorio.
 
 Should a critical error occur the program may fail to load or close. Details can be found in the most recent log file within the Logs folder.
 
