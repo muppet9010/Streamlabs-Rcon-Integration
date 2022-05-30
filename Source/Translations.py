@@ -22,7 +22,7 @@ class Translations:
                 "Status OBSConnecting": "OBS Connecting",
                 "Status Running": "Running",
                 "Status Stopped": "Stopped",
-                "Currency WebsiteDownloadFailed": "ERROR: Can't get currency conversion data from website",
+                "Currency WebsiteDownloadFailed": "ERROR: Can't get currency conversion data from website. See log for details.",
                 "StreamlabsEvent ErrorProcessingEvent": "ERROR: event data not as expected: ",
                 "StreamlabsEvent BadEventPayloadCount": "ERROR: wrong number of payloads in event: ",
                 "StreamlabsEvent MissingEventPayloadCount": "ERROR: no payload in event",

@@ -17,8 +17,9 @@ Installation & Usage
 4. Unzip the files into the desired folder.
 5. Open config.json in a text editor and add in your details - see later in readme for details
 6. Run the program: Streamlabs Rcon Integration.exe
-7. Select the desired profile from the dropdown and click Start.
-8. The integration is now running between the Streamlabs account and the game using the selected profile.
+7. Select the desired profile from the dropdown. Suggested are the `Print All` and `Print Most Fancy`.
+8. Click the Start button to connect the integration between Streamlabs and Factorio.
+9. The integration is now running between the Streamlabs account and the game using the selected profile. Test event sfrom streamlabs or from within the integration tool will now trigger activity within Factorio.
 
 Should a critical error occur the program may fail to load or close. Details can be found in the most recent log file within the Logs folder.
 
@@ -175,7 +176,7 @@ The program has a `config.json` that stores its global configuration. The settin
 
 - Logging DaysLogsToKeep - How many days back of logs the program will keep. -1 keeps logs indefinitely.
 - Logging DebugLogging - If enhanced Debug logs are generated. true/false
-- Currency ApiLayerAccessKey - The Currency API key generated when wigning up to that free website.
+- Currency ApiLayerAccessKey - The Currency API key generated when signing up to the free currency API website.
 - Streamlabs SocketApiToken - Your streamlabs API key. This can be found on the streamlabs website under your account:
     1. login to streamlabs website.
     1. "Settings" on left hand menu.

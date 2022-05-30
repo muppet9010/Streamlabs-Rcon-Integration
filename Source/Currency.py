@@ -14,9 +14,10 @@ class Currency():
     def GetRates(self):
         if len(self.rates) > 0:
             return True
+        self.logging.DebugLog("Checking for a currency cache file")
         if Os.path.isfile(self.cacheFileName):
             self.logging.DebugLog(
-                "Trying to get currancy rates from cache file")
+                "Currency rates cache file exists, so reviewing it")
             with open(self.cacheFileName, "r", encoding='utf-8') as file:
                 data = Json.load(file)
             file.closed
@@ -31,6 +32,11 @@ class Currency():
                     self.logging.DebugLog(
                         "Got currency rates from cache file")
                     return True
+            else:
+                self.logging.DebugLog(
+                    "Currency rates cache file too old to use")
+        else:
+            self.logging.DebugLog("No currency rates cache file found")
 
         self._SourceRateData()
         if len(self.rates) > 0:
@@ -51,6 +57,7 @@ class Currency():
         if not response["success"]:
             self.state.RecordActivity(
                 self.state.translations.GetTranslation("Currency WebsiteDownloadFailed"))
+            self.logging.Log(request.text)
             return False
         with open(self.cacheFileName, "w", encoding='utf-8') as file:
             file.write(Json.dumps(response))
