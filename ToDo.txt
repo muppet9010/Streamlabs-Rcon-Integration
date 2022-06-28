@@ -10,6 +10,7 @@ Look to use yaml in RCON integration configs as they may be nicer to read and ma
 Should I just ignore any event without an ID string? Came up ages ago during Will's playthrough. But not enough of an issue to be done at the time.
 If you close the GUI when internet is dead after being connected via RCON the python window never closes. Guess its waiting for something to close.
 Change profile loading to not error on startup for bad profiles, but error on trying to start them.
+Document that to call a named `action` in the `reactions` you need to pre-fix it with ACTION_, i.e. ACTION_myActionName. The `actions` array `name` field stays as just the name, i.e. myActionName.
 
 
 Ideas

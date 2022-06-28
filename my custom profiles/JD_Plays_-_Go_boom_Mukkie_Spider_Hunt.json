@@ -1,0 +1,160 @@
+{
+    "name": "JD_Plays - JD Go Boom & Followers Hunt JD & Mukkie2",
+    "description": "JD_Plays JD Go Boom and Followers add biter hunting groups 2022-06-11",
+    "reactions": [
+        {
+            "platform": "twitch_account",
+            "type": "subscription",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "ACTION_JD_Goes_Boom_Message"
+                },
+                {
+                    "COMMENT": "Tier 1 sub",
+                    "condition": "'[sub_plan]' == '1000' or '[sub_plan]' == 'Prime'",
+                    "manipulator": "[VALUE] * 0.5",
+                    "action": "/jd_goes_boom JD-Plays [CALCVALUE]"
+                },
+                {
+                    "COMMENT": "Tier 2 sub",
+                    "condition": "'[sub_plan]' == '2000'",
+                    "manipulator": "[VALUE] * 0.6",
+                    "action": "/jd_goes_boom JD-Plays [CALCVALUE]"
+                },
+                {
+                    "COMMENT": "Tier 3 sub",
+                    "condition": "'[sub_plan]' == '3000'",
+                    "manipulator": "[VALUE] * 0.7",
+                    "action": "/jd_goes_boom JD-Plays [CALCVALUE]"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "ACTION_JD_Sub_Thanks_Message"
+                }
+            ]
+        },
+        {
+            "COMMENT": "Copy of subscription section above, but with the type changed",
+            "platform": "twitch_account",
+            "type": "subMysteryGift",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "ACTION_JD_Goes_Boom_Message"
+                },
+                {
+                    "COMMENT": "Tier 1 sub",
+                    "condition": "'[sub_plan]' == '1000' or '[sub_plan]' == 'Prime'",
+                    "manipulator": "[VALUE] * 0.5",
+                    "action": "/jd_goes_boom JD-Plays [CALCVALUE]"
+                },
+                {
+                    "COMMENT": "Tier 2 sub",
+                    "condition": "'[sub_plan]' == '2000'",
+                    "manipulator": "[VALUE] * 0.6",
+                    "action": "/jd_goes_boom JD-Plays [CALCVALUE]"
+                },
+                {
+                    "COMMENT": "Tier 3 sub",
+                    "condition": "'[sub_plan]' == '3000'",
+                    "manipulator": "[VALUE] * 0.7",
+                    "action": "/jd_goes_boom JD-Plays [CALCVALUE]"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "ACTION_JD_Sub_Thanks_Message"
+                }
+            ]
+        },
+        {
+            "COMMENT": "Have to duplicate the seperate other money parts at present",
+            "platform": "twitch_account",
+            "type": "bits",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "ACTION_JD_Goes_Boom_Message"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "[VALUE] * 1.0",
+                    "action": "/jd_goes_boom JD-Plays [CALCVALUE]"
+                }
+            ]
+        },
+        {
+            "COMMENT": "Have to duplicate the seperate other money parts at present",
+            "platform": "streamlabs",
+            "type": "donation",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "ACTION_JD_Goes_Boom_Message"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "[VALUE] * 1.0",
+                    "action": "/jd_goes_boom JD-Plays [CALCVALUE]"
+                }
+            ]
+        },
+        {
+            "valueType": "follow",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/biter_hunt_group_add_biters 1 1"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/biter_hunt_group_reset_group_timer 1"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/muppet_gui_show_message {\"audience\": {\"players\":[\"JD-Plays\"], \"logic\":\"only\"}, \"message\":{\"simpleText\":\"[BESTNAME] followed the biter pack, you gonna join him?\", \"position\":\"left\", \"fontSize\":\"large\", \"fontStyle\":\"bold\", \"fontColor\":\"lightred\"}, \"close\":{\"timeout\":60}}"
+                },
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/muppet_gui_show_message {\"audience\": {\"players\":[\"JD-Plays\"], \"logic\":\"not\"}, \"message\":{\"simpleText\":\"[BESTNAME] followed the biter pack, you gonna join him?\", \"position\":\"left\", \"fontSize\":\"large\", \"fontStyle\":\"bold\", \"fontColor\":\"lightred\"}, \"close\":{\"timeout\":15}}"
+                }
+            ]
+        },
+        {
+            "valueType": "viewer",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        }
+    ],
+    "COMMENT_ACTIONS": "Done the long commands as it makes the reactions section easier to read. Don;t see any benefit in moving short simple actions down here.",
+    "actions": [
+        {
+            "name": "JD_Goes_Boom_Message",
+            "description": "Shows text on screen that a named person has made JD go boom.",
+            "effect": "/muppet_gui_show_message {\"audience\": {\"players\":[\"JD-Plays\"], \"logic\":\"only\"}, \"message\":{\"simpleText\":\"[BESTNAME] Made JD Go Boom\", \"position\":\"left\", \"fontSize\":\"large\", \"fontStyle\":\"bold\", \"fontColor\":\"lightred\"}, \"close\":{\"timeout\":60}}"
+        },
+        {
+            "name": "JD_Sub_Thanks_Message",
+            "description": "Shows text on screen that a named person has made JD go boom.",
+            "effect": "/muppet_gui_show_message {\"audience\": {\"players\":[\"JD-Plays\"], \"logic\":\"only\"}, \"message\":{\"simpleText\":\"Thanks for Subbing [BESTNAME] for [months] months\", \"position\":\"left\", \"fontSize\":\"large\", \"fontStyle\":\"bold\", \"fontColor\":\"lightred\"}, \"close\":{\"timeout\":60}}"
+        }
+    ],
+    "options": {
+        "twitchMysterSubGiftMode": "donator"
+    }
+}
