@@ -78,11 +78,14 @@ class TestEventUtils:
         primaryEvent = TestEventUtils._GenerateTestEvent(
             eventPlatform, eventType, value, special, payloadCount)
         testEventArray = [primaryEvent]
+
+        # Twitch sends events for the giver and also each receiver.
         if eventPlatform == "Twitch" and eventType == "Give Random Gift Subscriptions":
-            for i in range(special):
+           for i in range(special):
                 childEvent = TestEventUtils._GenerateTestEvent(
                     eventPlatform, "Give Specific Gift Subscription", value, i+2, 1)
                 testEventArray.append(childEvent)
+
         return testEventArray
 
     @staticmethod
@@ -219,7 +222,7 @@ class TestEventUtils:
                     usernameLowerCase = 'user' + str(iterator)
                     messageEventId = TestEventUtils.GenerateUuidNoHyphens()
                     return {
-                        'sub_plan': str(value),
+                        'sub_plan': TestEventUtils.TwitchSubscriptionSubPlanValueToString(value),
                         'sub_type': 'submysterygift',
                         'gifter': usernameLowerCase,
                         'gifter_display_name': usernameCamalCase,

@@ -94,7 +94,7 @@
         }
     },
     "twitch_account-subscriptionGift": {
-        "_comment": "When a user is gifted a subscription. If the gift was too the community and not the specific viewer then the 'twitchMysterSubGiftMode' option must be set to 'receiver' in the profile for this event to be triggered in this situation.",
+        "_comment": "When a user is gifted a subscription. If the gift was to the community and not the specific viewer then the 'twitchMysterSubGiftMode' option must be set to 'receiver' in the profile for this event to be triggered in this situation.",
         "name": {
             "valueType": "text string",
             "description": "the username of the person who received the subscription"
@@ -118,7 +118,8 @@
         "gifter": {
             "valueType": "text string",
             "description": "the username of the person who gifted the subscription"
-        }
+        },
+        "_comment_gifter_display_name": "There is no display name exposed by twitch for this event. So we can only use the gifters username (un-formatted)."
     },
     "twitch_account-subMysteryGift": {
         "_comment": "When a user gifts a number of subscriptions to the community. The 'twitchMysterSubGiftMode' option must be set to 'donator' in the profile for this event to be triggered.",

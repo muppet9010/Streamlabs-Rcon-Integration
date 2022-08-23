@@ -152,7 +152,7 @@ class StreamlabsEvent():
                 self.state.RecordActivity(self.state.translations.GetTranslation(
                     "StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
                 return False
-            self.state.mysterySubGifts[self.bestName] = amount
+            self.state.mysterySubGifts[self.rawMessage["gifter"]] = amount # Has to be the gifter username as this is the field ew get in all the events, the display name of the gifter isn't always present.
         elif (self.handlerName == "youtube_account-subscription"):
             self.valueType = "money"
             self.value = 5

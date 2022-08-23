@@ -16,7 +16,7 @@ import threading as Threading
 
 class State():
     def __init__(self):
-        self.version = "0.1.3"
+        self.version = "0.1.4"
         self.config = Config(self)
         self.logging = Logging(self)
         self.config.LogMissingSettings()
