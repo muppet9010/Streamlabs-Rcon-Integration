@@ -1,0 +1,94 @@
+{
+    "name": "Commander8890 - General",
+    "description": "Commander8890 general reactions and death 2022-06-04",
+    "reactions": [
+        {
+            "valueType": "money",
+            "filteredActions": [
+			{
+					"condition": "[VALUE] < 1",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                },
+                {
+					"condition": "[VALUE] >= 1 and [VALUE] < 5",
+                    "manipulator": "",
+                    "action": "/sc game.get_player(\"Commander8890\").teleport({0,0})"
+                },
+				{
+                    "condition": "[VALUE] >= 1 and [VALUE] < 5",
+                    "manipulator": "",
+                    "action": "/muppet_streamer_schedule_explosive_delivery {\"explosiveCount\":7, \"explosiveType\":\"grenade\", \"target\":\"Commander8890\", \"accuracyRadiusMin\":10, \"accuracyRadiusMax\":20}"
+                },
+				{
+                    "condition": "[VALUE] >= 5 and [VALUE] < 10",
+                    "manipulator": "",
+                    "action": "/muppet_streamer_spawn_around_player {\"target\":\"Commander8890\", \"entityName\":\"defenderBot\", \"radiusMax\":10, \"radiusMin\":10, \"existingEntities\":\"overlap\", \"quantity\": 20, \"followPlayer\": true}"
+                },
+				{
+                    "condition": "[VALUE] >= 10 and [VALUE] < 15",
+                    "manipulator": "",
+                    "action": "/muppet_streamer_schedule_explosive_delivery {\"explosiveCount\":1, \"explosiveType\":\"atomicRocket\", \"target\":\"Commander8890\", \"accuracyRadiusMax\":50}"
+                },
+				{
+                    "condition": "[VALUE] >= 10 and [VALUE] < 15",
+                    "manipulator": "",
+                    "action": "/sc local player = game.get_player(\"Commander8890\") player.surface.create_entity{name = \"big-biter\", position = {player.position.x+10,player.position.y+10}}"
+                },
+				{
+                    "condition": "[VALUE] >= 15 and [VALUE] < 20",
+                    "manipulator": "",
+                    "action": "/sc local player = game.get_player(\"Commander8890\") for i=1,3 do players.surface.create_entity{name = \"small-biter\", position = player.position} end for i=1,2 do player.surface.create_entity{name = \"medium-biter\", position = player.position} end"
+                },
+				{
+                    "condition": "[VALUE] >= 15 and [VALUE] < 20",
+                    "manipulator": "",
+                    "action": "/muppet_streamer_pants_on_fire {\"target\":\"Commander8890\", \"duration\": 30}"
+                },
+				{
+                    "condition": "[VALUE] >= 20 and [VALUE] < 25",
+                    "manipulator": "",
+                    "action": "/muppet_streamer_pants_on_fire {\"target\":\"Commander8890\", \"duration\": 30, \"fireGap\": 30, \"fireHeadStart\": 6}"
+                },
+				{
+                    "condition": "[VALUE] >= 25 and [VALUE] < 100",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                },
+				{
+                    "condition": "[VALUE] >= 100 and [VALUE] < 200",
+                    "manipulator": "",
+                    "action": "/muppet_streamer_schedule_explosive_delivery {\"delay\":5, \"explosiveCount\":150, \"explosiveType\":\"atomicRocket\", \"target\":\"Commander8890\", \"accuracyRadiusMax\":50, \"salvoSize\":10, \"salvoDelay\":180}"
+                },
+				{
+                    "condition": "[VALUE] >= 200",
+                    "manipulator": "",
+                    "action": "[NOTHING]"
+                }
+            ]
+        },
+        {
+            "valueType": "follow",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/muppet_streamer_spawn_around_player {\"target\":\"Commander8890\", \"entityName\":\"fire\", \"radiusMax\":20, \"radiusMin\":0, \"existingEntities\":\"overlap\", \"density\": 0.05, \"ammoCount\": 100}"
+                }
+            ]
+        },
+        {
+            "valueType": "viewer",
+            "filteredActions": [
+                {
+                    "condition": "[ALL]",
+                    "manipulator": "",
+                    "action": "/muppet_streamer_pants_on_fire {\"target\":\"Commander8890\", \"duration\": 30}"
+                }
+            ]
+        }
+    ],
+    "options": {
+        "twitchMysterSubGiftMode": "donator"
+    }
+}

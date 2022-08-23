@@ -1,15 +1,18 @@
 Bugs / Outstanding
 ===================
 
-Back in commit 402ff1a0a6efe40532fb6e523184eb4f974e0c92 I changed it so that both bespoke reactions and generic reactions ran for the same event. This was a mistake and I did it as a simple fix for what JD wanted to do at the time. I should reverse this change and add a new option for this type of usage case. As its breaking standard behavour for more normal usage scenarios. Also I never updated all the Readme for it.
+Back in commit 402ff1a0a6efe40532fb6e523184eb4f974e0c92 I changed it so that both bespoke reactions and generic reactions ran for the same event. This was a mistake and I did it as a simple fix for what JD wanted to do at the time. I should reverse this change and add a new option for this type of usage case. As its breaking standard behaviour for more normal usage scenarios. Also I never updated all the Readme for it.
 I couldn't use negative filtering by type on a money reaction: [TYPE] != 'subscription' and [TYPE] != 'subMysteryGift'
 Document that you can add comments within the profile if you want. The tool never looks for a "comment" key in the JSON. The tool only looks for the documented keys in the JSON with anything else being  ignored.
 Replace the event definitions with a proper readme type file. Also add to readme what the generic event types are.
 The profiles loading tries to do everything in Profiles folder, no sanity check about file/folder type. If you make a "backup" folder in it, the program crashes without recording an error.
 Look to use yaml in RCON integration configs as they may be nicer to read and may support the action commands and passing JSON to Factorio nicer.
-Should I just ignore any event without an ID string? Came up ages ago during Will's playthrough. But not enough of an issue to be done at the time.
+Should I just ignore any event without an ID string? Came up ages ago during Will's play through. But not enough of an issue to be done at the time.
 If you close the GUI when internet is dead after being connected via RCON the python window never closes. Guess its waiting for something to close.
 Change profile loading to not error on startup for bad profiles, but error on trying to start them.
+Document that to call a named `action` in the `reactions` you need to pre-fix it with ACTION_, i.e. ACTION_myActionName. The `actions` array `name` field stays as just the name, i.e. myActionName. It must also be wrapped in "[]" just like any other special field. The `effect` of the shared action will only accept `ALL` type fields, so can't use any event type specific fields.
+Correct "twitchMysterSubGiftMode" to not have a typo in it, readme and code. Add a changelog note for it and also make it error if the old bad spelling is in a config to ensure users update and thus get their desired setting.
+Lots of internal code typos throughout the project that need updating.
 
 
 Ideas

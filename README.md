@@ -2,8 +2,8 @@
 
 A tool that allows you to do actions in games based on Streamlabs events. Current usage focuses around Twitch events via Streamlabs triggering actions within Factorio. The tool is written in Python for cross platform usage and runs fully on your pc to remove any risk of sharing access keys or donators details on the internet.
 
-The tool recieves events from Streamlabs and uses configurable logic to send RCON commands to the game server to do actions.
-The integration should support any game that allows for RCON and is coded to support multiple streaming platforms connected via Stramlabs; youtube, mixer and twitch.
+The tool receives events from Streamlabs and uses configurable logic to send RCON commands to the game server to do actions.
+The integration should support any game that allows for RCON and is coded to support multiple streaming platforms connected via Streamlabs; youtube, mixer and twitch.
 
 This tool's setup is a little technical at present, but is fully functional and used by a few Factorio Twitch streamers. Any usage questions or issues grab me on discord: muppet9010#2645
 
@@ -20,7 +20,7 @@ Installation & Usage
 7. Run the program: Streamlabs Rcon Integration.exe
 8. Select the desired profile from the dropdown. Suggested are the `Print All` and `Print Most Fancy`.
 9. Click the Start button to connect the integration between Streamlabs and Factorio.
-10. The integration is now running between the Streamlabs account and the game using the selected profile. Test event sfrom streamlabs or from within the integration tool will now trigger activity within Factorio.
+10. The integration is now running between the Streamlabs account and the game using the selected profile. Test events from streamlabs or from within the integration tool will now trigger activity within Factorio.
 
 Should a critical error occur the program may fail to load or close. Details can be found in the most recent log file within the Logs folder.
 
@@ -36,7 +36,7 @@ The app takes in Streamlabs events and processes them through configurable profi
 Streamlab Events
 --------------
 
-The complete list of Streamlabs events and their contained data attributes can be found in the [eventDefinitions.json file](https://github.com/muppet9010/Streamlabs-Rcon-Integration/blob/master/Source/eventDefinitions.json). The top section under `[ALL]` are generated and normalised by the program to provide some standard entries across all event types. The list of platform and event specific attributes are what Streamlabs is currently sending. These often vary from their platfrom documentation and change periodically, so please refer to this tools definition.
+The complete list of Streamlabs events and their contained data attributes can be found in the [eventDefinitions.json file](https://github.com/muppet9010/Streamlabs-Rcon-Integration/blob/master/Source/eventDefinitions.json). The top section under `[ALL]` are generated and normalised by the program to provide some standard entries across all event types. The list of platform and event specific attributes are what Streamlabs is currently sending. These often vary from their platform documentation and change periodically, so please refer to this tools definition.
 
 Profile
 ---------
@@ -48,14 +48,14 @@ Profiles are structured as the below:
 - Profile file (.json):
     - "name" - the name of the profile as seen within the application
     - "description" - a short description shown within the application for this profile
-    - "reactions" - an array [] of unqiue reactions stored as dictionaries {} of attributes in key, value pairs.
+    - "reactions" - an array [] of unique reactions stored as dictionaries {} of attributes in key, value pairs.
         - "platform" - the event platform identifier string for this reaction
         - "type" - the event type identifier string for this reaction
-        - "filteredActions" - an array [] of unqiue filteredActions stored as dictionaries {} of attributes in key, value pairs.
+        - "filteredActions" - an array [] of unique filteredActions stored as dictionaries {} of attributes in key, value pairs.
             - "condition" - a condition for this filteredAction being done as a string
             - "manipulator" - an optional value change script
             - "action" - the text string that will be sent via RCON after being processed, or the name of a profile "actions" to call.
-    - "actions" - an array [] of unqiue actions stored as dictionaries {} of attributes in key, value pairs.
+    - "actions" - an array [] of unique actions stored as dictionaries {} of attributes in key, value pairs.
             - "name" - the name of the action as called from filteredActions.
             - "description" - a description just used within the JSON for documentation purposes
             - "effect": - the text string that will be sent via RCON after being processed
@@ -66,7 +66,7 @@ Profiles are structured as the below:
 Event Handling via Profile
 ==========
 
-When a Streamlabs event is recieved by the app it reviews the reactions within the current profile to work out what actions to take.
+When a Streamlabs event is received by the app it reviews the reactions within the current profile to work out what actions to take.
 
 Event Attributes
 -----------
@@ -87,13 +87,13 @@ Assuming a reaction for the event is found, the reaction's `filteredActions` are
 Filtered Actions
 --------------
 
-Each `filteredActions` list will have one or more filteredAction entries in it. Each of these entries is reviewed and its action carried out if approperiate.
+Each `filteredActions` list will have one or more filteredAction entries in it. Each of these entries is reviewed and its action carried out if appropriate.
 
 ### Condition
 
 The `condition` script in each filteredAction is evaluated and those that are met (resolves to True) will have their action executed for this event. All of the events data attributes from Streamlabs and this app can be used within the `condition` script in the format `[DATA_ITEM_NAME]`. i.e. `[VALUE] >= 5 and [VALUE] < 10`. The conditions within a reaction are order specific (excluding `[ALL]` condition) and can overlap each other's conditions if you wish both to be executed in those circumstances.
 
-There is a special `[ALL]` conditon script value that will be triggered after all other suitable conditions have been triggered in all cases.
+There is a special `[ALL]` condition script value that will be triggered after all other suitable conditions have been triggered in all cases.
 
 If a condition for a filtered action is met then the manipulator script and action are carried out
 
@@ -112,16 +112,17 @@ Should an Rcon command get a response from the server it will be shown in the Ac
 Actions
 --------
 
-The Actions list is a collection of named action command strings to enable their re-use when it's convenient. Their `effect` is identication to a filteredAction action.
+The Actions list is a collection of named action command strings to enable their re-use when it's convenient. Their `effect` is identification to a filteredAction action.
 
 Options
 -----------
 
-A number of profile wide options exist to allow further configuration of specific behavour.
+A number of profile wide options exist to allow further configuration of specific behaviour.
 
 - twitchMysterSubGiftMode - When Twitch Subscription Mystery Gifts are given out by a viewer to random other viewers the event can either be reacted to for the donator or receiver. The program's default is the `donator` value if the setting isn't specified in the profile's options. If the Streamlabs event is reacted to by a `money` valueType reaction, rather than a twitch subscriber specified reaction, it will obey this setting so only 1 reaction is triggered. Meaning the other event type won't be triggered for Twitch Subscription Mystery Gifts to avoid duplicate reactions.
     - `donator` - React to it as one large donation using the `subMysteryGift` event reaction.
     - `receiver` - React to each viewer getting the gifted subscription using the `subscriptionGift` event reaction.
+YES this setting has a typo in it.
 
 
 Profile Creation Notes
@@ -129,9 +130,9 @@ Profile Creation Notes
 
 ### Profile attribute values, quotes and quote escaping
 
-All data attributes used in scripts are replaced with their event data values at execution time. The replaced text may require wrapping in quotes if it needs to be treated as a string when it is recieved by the game through the RCON command.
+All data attributes used in scripts are replaced with their event data values at execution time. The replaced text may require wrapping in quotes if it needs to be treated as a string when it is received by the game through the RCON command.
 
-However, the profile file is defined using JSON syntax and so all text strings must be wrapped in double quotes `"` within the profile. Single quotes can be used within a JSON string without the need to escape them, and are advised for this reason where possible. If you need to use a double quote within a text string it must be escaped with a backslash `\`. In some cases single quotes may not be accepted by the game/mod recieveing the RCON command, and so escaped double quotes would have to be used, i.e. a mod expects a JSON string as an argument.
+However, the profile file is defined using JSON syntax and so all text strings must be wrapped in double quotes `"` within the profile. Single quotes can be used within a JSON string without the need to escape them, and are advised for this reason where possible. If you need to use a double quote within a text string it must be escaped with a backslash `\`. In some cases single quotes may not be accepted by the game/mod receiving the RCON command, and so escaped double quotes would have to be used, i.e. a mod expects a JSON string as an argument.
 
 Data attribute values will be made safe by the program; with any single or double quotes either being removed by Python automatically or escaped with a backslash before being used as part of a Rcon command. If you require a single or double quote to be received by Rcon escaped then you must escape it with 2 backslashes `\\'`. See the `Factorio - Advanced Usage Example.json` for examples of the some of these combinations.
 
@@ -184,7 +185,7 @@ The program has a `config.json` that stores its global configuration. The settin
     1. "API Settings" tab.
     1. "API Token" on inner tab.
     1. There's then the "Your Socket API Token".
-- Profile Default - The name of the profile json file that will be selected on loading the application. Profiel can be reselected once loaded.
+- Profile Default - The name of the profile json file that will be selected on loading the application. Profile can be reselected once loaded.
 - Rcon Server Address - The URL/IP address of your game server. Must be reachable from where you are running this application.
 - Rcon Server Port - The port that RCON is running on, on your game server. Must be reachable from where you are running this application.
 - Rcon Server Password - The password you set in your game, or can be blank if no password was set (not advised).
@@ -198,7 +199,7 @@ Development Building
 Uses the python modules and their dependencies. Built and tested against these old versions:
 
 - Python 3.7.3 32bit - default install modules  =  https://www.python.org/downloads/release/python-373
-- python-engineio 3.5.1  (pre-req of socketio, but if not done first the wrong dependant versin gets installed by socketio) =  pip install python-engineio==3.5.1
+- python-engineio 3.5.1  (pre-requisite of socketio, but if not done first the wrong dependant version gets installed by socketio) =  pip install python-engineio==3.5.1
 - python-socketio[client] 4.0.1  =  https://python-socketio.readthedocs.io/en/latest  =  pip install python-socketio[client]==4.0.1
 - PyInstaller 3.4  =  https://www.pyinstaller.org  =  pip install -U pyinstaller==3.4
 - MCRcon 0.5.2 =  https://github.com/uncaught-exceptions/mcrcon  =  pip install mcrcon==0.5.2

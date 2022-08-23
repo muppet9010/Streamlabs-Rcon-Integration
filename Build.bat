@@ -1,6 +1,7 @@
 @ECHO OFF
-set outputFolder=build\dist
-rd /s /q %outputFolder%
+set buildFolder=build
+set outputFolder=%buildFolder%\dist
+rd /s /q %buildFolder%
 pyinstaller --onefile ".\Source\Streamlabs Rcon Integration.py" --workpath ".\build" --clean --distpath ".\build\dist" --specpath ".\build"
 xcopy "Source\config.sample.json" "%outputFolder%" /q /y /i
 xcopy "Source\eventDefinitions.json" "%outputFolder%" /q /y /i
