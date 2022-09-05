@@ -1,0 +1,16 @@
+streamlabs
+streamlab
+youtube
+socketio
+engineio
+pyinstalle
+mcrcon
+CALCVALUE
+VALUETYPE
+JD # Factorio streamer.
+Myster # Typo throughout the code. In TODO list.
+BESTNAME
+BESTCOMMENT
+gifter
+Battlefluffy # Factorio scenario creator.
+pyinstaller
