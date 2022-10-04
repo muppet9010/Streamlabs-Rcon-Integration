@@ -233,8 +233,14 @@ class State():
             testEventArray = self.testEventUtils.GenerateTestEventArray(
                 testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
             if len(testEventArray) > 0:
-                for testEvent in testEventArray:
+                # Run each event in its own thread as this is how they come in from external partners.
+
+                def testEventTask(self, testEvent):
                     self.OnStreamlabsEventHandler(testEvent)
+
+                for testEvent in testEventArray:
+                    thread = Threading.Thread(target=testEventTask, args=(self, testEvent))
+                    thread.start()
             else:
                 self.RecordActivity(
                     self.translations.GetTranslation("TestEvent InvalidTestEvent") + testEventPlatform + " - " + testEventType)
