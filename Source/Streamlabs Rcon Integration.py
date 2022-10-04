@@ -16,7 +16,7 @@ import threading as Threading
 
 class State():
     def __init__(self):
-        self.version = "0.1.4"
+        self.version = "0.1.5"
         self.config = Config(self)
         self.logging = Logging(self)
         self.config.LogMissingSettings()
@@ -34,6 +34,7 @@ class State():
         self.guiWindow = GuiWindow(self)
         self.gui = self.guiWindow.gui
         self.gui.Setup()
+        self.sequentialEventId = 0
 
     def OnStartButtonHandler(self):
         try:
@@ -116,10 +117,11 @@ class State():
             random = Random.Random()
             random.seed(Threading.get_ident())
             sleepTime = random.random()
-            self.logging.DebugLog("Sleeping event for: " + str(sleepTime))
+            self.sequentialEventId = self.sequentialEventId + 1
+            self.logging.DebugLog("Sleeping event number " + str(self.sequentialEventId) + " for: " + str(sleepTime))
             Time.sleep(sleepTime)
             self.logging.DebugLog(
-                "Streamlabs raw event data: " + str(data))
+                "Streamlabs raw event number " + str(self.sequentialEventId) + " data: " + str(data))
             events = StreamlabsEventUtils.GenerateEventPerPayload(self, data)
             if events == None:
                 return
