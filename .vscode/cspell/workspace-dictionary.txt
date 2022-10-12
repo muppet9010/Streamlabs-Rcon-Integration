@@ -14,3 +14,5 @@ BESTCOMMENT
 gifter
 Battlefluffy # Factorio scenario creator.
 pyinstaller
+sio # object in Streamlabs library
+eio # object in Streamlabs library

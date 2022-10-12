@@ -116,16 +116,17 @@ class State():
     def OnStreamlabsEventHandler(self, data):
         try:
             # The random small delay (up to 0.1 seconds) is to handle duplicate events coming in at the same moment from StreamLabs. In the past this would cause double firing of events as they would both be processed in parallel. This isn't perfect still as the duplicate events could end up with the same delay and thus be processed in parallel, however this is very unlikely.
-            # It does have an issue in that if the Twitch MysteryGiftSub event is delayed after the subscription events then they will be double counted. Set as very small delay to try and avoid this issue. The subscription gift events do come in after the mystery gift event, but it is only a delay of a part of a second. The ideal fix is to move to a event queue processing system, but that's far more work for a dead project.
+            # It does have an issue in that if the Twitch MysteryGiftSub event is delayed after the subscription events then they will be double counted. Set as very small delay to try and avoid this issue. In real world experience the subscription gift events do come in as a separate lump of events after the mystery gift event, but it is only a delay of a part of a second. The ideal fix is to move to a event queue processing system, but that's far more work for a dead project.
             random = Random.Random()
             random.seed(Threading.get_ident())
             sleepTime = random.randrange(1,1000)/10000
 
             self.sequentialEventId = self.sequentialEventId + 1
-            self.logging.DebugLog("Sleeping event number " + str(self.sequentialEventId) + " for: " + str(sleepTime) + ". Received time: " + Datetime.datetime.now().strftime("%H:%M:%S.%f"))
+            sequentialEventId = self.sequentialEventId
+            self.logging.DebugLog("Sleeping event number " + str(sequentialEventId) + " for: " + str(sleepTime) + ". Received time: " + Datetime.datetime.now().strftime("%H:%M:%S.%f"))
             Time.sleep(sleepTime)
             self.logging.DebugLog(
-                "Streamlabs raw event number " + str(self.sequentialEventId) + " data: " + str(data))
+                "Streamlabs raw event number " + str(sequentialEventId) + " data: " + str(data))
             events = StreamlabsEventUtils.GenerateEventPerPayload(self, data)
             if events == None:
                 return
@@ -240,15 +241,15 @@ class State():
                 for testEvent in testEventArray:
                     self.OnStreamlabsEventHandler(testEvent)
 
-                # Run each event in its own thread as this is how they come in from external partners.
-                # In real world Twitch multi sub gift the first mysteryGiftSub comes in and then some time later (part of a second) all of the recipient events come in with near 0 gap between each each. This is very hard to setup test for, so commented out for now.
+                    # Run each event in its own thread as this is how they come in from external partners.
+                    # In real world Twitch multi sub gift the first mysteryGiftSub comes in and then some time later (part of a second) all of the recipient events come in with near 0 gap between each each. This is very hard to setup test for, so commented out for now.
 
-                #def testEventTask(self, testEvent):
-                #    self.OnStreamlabsEventHandler(testEvent)
+                    #def testEventTask(self, testEvent):
+                    #    self.OnStreamlabsEventHandler(testEvent)
 
-                #for testEvent in testEventArray:
-                #    thread = Threading.Thread(target=testEventTask, args=(self, testEvent))
-                #    thread.start()
+                    #for testEvent in testEventArray:
+                    #    thread = Threading.Thread(target=testEventTask, args=(self, testEvent))
+                    #   thread.start()
             else:
                 self.RecordActivity(
                     self.translations.GetTranslation("TestEvent InvalidTestEvent") + testEventPlatform + " - " + testEventType)
