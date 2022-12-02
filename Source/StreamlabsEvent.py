@@ -33,16 +33,14 @@ class StreamlabsEvent():
             self.ignored = True
             return
 
-        if "display_name" in self.rawMessage.keys():
+        if "display_name" in self.rawMessage.keys() and self.rawMessage["display_name"] != None:
             self.bestName = self.rawMessage["display_name"]
-        elif "name" in self.rawMessage.keys():
+        elif "name" in self.rawMessage.keys() and self.rawMessage["name"] != None:
             self.bestName = self.rawMessage["name"]
-        if "message" in self.rawMessage.keys():
+        if "message" in self.rawMessage.keys() and self.rawMessage["message"] != None:
             self.bestComment = self.rawMessage["message"]
-        elif "comment" in self.rawMessage.keys():
+        elif "comment" in self.rawMessage.keys() and self.rawMessage["comment"] != None:
             self.bestComment = self.rawMessage["comment"]
-        if self.bestComment == None:
-            self.bestComment = ""
 
         self.handlerName = StreamlabsEventUtils.MakeHandlerString(
             self.platform, self.type)
@@ -141,7 +139,13 @@ class StreamlabsEvent():
                     "StreamlabsEvent UnrecognisedTwitchSubscriptionType") + subPlan)
                 return False
         elif (self.handlerName == "twitch_account-subMysteryGift"):
-            self.bestName = self.rawMessage["gifter_display_name"]
+            # We want to overwrite the bestName if loaded from the event previously as that would be the recipient in this case, not the giver.
+            if "gifter_display_name" in self.rawMessage.keys() and self.rawMessage["gifter_display_name"] != None:
+                self.bestName = self.rawMessage["gifter_display_name"]
+            elif "gifter" in self.rawMessage.keys() and self.rawMessage["gifter"] != None:
+                self.bestName = self.rawMessage["gifter"]
+            else:
+                self.bestName = ''
             self.valueType = "money"
             subPlan = self.rawMessage["sub_plan"]
             subValue = StreamlabsEventUtils.GetTwitchSubscriptionValue(subPlan)
@@ -311,7 +315,11 @@ class StreamlabsEventUtils():
             events.append(StreamlabsEvent(
                 state, platformString, typeString, data["message"]))
         else:
-            for payload in data["message"]:
-                events.append(StreamlabsEvent(
-                    state, platformString, typeString, payload))
+            for message in data["message"]:
+                if "payload" in message:
+                    events.append(StreamlabsEvent(
+                        state, platformString, typeString, message["payload"]))
+                else:
+                    events.append(StreamlabsEvent(
+                        state, platformString, typeString, message))
         return events
