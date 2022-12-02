@@ -13,6 +13,7 @@ Change profile loading to not error on startup for bad profiles, but error on tr
 Document that to call a named `action` in the `reactions` you need to pre-fix it with ACTION_, i.e. ACTION_myActionName. The `actions` array `name` field stays as just the name, i.e. myActionName. It must also be wrapped in "[]" just like any other special field. The `effect` of the shared action will only accept `ALL` type fields, so can't use any event type specific fields.
 Correct "twitchMysterSubGiftMode" to not have a typo in it, readme and code. Add a changelog note for it and also make it error if the old bad spelling is in a config to ensure users update and thus get their desired setting.
 Lots of internal code typos throughout the project that need updating.
+When you repeat tests they don't seem to generate new values for the second time onwards. Found when I returned static text for the MysterSubGift test to test data edge case.
 
 
 

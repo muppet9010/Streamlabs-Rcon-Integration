@@ -110,7 +110,7 @@ class FilteredAction:
         if self.condition == "":
             self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
                                  "' condition can not be blank")
-        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttritubeUsed(
+        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(
             self.reaction.handlerName, self.condition, False)
         if eventAttributeCheckResult != "":
             self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
@@ -121,7 +121,7 @@ class FilteredAction:
                                  "' has an invalid condition script:\n" + scriptParseCheck)
 
         self.manipulator = filteredActionData["manipulator"]
-        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttritubeUsed(
+        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(
             self.reaction.handlerName, self.manipulator, False)
         if eventAttributeCheckResult != "":
             self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
@@ -138,7 +138,7 @@ class FilteredAction:
             actionName = action[8:-1]
             if actionName in self.reaction.profile.actions.keys():
                 self.action = self.reaction.profile.actions[actionName]
-                eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttritubeUsed(
+                eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(
                     self.reaction.handlerName, self.action.effect, True)
                 if eventAttributeCheckResult != "":
                     self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' referenced action " +
@@ -151,7 +151,7 @@ class FilteredAction:
             if self.actionText == "":
                 self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
                                      "' action can not be blank")
-            eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttritubeUsed(
+            eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(
                 self.reaction.handlerName, self.actionText, True)
             if eventAttributeCheckResult != "":
                 self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +

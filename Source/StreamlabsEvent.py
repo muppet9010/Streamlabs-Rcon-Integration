@@ -210,7 +210,7 @@ class StreamlabsEvent():
                 dataKeyValue = self.rawMessage[dataKeyName]
 
             string = string.replace(
-                instance, StreamlabsEventUtils.EspaceStringForRcon(str(dataKeyValue)))
+                instance, StreamlabsEventUtils.EscapeStringForRcon(str(dataKeyValue)))
         return string
 
 
@@ -222,7 +222,7 @@ class StreamlabsEventUtils():
         return platform + "-" + type
 
     @staticmethod
-    def EspaceStringForRcon(text):
+    def EscapeStringForRcon(text):
         text = text.replace("\\", "\\\\")
         text = text.replace("'", "\\'")
         text = text.replace('"', '\\"')
@@ -240,7 +240,7 @@ class StreamlabsEventUtils():
         StreamlabsEventUtils.handledEventTypes = data
 
     @staticmethod
-    def IsBadEventAttritubeUsed(eventType, string, calcValueAllowed):
+    def IsBadEventAttributeUsed(eventType, string, calcValueAllowed):
         if string in ["", "[ALL]", "[NOTHING]"]:
             return ""
         instances = StreamlabsEventUtils.FindAttributeTagsInString(string)

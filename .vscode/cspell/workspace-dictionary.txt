@@ -14,5 +14,11 @@ BESTCOMMENT
 gifter
 Battlefluffy # Factorio scenario creator.
 pyinstaller
-sio # object in Streamlabs library
-eio # object in Streamlabs library
+
+sio # object in Streamlabs library.
+eio # object in Streamlabs library.
+evt # Streamlabs uses this as a prefix to some event_id's for its own magical reasons.
+
+submysterygift # Twitch event type.
+superchat # Youtube event type.
+streamlabels # Streamlabs event type.

@@ -102,10 +102,10 @@ class TestEventUtils:
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameCamelCase = 'UsEr' + str(iterator)
                     return {
-                        'name': usernameCamalCase,
-                        'from': usernameCamalCase,
+                        'name': usernameCamelCase,
+                        'from': usernameCamelCase,
                         'amount': value,
                         'crate_item': None,
                         'message': 'Test donation',
@@ -118,10 +118,10 @@ class TestEventUtils:
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameCamelCase = 'UsEr' + str(iterator)
                     return {
                         'id': TestEventUtils.GenerateRandomDigits(8),
-                        'name': usernameCamalCase,
+                        'name': usernameCamelCase,
                         'amount': value,
                         'formatted_amount': '$' + "{:.2f}".format(value),
                         'formattedAmount': '$' + "{:.2f}".format(value),
@@ -130,7 +130,7 @@ class TestEventUtils:
                         'emotes': '',
                         'iconClassName': 'fab paypal',
                         'to': {'name': 'JDPlays'},
-                        'from': usernameCamalCase,
+                        'from': usernameCamelCase,
                         'from_user_id': None,
                         'donation_currency': 'USD',
                         'source': 'paypal',
@@ -145,10 +145,10 @@ class TestEventUtils:
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameCamelCase = 'UsEr' + str(iterator)
                     return {
-                        'name': usernameCamalCase,
-                        'from': usernameCamalCase,
+                        'name': usernameCamelCase,
+                        'from': usernameCamelCase,
                         'amount': value,
                         'formatted_amount': '$' + "{:.2f}".format(value)
                     }
@@ -161,10 +161,10 @@ class TestEventUtils:
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameCamelCase = 'UsEr' + str(iterator)
                     return {
-                        'name': usernameCamalCase,
-                        'from': usernameCamalCase
+                        'name': usernameCamelCase,
+                        'from': usernameCamelCase
                     }
                 eventOptions = TestEventOptions()
                 eventMessageConstructor = EventMessageConstructor
@@ -173,13 +173,13 @@ class TestEventUtils:
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameCamelCase = 'UsEr' + str(iterator)
                     usernameLowerCase = 'user' + str(iterator)
                     return {
                         'name': usernameLowerCase,
                         'from': usernameLowerCase,
-                        'display_name': usernameCamalCase,
-                        'from_display_name': usernameCamalCase,
+                        'display_name': usernameCamelCase,
+                        'from_display_name': usernameCamelCase,
                         'message': 'a test subscription',
                         'sub_plan': TestEventUtils.TwitchSubscriptionSubPlanValueToString(value),
                         'months': '2',
@@ -197,14 +197,14 @@ class TestEventUtils:
                     if special != None and special != "":
                         iterator = special
                         giver = 1
-                    recieverUsernameCamalCase = 'UsEr' + str(iterator)
-                    recieverUsernameLowerCase = 'user' + str(iterator)
+                    receiverUsernameCamelCase = 'UsEr' + str(iterator)
+                    receiverUsernameLowerCase = 'user' + str(iterator)
                     gifterUsernameLowerCase = 'user' + str(giver)
                     return {
-                        'name': recieverUsernameLowerCase,
-                        'from': recieverUsernameLowerCase,
-                        'display_name': recieverUsernameCamalCase,
-                        'from_display_name': recieverUsernameCamalCase,
+                        'name': receiverUsernameLowerCase,
+                        'from': receiverUsernameLowerCase,
+                        'display_name': receiverUsernameCamelCase,
+                        'from_display_name': receiverUsernameCamelCase,
                         'message': 'a test subscription',
                         'sub_plan': TestEventUtils.TwitchSubscriptionSubPlanValueToString(value),
                         'months': '2',
@@ -218,15 +218,15 @@ class TestEventUtils:
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameCamelCase = 'UsEr' + str(iterator)
                     usernameLowerCase = 'user' + str(iterator)
                     messageEventId = TestEventUtils.GenerateUuidNoHyphens()
                     return {
                         'sub_plan': TestEventUtils.TwitchSubscriptionSubPlanValueToString(value),
                         'sub_type': 'submysterygift',
                         'gifter': usernameLowerCase,
-                        'gifter_display_name': usernameCamalCase,
-                        'name': usernameCamalCase,
+                        'gifter_display_name': usernameCamelCase,
+                        'name': usernameCamelCase,
                         'amount': special,
                         '_id': messageEventId,
                         'event_id': messageEventId
@@ -240,13 +240,13 @@ class TestEventUtils:
 
                 def EventMessageConstructor(value, special, iterator):
                     iterator += 1
-                    usernameCamalCase = 'UsEr' + str(iterator)
+                    usernameCamelCase = 'UsEr' + str(iterator)
                     usernameLowerCase = 'user' + str(iterator)
                     return {
                         'name': usernameLowerCase,
                         'from': usernameLowerCase,
-                        'display_name': usernameCamalCase,
-                        'from_display_name': usernameCamalCase,
+                        'display_name': usernameCamelCase,
+                        'from_display_name': usernameCamelCase,
                         'amount': value,
                         'message': 'test bits'
                     }
@@ -295,7 +295,7 @@ class TestEventUtils:
             "type": typeString
         }
         if eventOptions.globalEventId == None or eventOptions.globalEventId == True:
-            eventDict["event_id"] = TestEventUtils.GenerateEvtUuid()
+            eventDict["event_id"] = TestEventUtils.GenerateEventUuid()
         if messageIsTypeList:
             eventDict["message"] = []
             for i in range(payloadCount):
@@ -369,7 +369,7 @@ class TestEventUtils:
         return Uuid(Uuid4().hex).hex
 
     @staticmethod
-    def GenerateEvtUuid():
+    def GenerateEventUuid():
         return "evt" + Uuid(Uuid4().hex).hex
 
     @staticmethod
