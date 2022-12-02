@@ -7,27 +7,26 @@ class Logging():
     def __init__(self, state):
         self.state = state
         dateFormat = "%Y_%m_%d %H_%M_%S"
-        currentDT = Datetime.datetime.now()
-        dtString = currentDT.strftime(dateFormat)
+        currentDateTime = Datetime.datetime.now()
+        dateTimeString = currentDateTime.strftime(dateFormat)
         logFolder = "Logs"
         if Os.path.isdir(logFolder):
-            self._TidyUpOldLogFiles(
-                logFolder, currentDT, state.config.GetSetting("Logging DaysLogsToKeep"), dateFormat)
+            self._TidyUpOldLogFiles(logFolder, currentDateTime, state.config.GetSetting("Logging DaysLogsToKeep"), dateFormat)
         else:
             Os.mkdir(logFolder)
-        logFileName = "Log " + dtString + ".log"
+        logFileName = "Log " + dateTimeString + ".log"
         self.logFilePath = logFolder + "/" + logFileName
         self.debugLogFilePath = logFolder + "/Debug" + logFileName
         self.debugLogging = state.config.GetSetting("Logging DebugLogging")
         self.Log("Logging Started - " + self.state.version)
 
-    def _TidyUpOldLogFiles(self, logFolder, currentDT, daysLogsToKeep, dateFormat):
+    def _TidyUpOldLogFiles(self, logFolder, currentDateTime, daysLogsToKeep, dateFormat):
         for name in Os.listdir(logFolder):
             if name[-3:] != "log":
                 continue
             oldDateString = name[name.find(" ") + 1:-4]
             oldDate = Datetime.datetime.strptime(oldDateString, dateFormat)
-            if abs((currentDT - oldDate).days) > daysLogsToKeep:
+            if abs((currentDateTime - oldDate).days) > daysLogsToKeep:
                 Os.remove(logFolder + "/" + name)
 
     def Log(self, text):
@@ -50,9 +49,9 @@ class Logging():
         file.closed
 
     def TimestampText(self, text):
-        currentDT = Datetime.datetime.now()
-        dtString = currentDT.strftime("%H:%M:%S")
-        return dtString + " : " + text
+        currentDateTime = Datetime.datetime.now()
+        dateTimeString = currentDateTime.strftime("%H:%M:%S")
+        return dateTimeString + " : " + text
 
     def RecordException(self, ex, description):
         text = description + " - See logs for full details"

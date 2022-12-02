@@ -35,8 +35,7 @@ class Config():
 
     def LogMissingSettings(self):
         for name in self._settingsMissing:
-            self.state.logging.Log(
-                "Config key missing, using default: " + name)
+            self.state.logging.Log("Config key missing, using default: " + name)
 
     def GetSetting(self, name):
         return self._settings[name]

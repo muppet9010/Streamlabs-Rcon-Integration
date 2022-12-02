@@ -75,15 +75,13 @@ class TestEventUtils:
 
     @staticmethod
     def GenerateTestEventArray(eventPlatform, eventType, value, special, payloadCount):
-        primaryEvent = TestEventUtils._GenerateTestEvent(
-            eventPlatform, eventType, value, special, payloadCount)
+        primaryEvent = TestEventUtils._GenerateTestEvent(eventPlatform, eventType, value, special, payloadCount)
         testEventArray = [primaryEvent]
 
         # Twitch sends events for the giver and also each receiver.
         if eventPlatform == "Twitch" and eventType == "Give Random Gift Subscriptions":
-           for i in range(special):
-                childEvent = TestEventUtils._GenerateTestEvent(
-                    eventPlatform, "Give Specific Gift Subscription", value, i+2, 1)
+            for i in range(special):
+                childEvent = TestEventUtils._GenerateTestEvent(eventPlatform, "Give Specific Gift Subscription", value, i+2, 1)
                 testEventArray.append(childEvent)
 
         return testEventArray
@@ -300,12 +298,10 @@ class TestEventUtils:
             eventDict["message"] = []
             for i in range(payloadCount):
                 messageEntry = messageConstructor(value, special, i)
-                eventDict["message"].append(TestEventUtils._MakeTestEventMessageEntry(
-                    messageEntry, forString, typeString, eventOptions))
+                eventDict["message"].append(TestEventUtils._MakeTestEventMessageEntry(messageEntry, forString, typeString, eventOptions))
         else:
             messageEntry = messageConstructor(value, special, 1)
-            eventDict["message"] = TestEventUtils._MakeTestEventMessageEntry(
-                messageEntry, forString, typeString, eventOptions)
+            eventDict["message"] = TestEventUtils._MakeTestEventMessageEntry(messageEntry, forString, typeString, eventOptions)
         return eventDict
 
     @staticmethod
@@ -314,8 +310,7 @@ class TestEventUtils:
             return messageEntry
 
         nowDateTime = DateTime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        pastDateTime = (DateTime.datetime.now() -
-                        DateTime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+        pastDateTime = (DateTime.datetime.now() - DateTime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
 
         messageEntry["type"] = typeString
         messageEntry["platform"] = forString

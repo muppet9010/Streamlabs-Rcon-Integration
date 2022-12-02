@@ -65,16 +65,13 @@ class Reaction:
         if "platform" in reactionData:
             self.platform = reactionData["platform"]
             self.type = reactionData["type"]
-            self.handlerName = StreamlabsEventUtils.MakeHandlerString(
-                self.platform, self.type)
+            self.handlerName = StreamlabsEventUtils.MakeHandlerString(self.platform, self.type)
             if self.handlerName not in StreamlabsEventUtils.handledEventTypes.keys():
-                self.logging.LogQuit(self.profile.name +
-                                     " : has invalid event handler type: " + self.handlerName)
+                self.logging.LogQuit(self.profile.name +" : has invalid event handler type: " + self.handlerName)
         else:
             self.valueType = reactionData["valueType"]
             if self.valueType not in ["money", "follow", "viewer"]:
-                self.logging.LogQuit(
-                    self.profile.name + " : has invalid valueType: " + self.valueType)
+                self.logging.LogQuit(self.profile.name + " : has invalid valueType: " + self.valueType)
         self.filterActionPriorities = {1: [], 2: []}
         for filteredActionData in reactionData["filteredActions"]:
             filteredAction = FilteredAction(filteredActionData, self)
@@ -108,28 +105,21 @@ class FilteredAction:
 
         self.condition = filteredActionData["condition"]
         if self.condition == "":
-            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
-                                 "' condition can not be blank")
-        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(
-            self.reaction.handlerName, self.condition, False)
+            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' condition can not be blank")
+        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(self.reaction.handlerName, self.condition, False)
         if eventAttributeCheckResult != "":
-            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
-                                 "' condition error: " + eventAttributeCheckResult)
+            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' condition error: " + eventAttributeCheckResult)
         scriptParseCheck = StreamlabsEventUtils.IsScriptValid(self.condition)
         if scriptParseCheck != "":
-            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
-                                 "' has an invalid condition script:\n" + scriptParseCheck)
+            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' has an invalid condition script:\n" + scriptParseCheck)
 
         self.manipulator = filteredActionData["manipulator"]
-        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(
-            self.reaction.handlerName, self.manipulator, False)
+        eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(self.reaction.handlerName, self.manipulator, False)
         if eventAttributeCheckResult != "":
-            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
-                                 "' manipulator error: " + eventAttributeCheckResult)
+            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' manipulator error: " + eventAttributeCheckResult)
         scriptParseCheck = StreamlabsEventUtils.IsScriptValid(self.manipulator)
         if scriptParseCheck != "":
-            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
-                                 "' has an invalid manipulator script:\n" + scriptParseCheck)
+            self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' has an invalid manipulator script:\n" + scriptParseCheck)
 
         self.actionText = ""
         self.action = None
@@ -138,30 +128,23 @@ class FilteredAction:
             actionName = action[8:-1]
             if actionName in self.reaction.profile.actions.keys():
                 self.action = self.reaction.profile.actions[actionName]
-                eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(
-                    self.reaction.handlerName, self.action.effect, True)
+                eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(self.reaction.handlerName, self.action.effect, True)
                 if eventAttributeCheckResult != "":
-                    self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' referenced action " +
-                                         actionName + " which has action text error: " + eventAttributeCheckResult)
+                    self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' referenced action " + actionName + " which has action text error: " + eventAttributeCheckResult)
             else:
-                self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
-                                     "' referenced non-existent action : " + actionName)
+                self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' referenced non-existent action : " + actionName)
         else:
             self.actionText = action
             if self.actionText == "":
-                self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
-                                     "' action can not be blank")
-            eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(
-                self.reaction.handlerName, self.actionText, True)
+                self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' action can not be blank")
+            eventAttributeCheckResult = StreamlabsEventUtils.IsBadEventAttributeUsed(self.reaction.handlerName, self.actionText, True)
             if eventAttributeCheckResult != "":
-                self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() +
-                                     "' action text error: " + eventAttributeCheckResult)
+                self.logging.LogQuit(errorLoggingParentsString + " : '" + self.reaction.GetPrintHandlerType() + "' action text error: " + eventAttributeCheckResult)
 
     def DoesEventTriggerAction(self, event):
         if self.condition == "[ALL]":
             return True
-        conditionStringPopulated = event.SubstituteEventDataIntoString(
-            self.condition)
+        conditionStringPopulated = event.SubstituteEventDataIntoString(self.condition)
         if eval(conditionStringPopulated) == True:
             return True
         else:
@@ -174,18 +157,14 @@ class FilteredAction:
         if self.action != None:
             actionText = self.action.effect
         if self.manipulator != None and self.manipulator != "":
-            manipulatorValueString = event.SubstituteEventDataIntoString(
-                self.manipulator)
+            manipulatorValueString = event.SubstituteEventDataIntoString(self.manipulator)
             manipulatorValue = 0
             try:
                 manipulatorValue = eval(manipulatorValueString)
             except:
-                manipulatorValue = StreamlabsEventUtils.ProcessExecScript(
-                    manipulatorValueString)
-            return event.SubstituteEventDataIntoString(
-                actionText, manipulatorValue)
-        return event.SubstituteEventDataIntoString(
-            actionText)
+                manipulatorValue = StreamlabsEventUtils.ProcessExecScript(manipulatorValueString)
+            return event.SubstituteEventDataIntoString(actionText, manipulatorValue)
+        return event.SubstituteEventDataIntoString(actionText)
 
 
 class Action:
@@ -203,5 +182,4 @@ class Options:
         if "twitchMysterSubGiftMode" in optionData:
             self.twitchMysterSubGiftMode = optionData["twitchMysterSubGiftMode"]
         if self.twitchMysterSubGiftMode not in ("donator", "receiver"):
-            self.logging.LogQuit(self.profile.name +
-                                 " : has invalid twitchMysterSubGiftMode option value: " + self.twitchMysterSubGiftMode)
+            self.logging.LogQuit(self.profile.name + " : has invalid twitchMysterSubGiftMode option value: " + self.twitchMysterSubGiftMode)

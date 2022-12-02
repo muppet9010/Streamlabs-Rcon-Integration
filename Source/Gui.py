@@ -32,39 +32,31 @@ class Gui(TK.Frame):
 
         self.statusText = TK.StringVar()
         self.state.UpdateStatus()
-        statusLabel = TK.Label(
-            runningContainer, textvariable=self.statusText, height=1, width=30)
+        statusLabel = TK.Label(runningContainer, textvariable=self.statusText, height=1, width=30)
         statusLabel.pack(side=TK.LEFT)
 
         self.selectedProfileName = TK.StringVar()
-        sortedProfileNames = sorted(list(
-            self.state.profiles.profiles.keys()))
+        sortedProfileNames = sorted(list(self.state.profiles.profiles.keys()))
         configProfileDefault = self.state.config.GetSetting("Profile Default")
         if configProfileDefault != "" and configProfileDefault in sortedProfileNames:
             self.selectedProfileName.set(configProfileDefault)
         else:
-            self.selectedProfileName.set(
-                self.translations.GetTranslation("Gui SelectProfile"))
-        self.profileList = TK.OptionMenu(
-            runningContainer, self.selectedProfileName, *sortedProfileNames)
+            self.selectedProfileName.set(self.translations.GetTranslation("Gui SelectProfile"))
+        self.profileList = TK.OptionMenu(runningContainer, self.selectedProfileName, *sortedProfileNames)
         self.profileList.pack(side=TK.LEFT)
 
-        self.startButton = TK.Button(runningContainer,
-                                     text=self.translations.GetTranslation("Gui StartButton"), command=self.state.OnStartButtonHandler)
+        self.startButton = TK.Button(runningContainer,text=self.translations.GetTranslation("Gui StartButton"), command=self.state.OnStartButtonHandler)
         self.startButton.pack(side=TK.LEFT)
 
-        self.stopButton = TK.Button(
-            runningContainer, text=self.translations.GetTranslation("Gui StopButton"), command=self.state.OnStopButtonHandler)
+        self.stopButton = TK.Button(runningContainer, text=self.translations.GetTranslation("Gui StopButton"), command=self.state.OnStopButtonHandler)
         self.stopButton.pack(side=TK.LEFT)
 
     def _CreateActivityLog(self, parent):
-        titleFrame = TK.LabelFrame(
-            parent, text=self.translations.GetTranslation("Gui ActivityLogTitle"))
+        titleFrame = TK.LabelFrame(parent, text=self.translations.GetTranslation("Gui ActivityLogTitle"))
         titleFrame.pack(fill=TK.BOTH, expand=True, side=TK.TOP, padx=3, pady=3)
         yScroll = TK.Scrollbar(titleFrame, orient=TK.VERTICAL)
         yScroll.pack(fill=TK.Y, expand=False, side=TK.RIGHT)
-        self.activityLogText = TK.Text(
-            titleFrame, height=5, wrap=TK.WORD, yscrollcommand=yScroll.set, state=TK.DISABLED)
+        self.activityLogText = TK.Text(titleFrame, height=5, wrap=TK.WORD, yscrollcommand=yScroll.set, state=TK.DISABLED)
         self.activityLogText.pack(fill=TK.BOTH, expand=True, side=TK.LEFT)
 
     def _CreateBottomBar(self, parent):
@@ -72,54 +64,41 @@ class Gui(TK.Frame):
         bottomBarContainer.pack(fill=TK.X, side=TK.TOP)
 
         self.selectedTestEventPlatform = TK.StringVar()
-        self.selectedTestEventPlatform.trace_variable(
-            TK.W, self.OnTestEventPlatformChanged)
+        self.selectedTestEventPlatform.trace_variable(TK.W, self.OnTestEventPlatformChanged)
         orderedTestEventPlatforms = self.state.testEventUtils.GetPlatforms()
-        self.testEventPlatformList = TK.OptionMenu(
-            bottomBarContainer, self.selectedTestEventPlatform, *orderedTestEventPlatforms)
+        self.testEventPlatformList = TK.OptionMenu(bottomBarContainer, self.selectedTestEventPlatform, *orderedTestEventPlatforms)
         self.testEventPlatformList.pack(side=TK.LEFT)
 
         self.selectedTestEventType = TK.StringVar()
-        self.selectedTestEventType.trace_variable(
-            TK.W, self.OnTestEventTypeChanged)
+        self.selectedTestEventType.trace_variable(TK.W, self.OnTestEventTypeChanged)
         self.orderedTestEventTypes = [""]
-        self.testEventTypeList = TK.OptionMenu(
-            bottomBarContainer, self.selectedTestEventType, *self.orderedTestEventTypes)
+        self.testEventTypeList = TK.OptionMenu(bottomBarContainer, self.selectedTestEventType, *self.orderedTestEventTypes)
         self.testEventTypeList.pack(side=TK.LEFT)
 
-        self.testEventValueLabel = TK.Label(
-            bottomBarContainer, text="event value:")
+        self.testEventValueLabel = TK.Label(bottomBarContainer, text="event value:")
         self.testEventValueLabel.pack(side=TK.LEFT)
         self.testEventValue = TK.StringVar()
-        self.testEventValueInput = TK.Entry(
-            bottomBarContainer, textvariable=self.testEventValue, width=10)
+        self.testEventValueInput = TK.Entry(bottomBarContainer, textvariable=self.testEventValue, width=10)
         self.testEventValueInput.pack(side=TK.LEFT)
 
-        self.testEventQuantityLabel = TK.Label(
-            bottomBarContainer, text="quantity:")
+        self.testEventQuantityLabel = TK.Label(bottomBarContainer, text="quantity:")
         self.testEventQuantityLabel.pack(side=TK.LEFT)
         self.testEventQuantity = TK.StringVar()
-        self.testEventQuantityInput = TK.Entry(
-            bottomBarContainer, textvariable=self.testEventQuantity, width=10)
+        self.testEventQuantityInput = TK.Entry(bottomBarContainer, textvariable=self.testEventQuantity, width=10)
         self.testEventQuantityInput.pack(side=TK.LEFT)
 
-        self.testEventPayloadCountLabel = TK.Label(
-            bottomBarContainer, text="payload count:")
+        self.testEventPayloadCountLabel = TK.Label(bottomBarContainer, text="payload count:")
         self.testEventPayloadCountLabel.pack(side=TK.LEFT)
         self.testEventPayloadCount = TK.StringVar()
         self.testEventPayloadCount.set("1")
-        self.testEventPayloadCountInput = TK.Entry(
-            bottomBarContainer, textvariable=self.testEventPayloadCount, width=10)
+        self.testEventPayloadCountInput = TK.Entry(bottomBarContainer, textvariable=self.testEventPayloadCount, width=10)
         self.testEventPayloadCountInput.pack(side=TK.LEFT)
 
-        self.testEventButton = TK.Button(bottomBarContainer, text=self.translations.GetTranslation(
-            "Gui TestEventButton"), command=self.state.OnTestEventButtonHandler)
+        self.testEventButton = TK.Button(bottomBarContainer, text=self.translations.GetTranslation("Gui TestEventButton"), command=self.state.OnTestEventButtonHandler)
         self.testEventButton.pack(side=TK.LEFT)
 
-        self.selectedTestEventPlatform.set(
-            self.translations.GetTranslation("Gui SelectTestEventPlatform"))
-        self.selectedTestEventType.set(
-            self.translations.GetTranslation("Gui SelectTestEventType"))
+        self.selectedTestEventPlatform.set(self.translations.GetTranslation("Gui SelectTestEventPlatform"))
+        self.selectedTestEventType.set(self.translations.GetTranslation("Gui SelectTestEventType"))
 
         self.testEventPlatformList.config(state=TK.DISABLED)
         self.testEventTypeList.config(state=TK.DISABLED)
@@ -136,8 +115,7 @@ class Gui(TK.Frame):
 
     def AddToActivityLog(self, text):
         self.activityLogText.configure(state=TK.NORMAL)
-        self.activityLogText.insert(
-            1.0, self.state.logging.TimestampText(text) + "\n")
+        self.activityLogText.insert(1.0, self.state.logging.TimestampText(text) + "\n")
         self.activityLogText.configure(state=TK.DISABLED)
 
     def OnStarted(self):
@@ -156,13 +134,10 @@ class Gui(TK.Frame):
         self.testEventTypeList["menu"].delete(0, TK.END)
         orderedTestEventTypes = []
         if self.selectedTestEventPlatform.get() != self.translations.GetTranslation("Gui SelectTestEventPlatform"):
-            orderedTestEventTypes = self.state.testEventUtils.GetPlatformTypes(
-                self.selectedTestEventPlatform.get())
+            orderedTestEventTypes = self.state.testEventUtils.GetPlatformTypes(self.selectedTestEventPlatform.get())
         for testEventType in orderedTestEventTypes:
-            self.testEventTypeList["menu"].add_command(
-                label=testEventType, command=TK._setit(self.selectedTestEventType, testEventType))
-        self.selectedTestEventType.set(
-            self.translations.GetTranslation("Gui SelectTestEventType"))
+            self.testEventTypeList["menu"].add_command(label=testEventType, command=TK._setit(self.selectedTestEventType, testEventType))
+        self.selectedTestEventType.set(self.translations.GetTranslation("Gui SelectTestEventType"))
         self.testEventTypeList.config(state=TK.NORMAL)
         self.testEventValueLabel.config(state=TK.DISABLED)
         self.testEventValueInput.config(state=TK.DISABLED)
@@ -177,12 +152,9 @@ class Gui(TK.Frame):
         quantityEnabled = False
         payloadCountEnabled = False
         if self.selectedTestEventType.get() != self.translations.GetTranslation("Gui SelectTestEventType"):
-            amountEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(
-            ), self.selectedTestEventType.get(), "valueInput")
-            quantityEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(
-            ), self.selectedTestEventType.get(), "quantityInput")
-            payloadCountEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(
-            ), self.selectedTestEventType.get(), "payloadInput")
+            amountEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(), self.selectedTestEventType.get(), "valueInput")
+            quantityEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(), self.selectedTestEventType.get(), "quantityInput")
+            payloadCountEnabled = self.state.testEventUtils.GetAttribute(self.selectedTestEventPlatform.get(), self.selectedTestEventType.get(), "payloadInput")
         if amountEnabled:
             self.testEventValueLabel.config(state=TK.NORMAL)
             self.testEventValueInput.config(state=TK.NORMAL)

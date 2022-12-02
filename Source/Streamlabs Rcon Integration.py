@@ -17,7 +17,7 @@ import threading as Threading
 
 class State():
     def __init__(self):
-        self.version = "0.1.5"
+        self.version = "0.1.5 - alpha 2022-12-02"
         self.config = Config(self)
         self.logging = Logging(self)
         self.config.LogMissingSettings()
@@ -41,8 +41,7 @@ class State():
         try:
             self.logging.DebugLog("Start Button Pressed")
             if self.gui.selectedProfileName.get() == "" or self.gui.selectedProfileName.get() == self.translations.GetTranslation("Gui SelectProfile"):
-                self.RecordActivity(
-                    self.translations.GetTranslation("Message NeedProfileBeforeStart"))
+                self.RecordActivity(self.translations.GetTranslation("Message NeedProfileBeforeStart"))
                 return
             self.profiles.SetCurrentProfile(self.gui.selectedProfileName.get())
             self.gui.OnStarted()
@@ -72,11 +71,9 @@ class State():
         try:
             self.streamlabs.connecting = False
             self.UpdateStatus()
-            self.RecordActivity(
-                self.translations.GetTranslation("Message Started"))
+            self.RecordActivity(self.translations.GetTranslation("Message Started"))
         except Exception as ex:
-            self.logging.RecordException(
-                ex, "Start Button Post Connection Critical Error")
+            self.logging.RecordException(ex, "Start Button Post Connection Critical Error")
             self.gui.OnStopped()
 
     def OnStopButtonHandler(self):
@@ -91,11 +88,9 @@ class State():
             self.logging.DebugLog("Streamlabs Disconnected Pressed")
             self.gui.OnStopped()
             if not self.streamlabs.disconnecting:
-                self.RecordActivity(
-                    self.translations.GetTranslation("Message StreamlabsUnexpectedStop"))
+                self.RecordActivity(self.translations.GetTranslation("Message StreamlabsUnexpectedStop"))
             else:
-                self.RecordActivity(
-                    self.translations.GetTranslation("Message Stopped"))
+                self.RecordActivity(self.translations.GetTranslation("Message Stopped"))
             self.streamlabs.disconnecting = False
             self.UpdateStatus()
         except Exception as ex:
@@ -125,67 +120,51 @@ class State():
             sequentialEventId = self.sequentialEventId
             self.logging.DebugLog("Sleeping event number " + str(sequentialEventId) + " for: " + str(sleepTime) + ". Received time: " + Datetime.datetime.now().strftime("%H:%M:%S.%f"))
             Time.sleep(sleepTime)
-            self.logging.DebugLog(
-                "Streamlabs raw event number " + str(sequentialEventId) + " data: " + str(data))
+            self.logging.DebugLog("Streamlabs raw event number " + str(sequentialEventId) + " data: " + str(data))
             events = StreamlabsEventUtils.GenerateEventPerPayload(self, data)
             if events == None:
                 return
             for event in events:
                 if event.errored:
-                    self.logging.DebugLog(
-                        "Streamlabs event errored during initial handling: " + str(event))
+                    self.logging.DebugLog("Streamlabs event errored during initial handling: " + str(event))
                     return
                 if event.ignored:
-                    self.logging.DebugLog(
-                        "Streamlabs event being ignored: " + event.GetEventRawTitlesAsPrettyString())
+                    self.logging.DebugLog("Streamlabs event being ignored: " + event.GetEventRawTitlesAsPrettyString())
                     return
                 if not event.IsHandledEvent():
-                    self.RecordActivity(
-                        self.translations.GetTranslation("StreamlabsEvent UnrecognisedEvent") + event.GetEventRawTitlesAsPrettyString())
+                    self.RecordActivity(self.translations.GetTranslation("StreamlabsEvent UnrecognisedEvent") + event.GetEventRawTitlesAsPrettyString())
                     return
                 if not event.PopulateNormalisedData():
-                    self.RecordActivity(
-                        self.translations.GetTranslation("StreamlabsEvent ErrorProcessingEvent") + event.GetEventRawTitlesAsPrettyString())
+                    self.RecordActivity(self.translations.GetTranslation("StreamlabsEvent ErrorProcessingEvent") + event.GetEventRawTitlesAsPrettyString())
                     return
-                self.logging.DebugLog(
-                    "Streamlabs processed event: " + str(event))
+                self.logging.DebugLog("Streamlabs processed event: " + str(event))
 
-                actionTexts = self.profiles.currentProfile.GetActionTextsForEvent(
-                    event)
+                actionTexts = self.profiles.currentProfile.GetActionTextsForEvent(event)
                 if len(actionTexts) == 0:
-                    self.RecordActivity(
-                        self.translations.GetTranslation("StreamlabsEvent NoProfileAction") + event.GetEventRawTitlesAsPrettyString())
-                    self.logging.DebugLog(
-                        "No profile action for: " + event.GetEventRawTitlesAsPrettyString())
+                    self.RecordActivity(self.translations.GetTranslation("StreamlabsEvent NoProfileAction") + event.GetEventRawTitlesAsPrettyString())
+                    self.logging.DebugLog("No profile action for: " + event.GetEventRawTitlesAsPrettyString())
                     return
                 for actionText in actionTexts:
                     actionType = ""
                     response = ""
                     if actionText == "":
                         actionType = "Ignore event"
-                        self.logging.DebugLog(
-                            "NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
+                        self.logging.DebugLog("NOTHING action specified for: " + event.GetEventRawTitlesAsPrettyString())
                     else:
                         actionType = "Rcon command"
                         try:
-                            self.logging.DebugLog(
-                                "Doing Rcon command: " + actionText)
+                            self.logging.DebugLog("Doing Rcon command: " + actionText)
                             response = self.rcon.SendCommand(actionText)
                         except Exception as ex:
-                            self.logging.RecordException(
-                                ex, "Rcon event failed")
-                            self.RecordActivity(
-                                self.translations.GetTranslation("Rcon CommandError") + actionText)
+                            self.logging.RecordException(ex, "Rcon event failed")
+                            self.RecordActivity(self.translations.GetTranslation("Rcon CommandError") + actionText)
                             return
                     if response != "":
-                        self.RecordActivity(
-                            self.translations.GetTranslation("Rcon CommandResponseWarning") + response)
+                        self.RecordActivity(self.translations.GetTranslation("Rcon CommandResponseWarning") + response)
                     self.logging.DebugLog("Action done: " + actionText)
-                self.RecordActivity(
-                    self.translations.GetTranslation("StreamlabsEvent EventHandled") + event.GetEventRawTitlesAsPrettyString() + " : " + event.bestName + " : value " + str(event.value) + " : " + actionType)
+                self.RecordActivity(self.translations.GetTranslation("StreamlabsEvent EventHandled") + event.GetEventRawTitlesAsPrettyString() + " : " + event.bestName + " : value " + str(event.value) + " : " + actionType)
         except Exception as ex:
-            self.logging.RecordException(
-                ex, "OBS Event Handler Critical Error - This event won't be processed")
+            self.logging.RecordException(ex, "OBS Event Handler Critical Error - This event won't be processed")
 
     def OnTestEventButtonHandler(self):
         try:
@@ -202,16 +181,14 @@ class State():
                         try:
                             testEventValue = float(testEventValue)
                         except:
-                            self.RecordActivity(
-                                self.translations.GetTranslation("TestEvent ValueNotFloatOrPrime") + str(testEventValue))
+                            self.RecordActivity(self.translations.GetTranslation("TestEvent ValueNotFloatOrPrime") + str(testEventValue))
                             return
                 else:
                     # As a standard event type the value must be a number
                     try:
                         testEventValue = float(testEventValue)
                     except:
-                        self.RecordActivity(
-                            self.translations.GetTranslation("TestEvent ValueNotFloat") + str(testEventValue))
+                        self.RecordActivity(self.translations.GetTranslation("TestEvent ValueNotFloat") + str(testEventValue))
                         return
             testEventQuantity = ""
             if TestEventUtils.GetAttribute(testEventPlatform, testEventType, "quantityInput"):
@@ -221,8 +198,7 @@ class State():
                     if testEventQuantity <= 0:
                         raise ValueError()
                 except:
-                    self.RecordActivity(
-                        self.translations.GetTranslation("TestEvent QuantityCountNotInt") + str(testEventQuantity))
+                    self.RecordActivity(self.translations.GetTranslation("TestEvent QuantityCountNotInt") + str(testEventQuantity))
                     return
             testEventPayloadCount = 1
             if TestEventUtils.GetAttribute(testEventPlatform, testEventType, "payloadInput"):
@@ -232,11 +208,9 @@ class State():
                     if testEventPayloadCount <= 0:
                         raise ValueError()
                 except:
-                    self.RecordActivity(self.translations.GetTranslation(
-                        "TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
+                    self.RecordActivity(self.translations.GetTranslation("TestEvent PayloadCountNotInt") + str(testEventPayloadCount))
                     return
-            testEventArray = self.testEventUtils.GenerateTestEventArray(
-                testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
+            testEventArray = self.testEventUtils.GenerateTestEventArray(testEventPlatform, testEventType, testEventValue, testEventQuantity, testEventPayloadCount)
             if len(testEventArray) > 0:
                 for testEvent in testEventArray:
                     self.OnStreamlabsEventHandler(testEvent)
@@ -251,22 +225,17 @@ class State():
                     #    thread = Threading.Thread(target=testEventTask, args=(self, testEvent))
                     #   thread.start()
             else:
-                self.RecordActivity(
-                    self.translations.GetTranslation("TestEvent InvalidTestEvent") + testEventPlatform + " - " + testEventType)
+                self.RecordActivity(self.translations.GetTranslation("TestEvent InvalidTestEvent") + testEventPlatform + " - " + testEventType)
         except Exception as ex:
-            self.logging.RecordException(
-                ex, "Test Event Critical Error - Failed to run test event")
+            self.logging.RecordException(ex, "Test Event Critical Error - Failed to run test event")
 
     def UpdateStatus(self):
         if self.streamlabs.connecting:
-            self.gui.UpdateStatusText(
-                self.translations.GetTranslation("Status OBSConnecting"))
+            self.gui.UpdateStatusText(self.translations.GetTranslation("Status OBSConnecting"))
         elif self.streamlabs.sio.eio.state == "connected":
-            self.gui.UpdateStatusText(
-                self.translations.GetTranslation("Status Running"))
+            self.gui.UpdateStatusText(self.translations.GetTranslation("Status Running"))
         else:
-            self.gui.UpdateStatusText(
-                self.translations.GetTranslation("Status Stopped"))
+            self.gui.UpdateStatusText(self.translations.GetTranslation("Status Stopped"))
 
     def Run(self):
         self.logging.Log("App Started")
@@ -283,7 +252,6 @@ except Exception as ex:
     except:
         pass
     try:
-        state.logging.RecordException(
-            ex, "Application Critical Error - Application has been stopped")
+        state.logging.RecordException(ex, "Application Critical Error - Application has been stopped")
     except:
         pass

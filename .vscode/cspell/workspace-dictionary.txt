@@ -22,3 +22,9 @@ evt # Streamlabs uses this as a prefix to some event_id's for its own magical re
 submysterygift # Twitch event type.
 superchat # Youtube event type.
 streamlabels # Streamlabs event type.
+
+textvariable # Python GUI field name.
+padx # Python GUI field name.
+pady # Python GUI field name.
+yscrollcommand # Python GUI field name.
+setit # Python GUI field name.

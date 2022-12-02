@@ -117,7 +117,7 @@ The Actions list is a collection of named action command strings to enable their
 Options
 -----------
 
-A number of profile wide options exist to allow further configuration of specific behaviour.
+A number of profile wide options exist to allow further configuration of specific behavior.
 
 - twitchMysterSubGiftMode - When Twitch Subscription Mystery Gifts are given out by a viewer to random other viewers the event can either be reacted to for the donator or receiver. The program's default is the `donator` value if the setting isn't specified in the profile's options. If the Streamlabs event is reacted to by a `money` valueType reaction, rather than a twitch subscriber specified reaction, it will obey this setting so only 1 reaction is triggered. Meaning the other event type won't be triggered for Twitch Subscription Mystery Gifts to avoid duplicate reactions.
     - `donator` - React to it as one large donation using the `subMysteryGift` event reaction.

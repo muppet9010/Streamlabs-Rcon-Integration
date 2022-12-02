@@ -19,8 +19,7 @@ class Streamlabs():
         self.logging.DebugLog("Streamlabs Connecting")
         self.disconnecting = False
         self.connecting = True
-        self.sio.connect("https://sockets.streamlabs.com?token=" +
-                         self.state.config.GetSetting("Streamlabs SocketApiToken"))
+        self.sio.connect("https://sockets.streamlabs.com?token=" + self.state.config.GetSetting("Streamlabs SocketApiToken"))
 
     def Disconnect(self):
         if self.sio.eio.state != "connected":

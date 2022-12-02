@@ -11,7 +11,7 @@ class Translations:
                 "Gui StartButton": "Start",
                 "Gui StopButton": "Stop",
                 "Gui QuitButton": "Quit",
-                "Gui ActivityLogTitle": "Actvity Log",
+                "Gui ActivityLogTitle": "Activity Log",
                 "Gui TestEventButton": "Test Event",
                 "Gui SelectTestEventPlatform": "Select Platform",
                 "Gui SelectTestEventType": "Select Type",
@@ -46,6 +46,5 @@ class Translations:
         if key in self.currentTexts.keys():
             return self.currentTexts[key]
         else:
-            self.state.logging.Log(
-                "ERROR: Missing translation in '" + self.language + "': " + key)
+            self.state.logging.Log("ERROR: Missing translation in '" + self.language + "': " + key)
             return "MISSING KEY"
