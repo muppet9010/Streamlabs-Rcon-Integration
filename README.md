@@ -1,3 +1,11 @@
+# Archived Project
+
+This project is no longer maintained. I would suggest ViewerLoop as a free-to-use alternative.
+
+https://www.viewerloop.com/about
+
+
+
 # Streamlabs-Rcon-Integration
 
 A tool that allows you to do actions in games based on Streamlabs events. Current usage focuses around Twitch events via Streamlabs triggering actions within Factorio. The tool is written in Python for cross platform usage and runs fully on your pc to remove any risk of sharing access keys or donators details on the internet.
